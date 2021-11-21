@@ -1,6 +1,7 @@
 package com.ynsuper.screenmirroring.view.activity
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -32,9 +33,9 @@ class TutorialActivity : AppCompatActivity() {
         if (!intent.hasExtra(Constants.EXTRA_TUTORIAL)) {
             binding.imageCloseTutorial.visibility = View.VISIBLE
             binding.buttonNext.visibility = View.GONE
-        }else
+        } else
 
-        handleClick()
+            handleClick()
 
     }
 
@@ -99,6 +100,13 @@ class TutorialActivity : AppCompatActivity() {
         binding.buttonNext.setOnClickListener {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
+                val sharedPreferences =
+                    getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putBoolean(Constants.KEY_START_FISRT_APP, false)
+                editor.commit()
+                editor.apply()
+
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 finish()

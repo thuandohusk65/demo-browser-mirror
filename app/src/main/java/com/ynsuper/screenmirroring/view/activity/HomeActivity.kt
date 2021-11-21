@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ynsuper.screenmirroring.databinding.ActivityHomeBinding
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
 
-class HomeActivity : AppCompatActivity(){
+class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
 
@@ -21,7 +21,6 @@ class HomeActivity : AppCompatActivity(){
         if (!wifi.isWifiEnabled) {
             NoInternetDialog.Builder(this).build()
         }
-
         setContentView(binding.root)
     }
 
