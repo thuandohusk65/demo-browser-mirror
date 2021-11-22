@@ -13,4 +13,9 @@
     <color name="color_text_grey">#6B6B6B</color>
     <color name="flat_grey_light_1">#ecf0f1</color>
     <color name="flat_grey_normal_1">#95a5a6</color>
+    <color name="color_button_style2">#00CF33</color>
+    <color name="color_button_style1">#9B51E0</color>
+    <color name="green1">#00CF33</color>
+    <color name="green2">#3FB074</color>
+    <color name="red">#FF5C5C</color>
 </resources>

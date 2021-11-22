@@ -32,6 +32,7 @@
         <activity android:name=".view.activity.TutorialActivity" />
         <activity android:name=".view.activity.HomeActivity" />
         <activity android:name=".view.activity.SelectDeviceActivity" />
+        <activity android:name=".view.activity.RemoveAdsActivity" />
         <activity android:name=".view.activity.SettingActivity" />
     </application>
 

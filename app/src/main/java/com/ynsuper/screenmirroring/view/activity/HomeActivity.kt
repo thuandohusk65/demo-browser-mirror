@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.ynsuper.screenmirroring.databinding.ActivityHomeBinding
+import com.ynsuper.screenmirroring.utility.Constants
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
 
 class HomeActivity : AppCompatActivity() {
@@ -25,12 +26,25 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.imageReady.setOnClickListener {
+//        binding.imageReady.setOnClickListener {
+//            val intent = Intent(this, SelectDeviceActivity::class.java)
+//            startActivity(intent)
+//        }
+        binding.pulseLayout.start()
+        binding.pulseLayout.setOnClickListener {
             val intent = Intent(this, SelectDeviceActivity::class.java)
             startActivity(intent)
         }
         binding.imageLight.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
+            startActivity(intent)
+        }
+        binding.imageRemoveAds.setOnClickListener {
+            val intent = Intent(this, RemoveAdsActivity::class.java)
+            startActivity(intent)
+        }
+        binding.imageSetting.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
             startActivity(intent)
         }
     }

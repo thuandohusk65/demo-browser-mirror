@@ -24,7 +24,6 @@ class SelectDeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectDeviceBinding.inflate(layoutInflater)
         initView()
-        startCheckWifiStatus()
         setContentView(binding.root)
     }
 
@@ -77,5 +76,11 @@ class SelectDeviceActivity : AppCompatActivity() {
         binding.imageBack.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startCheckWifiStatus()
+
     }
 }

@@ -5,20 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activity.TutorialActivity">
-
-    <ImageView
-        android:id="@+id/image_close_tutorial"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_close_tutorial"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/text_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:gravity="center"
         android:text="@string/connection_instructions"
@@ -27,6 +16,15 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_close"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_close_tutorial"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -79,9 +77,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="@color/main_color"
-        android:text="Next"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:text="Next"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

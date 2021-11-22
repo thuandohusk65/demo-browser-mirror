@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.ynsuper.screenmirroring.R
@@ -29,13 +30,13 @@ class TutorialActivity : AppCompatActivity() {
         val tutorialPagerAdapter = TutorialPagerAdapter(this, loadAllImageTutorial())
         binding.viewpagerTutorial.adapter = tutorialPagerAdapter
         binding.imageArrowRight.visibility = View.VISIBLE
-        setContentView(binding.root)
         if (!intent.hasExtra(Constants.EXTRA_TUTORIAL)) {
-            binding.imageCloseTutorial.visibility = View.VISIBLE
+            binding.imageClose.visibility = View.VISIBLE
             binding.buttonNext.visibility = View.GONE
-        } else
-
             handleClick()
+        } else
+            handleClick()
+        setContentView(binding.root)
 
     }
 
@@ -92,11 +93,10 @@ class TutorialActivity : AppCompatActivity() {
             binding.viewpagerTutorial.currentItem = currentItemViewPager
 
         }
-        binding.imageCloseTutorial.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
+        binding.imageClose.setOnClickListener {
             finish()
         }
+
         binding.buttonNext.setOnClickListener {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
