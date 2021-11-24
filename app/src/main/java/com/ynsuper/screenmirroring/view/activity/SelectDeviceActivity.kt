@@ -11,12 +11,14 @@ import android.os.Handler
 import java.lang.Exception
 import android.net.wifi.WifiManager
 import android.view.View
+import com.ynsuper.screenmirroring.R
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
+import com.ynsuper.screenmirroring.utility.dialog.ViewDialog
 
 
 class SelectDeviceActivity : AppCompatActivity() {
 
-    private val TIME_LOADING_PROGRESS: Long = 1000L
+    private val TIME_LOADING_PROGRESS: Long = 200L
 
     private lateinit var binding: ActivitySelectDeviceBinding
 
@@ -24,7 +26,12 @@ class SelectDeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectDeviceBinding.inflate(layoutInflater)
         initView()
+        showViewUpgrade()
         setContentView(binding.root)
+    }
+
+    private fun showViewUpgrade() {
+        ViewDialog.showDialogUpgrade(this)
     }
 
     private fun startCheckWifiStatus() {
@@ -68,9 +75,10 @@ class SelectDeviceActivity : AppCompatActivity() {
 
         binding.buttonSelectDevice.setOnClickListener {
             try {
+                finish()
                 startActivity(Intent("android.settings.CAST_SETTINGS"))
             } catch (exception1: Exception) {
-                Toast.makeText(applicationContext, "Device not supported", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, R.string.not_support_device, Toast.LENGTH_LONG).show()
             }
         }
         binding.imageBack.setOnClickListener {

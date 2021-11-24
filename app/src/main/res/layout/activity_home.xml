@@ -59,7 +59,7 @@
         app:layout_constraintBottom_toTopOf="@+id/layout_ad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar"
         app:mpa_duration="2000"
         app:mpa_paint_style="fill"
         app:mpa_purse_color="@color/main_color"
@@ -68,7 +68,7 @@
         app:mpa_stroke_width="200dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/image_cast"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@drawable/ic_connect"
@@ -78,6 +78,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/text_state_connect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ready_connect"
@@ -86,8 +87,25 @@
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/image_cast" />
     </com.ynsuper.screenmirroring.utility.pulse.MultiPulseLayout>
+
+    <TextView
+        android:id="@+id/text_device"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:padding="8dp"
+        android:drawablePadding="8dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_cast_connected_24"
+        android:gravity="center"
+        android:text="Apple TV"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/layout_ad"
+        app:layout_constraintTop_toBottomOf="@+id/pulse_layout" />
 
     <LinearLayout
         android:id="@+id/layout_ad"

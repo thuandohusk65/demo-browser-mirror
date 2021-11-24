@@ -33,4 +33,10 @@
     <string name="last_price"><strike>900.000 đ</strike></string>
     <string name="premium_full_version">Premium Full version</string>
     <string name="ready_connect">Ready Connect</string>
+    <string name="say_no_with_advertising">Say NO with ADVERTISING</string>
+    <string name="upgrade_to_the_ad_free_for_a_better_experience">Upgrade to the ad free for a better experience</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="connect">Connect</string>
+    <string name="not_support_device">Device not supported</string>
+    <string name="channel_id">channelID</string>
 </resources>
