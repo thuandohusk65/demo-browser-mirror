@@ -54,8 +54,8 @@
 
     <com.ynsuper.screenmirroring.utility.pulse.MultiPulseLayout
         android:id="@+id/pulse_layout"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_ad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
         app:mpa_paint_style="fill"
         app:mpa_purse_color="@color/main_color"
         app:mpa_purse_count="4"
-        app:mpa_start_radius="80dp"
+        app:mpa_start_radius="60dp"
         app:mpa_stroke_width="200dp">
 
         <ImageView
@@ -83,7 +83,6 @@
             android:layout_height="wrap_content"
             android:text="@string/ready_connect"
             android:textColor="@color/white"
-            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -91,6 +91,5 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="22sp"
-        app:circularflow_defaultRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

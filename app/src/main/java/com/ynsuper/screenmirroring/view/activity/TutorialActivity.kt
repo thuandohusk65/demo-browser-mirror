@@ -30,12 +30,16 @@ class TutorialActivity : AppCompatActivity() {
         val tutorialPagerAdapter = TutorialPagerAdapter(this, loadAllImageTutorial())
         binding.viewpagerTutorial.adapter = tutorialPagerAdapter
         binding.imageArrowRight.visibility = View.VISIBLE
-        if (!intent.hasExtra(Constants.EXTRA_TUTORIAL)) {
+        if (intent.hasExtra(Constants.EXTRA_TUTORIAL)
+            && intent.getBooleanExtra(Constants.EXTRA_TUTORIAL, false)
+        ) {
+            binding.imageClose.visibility = View.GONE
+            binding.buttonNext.visibility = View.VISIBLE
+        } else {
             binding.imageClose.visibility = View.VISIBLE
             binding.buttonNext.visibility = View.GONE
-            handleClick()
-        } else
-            handleClick()
+        }
+        handleClick()
         setContentView(binding.root)
 
     }
@@ -51,13 +55,14 @@ class TutorialActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                binding.textStep.text = "Step " + (position + 1) + "/3"
+                binding.textStep.text = "Step " + (position + 1) +"/"+ (loadAllImageTutorial().size)
                 currentItemViewPager = position
 
                 when (position) {
                     0 -> {
                         binding.buttonNext.text = getString(R.string.next_screen)
                         binding.imageArrowLeft.visibility = View.INVISIBLE
+                        binding.textStep.visibility = View.VISIBLE
                     }
                     loadAllImageTutorial().size - 1 -> {
                         binding.imageArrowRight.visibility = View.INVISIBLE
@@ -68,6 +73,8 @@ class TutorialActivity : AppCompatActivity() {
                         binding.buttonNext.text = getString(R.string.next_screen)
                         binding.imageArrowRight.visibility = View.VISIBLE
                         binding.imageArrowLeft.visibility = View.VISIBLE
+                        binding.textStep.visibility = View.VISIBLE
+
                     }
                 }
             }
@@ -121,16 +128,16 @@ class TutorialActivity : AppCompatActivity() {
     private fun loadAllImageTutorial(): ArrayList<TutorialModel> {
         val arrTutorial = ArrayList<TutorialModel>()
 //        return if (!intent.hasExtra(Constants.EXTRA_TUTORIAL)) {
-//            arrTutorial.add(TutorialModel(R.drawable.ic_step_1, R.string.text_step_1))
-//            arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
-//            arrTutorial.add(TutorialModel(R.drawable.ic_step_3, R.string.text_step_3))
-//            arrTutorial.add(TutorialModel(R.drawable.ic_step_4, R.string.text_step_4))
-//            arrTutorial.add(TutorialModel(R.drawable.ic_step_5, R.string.text_step_5))
+            arrTutorial.add(TutorialModel(R.drawable.ic_step_1, R.string.text_step_1))
+            arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
+            arrTutorial.add(TutorialModel(R.drawable.ic_step_3, R.string.text_step_3))
+            arrTutorial.add(TutorialModel(R.drawable.ic_step_4, R.string.text_step_4))
+            arrTutorial.add(TutorialModel(R.drawable.ic_step_5, R.string.text_step_5))
 //            arrTutorial
 //        } else {
-        arrTutorial.add(TutorialModel(R.drawable.ic_step_1, R.string.text_step_1))
-        arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
-        arrTutorial.add(TutorialModel(R.drawable.ic_step_5, R.string.text_step_5))
+//        arrTutorial.add(TutorialModel(R.drawable.ic_step_1, R.string.text_step_1))
+//        arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
+//        arrTutorial.add(TutorialModel(R.drawable.ic_step_5, R.string.text_step_5))
         return arrTutorial
 //        }
 

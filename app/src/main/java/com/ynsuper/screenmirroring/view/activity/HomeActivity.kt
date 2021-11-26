@@ -16,6 +16,7 @@ import com.ynsuper.screenmirroring.R
 import com.ynsuper.screenmirroring.databinding.ActivityHomeBinding
 import com.ynsuper.screenmirroring.service.MyForegroundService
 import com.ynsuper.screenmirroring.utility.Constants
+import com.ynsuper.screenmirroring.utility.Constants.SELECT_FROM_SETTING
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
 import java.lang.Exception
 
@@ -23,7 +24,6 @@ class HomeActivity : AppCompatActivity() {
 
     private var isConnectMirror: Boolean = false
     private lateinit var binding: ActivityHomeBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -55,11 +55,6 @@ class HomeActivity : AppCompatActivity() {
         }
         val displayListener: DisplayListener = object : DisplayListener {
             override fun onDisplayAdded(displayId: Int) {
-                Toast.makeText(
-                    this@HomeActivity,
-                    "displayListener onDisplayAdded:$displayId",
-                    Toast.LENGTH_SHORT
-                ).show()
                 Log.d(
                     "Ynsuper",
                     "displayListener onDisplayAdded ${displayManager.getDisplay(displayId).name}"
@@ -106,6 +101,7 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.imageLight.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
+            intent.putExtra(Constants.EXTRA_TUTORIAL, false)
             startActivity(intent)
         }
         binding.imageRemoveAds.setOnClickListener {
@@ -120,7 +116,15 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        checkConnectionScreenMirroring()
+        if (!SELECT_FROM_SETTING) {
+            checkConnectionScreenMirroring()
+        } else {
+            val intent = Intent(this, SplashActivity::class.java)
+            startActivity(intent)
+            SELECT_FROM_SETTING = false
+
+            finish()
+        }
     }
 
     fun startServiceConnection(nameTV: String) {
@@ -129,6 +133,7 @@ class HomeActivity : AppCompatActivity() {
         myServiceIntent.putExtra(Constants.SERVICE_EXTRA_NAME_TV, nameTV)
         ContextCompat.startForegroundService(this, myServiceIntent)
     }
+
     public fun stopServiceConnection() {
         val serviceIntent = Intent(this, MyForegroundService::class.java)
         stopService(serviceIntent)

@@ -12,6 +12,7 @@ import java.lang.Exception
 import android.net.wifi.WifiManager
 import android.view.View
 import com.ynsuper.screenmirroring.R
+import com.ynsuper.screenmirroring.utility.Constants
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
 import com.ynsuper.screenmirroring.utility.dialog.ViewDialog
 
@@ -75,11 +76,14 @@ class SelectDeviceActivity : AppCompatActivity() {
 
         binding.buttonSelectDevice.setOnClickListener {
             try {
-                finish()
+                Constants.SELECT_FROM_SETTING = true
                 startActivity(Intent("android.settings.CAST_SETTINGS"))
             } catch (exception1: Exception) {
-                Toast.makeText(applicationContext, R.string.not_support_device, Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, R.string.not_support_device, Toast.LENGTH_LONG)
+                    .show()
             }
+            finish()
+
         }
         binding.imageBack.setOnClickListener {
             finish()

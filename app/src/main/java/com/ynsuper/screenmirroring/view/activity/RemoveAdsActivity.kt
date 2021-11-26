@@ -20,7 +20,7 @@ class RemoveAdsActivity : AppCompatActivity() {
             finish()
         }
         binding.buttonBuyForever.setOnClickListener {
-            Toast.makeText(this, "buy forever", Toast.LENGTH_SHORT).show()
+
         }
     }
 }

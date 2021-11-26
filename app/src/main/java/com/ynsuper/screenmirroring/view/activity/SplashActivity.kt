@@ -13,6 +13,7 @@ import com.ynsuper.screenmirroring.utility.Constants
 
 class SplashActivity : AppCompatActivity() {
 
+    private lateinit var thread: Thread
     private var isRunFistApp = true
     private lateinit var binding: ActivitySplashBinding
     var progressTime = 0
@@ -20,6 +21,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
+        Constants.SELECT_FROM_SETTING = false
         initView()
         setContentView(binding.root)
 
@@ -51,7 +53,7 @@ class SplashActivity : AppCompatActivity() {
     private fun startProgressTime() {
 
 
-        Thread() {
+         thread = Thread() {
             kotlin.run {
                 while (progressTime < 1000) {
                     try {
@@ -62,10 +64,16 @@ class SplashActivity : AppCompatActivity() {
                     }
                     progressTime += 10
                 }
+
                 checkRunFirstApp()
 
             }
-        }.start()
+        }
+        thread.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 }
