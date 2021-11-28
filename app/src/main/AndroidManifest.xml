@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <permission
         android:name="android.permission.CONFIGURE_WIFI_DISPLAY"
@@ -23,6 +24,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScreenMirroring">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
         <activity
             android:name=".view.activity.SplashActivity"
             android:exported="true">
@@ -38,7 +43,10 @@
         <activity android:name=".view.activity.RemoveAdsActivity" />
         <activity android:name=".view.activity.SettingActivity" />
 
-        <service android:name=".service.MyForegroundService" />
+        <service
+            android:name=".service.MyForegroundService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

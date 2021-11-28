@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
-    android:layout_height="400dp"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/round_background_upgrade">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_no_with_ad"
         android:layout_width="match_parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_height="180dp"
+        android:layout_height="150dp"
         android:background="@drawable/ic_bg_remove_ad_2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="@string/say_no_with_advertising"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:padding="16dp"
         android:text="@string/upgrade_to_the_ad_free_for_a_better_experience"
         android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -59,12 +59,14 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
+        <TextView
             android:id="@+id/button_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center"
             android:backgroundTint="@color/white"
             android:text="Cancel"
             android:textAllCaps="false"

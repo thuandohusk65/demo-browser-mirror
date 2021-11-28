@@ -19,20 +19,64 @@ import com.ynsuper.screenmirroring.utility.Constants
 import com.ynsuper.screenmirroring.utility.Constants.SELECT_FROM_SETTING
 import com.ynsuper.screenmirroring.utility.NoInternetDialog
 import java.lang.Exception
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.facebook.ads.*
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.VideoOptions
+import com.google.android.gms.ads.formats.NativeAdOptions
+import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.ynsuper.screenmirroring.ads.FanNativeAdListener
+import com.ynsuper.screenmirroring.ads.InterstitialLoader
+import com.ynsuper.screenmirroring.utility.AdConfig
+import com.ynsuper.screenmirroring.utility.UtilAd
+import java.util.ArrayList
+
 
 class HomeActivity : AppCompatActivity() {
 
+    private lateinit var interstitialLoader: InterstitialLoader
     private var isConnectMirror: Boolean = false
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var unifiedNativeAd: UnifiedNativeAd
+    private lateinit var nativeAdFb: NativeAd
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         initView()
+        checkingInternet()
+        loadAdsNative()
+    }
+
+    private fun loadAdsIntersitial() {
+        interstitialLoader= InterstitialLoader()
+        interstitialLoader.setAdsId(this, AdConfig.AD_ADMOB_SPLASH_INTERSTITIAL_GO_TO,
+            "")
+        interstitialLoader.showProgress()
+    }
+
+    private fun loadAdsNative() {
+        binding.adsWall.shimmerSdLoading.visibility = View.VISIBLE
+        binding.adsWall.adContainer.visibility = View.GONE
+        if (UtilAd.checkShowFacebookAds(this)) {
+            loadNativeAdFacebook()
+        } else {
+            loadNativeAdGoogle()
+        }
+    }
+
+    private fun checkingInternet() {
         val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         if (!wifi.isWifiEnabled) {
             NoInternetDialog.Builder(this).build()
         }
-        setContentView(binding.root)
     }
 
     private fun checkConnectionScreenMirroring() {
@@ -55,11 +99,19 @@ class HomeActivity : AppCompatActivity() {
         }
         val displayListener: DisplayListener = object : DisplayListener {
             override fun onDisplayAdded(displayId: Int) {
-                Log.d(
-                    "Ynsuper",
-                    "displayListener onDisplayAdded ${displayManager.getDisplay(displayId).name}"
-                )
-                startServiceConnection(displayManager.getDisplay(displayId).name)
+                if (SELECT_FROM_SETTING) {
+                    SELECT_FROM_SETTING = false
+                    startServiceConnection(displayManager.getDisplay(displayId).name)
+                    val intent = Intent()
+                    intent.action = "test.Broadcast"
+                    sendBroadcast(intent)
+                    Log.d(
+                        "Ynsuper",
+                        "test.Broadcast onDisplayAdded " + displayManager.displays.size
+                    )
+
+                }
+
             }
 
             override fun onDisplayRemoved(displayId: Int) {
@@ -80,8 +132,14 @@ class HomeActivity : AppCompatActivity() {
 //            val intent = Intent(this, SelectDeviceActivity::class.java)
 //            startActivity(intent)
 //        }
+
+        //Broadcast
+
+
         binding.pulseLayout.start()
         binding.pulseLayout.setOnClickListener {
+            loadAdsIntersitial()
+
             // check connect for show disconnect
             if (isConnectMirror) {
                 try {
@@ -92,10 +150,21 @@ class HomeActivity : AppCompatActivity() {
                         R.string.not_support_device,
                         Toast.LENGTH_LONG
                     ).show()
+
                 }
             } else {
-                val intent = Intent(this, SelectDeviceActivity::class.java)
-                startActivity(intent)
+                interstitialLoader.showInterstitial(object : InterstitialLoader.AdmobListener{
+                    override fun onAdLoaded() {
+
+                    }
+
+                    override fun onAdClosed() {
+                        val intent = Intent(this@HomeActivity, SelectDeviceActivity::class.java)
+                        startActivity(intent)
+                    }
+
+                })
+
             }
 
         }
@@ -114,8 +183,157 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadNativeAdFacebook() {
+
+        nativeAdFb =  NativeAd(this, AdConfig.AD_FACEBOOK_HOME_NATIVE)
+        // Request an ad
+        val loadAdConfig = nativeAdFb.buildLoadAdConfig()
+            .withMediaCacheFlag(NativeAdBase.MediaCacheFlag.ALL)
+            .withAdListener(object : FanNativeAdListener(this@HomeActivity, AdConfig.AD_FACEBOOK_HOME_NATIVE) {
+                override fun onError(ad: Ad, adError: com.facebook.ads.AdError) {
+                    super.onError(ad, adError)
+                    Log.d("Ynsuper","Native ad failed to load:"+ adError.errorMessage)
+                    loadNativeAdGoogle()
+                }
+
+                override fun onAdLoaded(ad: Ad) {
+                    Log.d("Ynsuper","onAdLoaded facebook")
+                    if (nativeAdFb != ad) return
+                    if (ad.isAdInvalidated) return
+                    showAdsNativeFacebook(nativeAdFb)
+                }
+
+                override fun onLoggingImpression(ad: Ad) {
+                    super.onLoggingImpression(ad)
+                    Log.d("Ynsuper","ad FAN: onLoggingImpression")
+                }
+            })
+            .build()
+        nativeAdFb.loadAd(loadAdConfig)
+    }
+
+    private fun loadNativeAdGoogle() {
+        val videoOptions = VideoOptions.Builder()
+            .setStartMuted(false)
+            .build()
+
+        val adOptions = NativeAdOptions.Builder()
+            .setVideoOptions(videoOptions)
+            .build()
+        val adRequestBuilder = AdRequest.Builder()
+        val adLoader = AdLoader.Builder(this,AdConfig.AD_ADMOB_HOME_NATIVE)
+            .forUnifiedNativeAd { it ->
+                Log.d("Ynsuper","loadNativeAdGoogle Success")
+                unifiedNativeAd = it
+                showAdsNativeGoogle(unifiedNativeAd)
+            }
+            .withAdListener(object : com.google.android.gms.ads.AdListener() {
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    Log.d("Ynsuper","onAdImpression")
+                }
+
+                override fun onAdFailedToLoad(p0: Int) {
+                    Log.d("Ynsuper","onAdFailedToLoad $p0")
+                    binding.adsWall.root.visibility = View.GONE
+                }
+            })
+            .withNativeAdOptions(adOptions)
+            .build()
+        adLoader.loadAd(adRequestBuilder.build())
+    }
+    private fun showAdsNativeGoogle(unifiedNativeAd: UnifiedNativeAd?) {
+        Log.d("Ynsuper","showAdsNativeGoogle")
+        unifiedNativeAd?.let {
+            val adViewNativeGoogle = UtilAd.buildViewNativeGoogleMedium2(this, it)
+            binding.adsWall.shimmerSdLoading.visibility = View.GONE
+            binding.adsWall.adContainer.visibility = View.VISIBLE
+            binding.adsWall.adContainer.removeAllViews()
+            binding.adsWall.adContainer.addView(
+                adViewNativeGoogle,
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 800)
+            )
+        }
+    }
+    private fun showAdsNativeFacebook(nativeAd: NativeAd) {
+        Log.d("Ynsuper","showAdsNativeFacebook")
+        nativeAd.unregisterView()
+        binding.adsWall.shimmerSdLoading.visibility = View.GONE
+        binding.adsWall.adContainer.visibility = View.VISIBLE
+        findViewById<NativeAdLayout>(R.id.fanNativeAdContainer).visibility = View.VISIBLE
+        val inflater = LayoutInflater.from(this)
+        // Inflate the Ad view.  The layout referenced should be the one you created in the last step.
+        val adView =
+            inflater.inflate(
+                R.layout.ad_facebook_native_ad,
+                findViewById<NativeAdLayout>(R.id.fanNativeAdContainer),
+                false
+            ) as LinearLayout
+        findViewById<NativeAdLayout>(R.id.fanNativeAdContainer).addView(adView)
+
+        // Add the AdOptionsView
+        val adChoicesContainer: LinearLayout = adView.findViewById(R.id.ad_choices_container)
+        val adOptionsView =
+            AdOptionsView(this, nativeAd, findViewById<NativeAdLayout>(R.id.fanNativeAdContainer))
+        adChoicesContainer.removeAllViews()
+        adChoicesContainer.addView(adOptionsView, 0)
+
+        // Create native UI using the ad metadata.
+        val nativeAdIcon: MediaView = adView.findViewById(R.id.native_ad_icon)
+        val nativeAdTitle: TextView = adView.findViewById(R.id.native_ad_title)
+        val nativeAdMedia: MediaView = adView.findViewById(R.id.native_ad_media)
+        val nativeAdSocialContext: TextView = adView.findViewById(R.id.native_ad_social_context)
+        val nativeAdBody: TextView = adView.findViewById(R.id.native_ad_body)
+        val sponsoredLabel: TextView = adView.findViewById(R.id.native_ad_sponsored_label)
+        val nativeAdCallToAction: Button = adView.findViewById(R.id.native_ad_call_to_action)
+
+        // Set the Text.
+        nativeAdTitle.text = nativeAd.advertiserName
+        nativeAdBody.text = nativeAd.adBodyText
+        nativeAdSocialContext.text = nativeAd.adSocialContext
+        nativeAdCallToAction.visibility = if (nativeAd.hasCallToAction()) {
+            View.VISIBLE
+        } else View.INVISIBLE
+        nativeAdCallToAction.text = nativeAd.adCallToAction
+        sponsoredLabel.text = nativeAd.sponsoredTranslation
+
+        // Create a list of clickable views
+        val clickableViews: MutableList<View> = ArrayList()
+        clickableViews.add(nativeAdTitle)
+        clickableViews.add(nativeAdCallToAction)
+        // Register the Title and CTA button to listen for clicks.
+        nativeAd.registerViewForInteraction(
+            adView,
+            nativeAdMedia,
+            nativeAdIcon,
+            clickableViews
+        )
+
+        NativeAdBase.NativeComponentTag.tagView(
+            nativeAdIcon,
+            NativeAdBase.NativeComponentTag.AD_ICON
+        )
+        NativeAdBase.NativeComponentTag.tagView(
+            nativeAdTitle,
+            NativeAdBase.NativeComponentTag.AD_TITLE
+        )
+        NativeAdBase.NativeComponentTag.tagView(
+            nativeAdBody,
+            NativeAdBase.NativeComponentTag.AD_BODY
+        )
+        NativeAdBase.NativeComponentTag.tagView(
+            nativeAdSocialContext,
+            NativeAdBase.NativeComponentTag.AD_SOCIAL_CONTEXT
+        )
+        NativeAdBase.NativeComponentTag.tagView(
+            nativeAdCallToAction,
+            NativeAdBase.NativeComponentTag.AD_CALL_TO_ACTION
+        )
+    }
     override fun onResume() {
         super.onResume()
+        Log.d("Ynsuper", "registerBroadCast");
+
         if (!SELECT_FROM_SETTING) {
             checkConnectionScreenMirroring()
         } else {
@@ -138,4 +356,5 @@ class HomeActivity : AppCompatActivity() {
         val serviceIntent = Intent(this, MyForegroundService::class.java)
         stopService(serviceIntent)
     }
+
 }

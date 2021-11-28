@@ -19,4 +19,6 @@
     <color name="green2">#3FB074</color>
     <color name="red">#FF5C5C</color>
     <color name="color_main2">#3FB074</color>
+    <color name="colorGrey">#dddddd</color>
+    <color name="textGray">#7d7d7d</color>
 </resources>
