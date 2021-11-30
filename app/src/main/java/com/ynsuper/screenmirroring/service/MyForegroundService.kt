@@ -27,7 +27,8 @@ class MyForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val nameTV = intent?.getStringExtra(Constants.SERVICE_EXTRA_NAME_TV)
         val notificationIntent = Intent(this, SplashActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+            PendingIntent.FLAG_IMMUTABLE)
         val channelId =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createNotificationChannel("my_service", "My Background Service")
@@ -55,7 +56,7 @@ class MyForegroundService : Service() {
     private fun onButtonNotificationClick(@IdRes id: Int): PendingIntent? {
         val intent = Intent()
         intent.putExtra("", id)
-        return PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_IMMUTABLE)
     }
 
 //    private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
