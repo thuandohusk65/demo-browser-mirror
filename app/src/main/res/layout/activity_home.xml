@@ -60,11 +60,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_toolbar"
-        app:mpa_duration="2000"
+        app:mpa_duration="1500"
         app:mpa_paint_style="fill"
         app:mpa_purse_color="@color/main_color"
-        app:mpa_purse_count="4"
-        app:mpa_start_radius="60dp"
+        app:mpa_purse_count="2"
+        app:mpa_start_radius="70dp"
         app:mpa_stroke_width="200dp">
 
         <ImageView

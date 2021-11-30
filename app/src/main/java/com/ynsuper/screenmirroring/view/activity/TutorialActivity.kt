@@ -5,16 +5,21 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.ynsuper.screenmirroring.R
+import com.ynsuper.screenmirroring.ads.InterstitialLoader
 import com.ynsuper.screenmirroring.databinding.ActivityTutorialBinding
 import com.ynsuper.screenmirroring.model.TutorialModel
+import com.ynsuper.screenmirroring.utility.AdConfig
 import com.ynsuper.screenmirroring.utility.Constants
 import com.ynsuper.screenmirroring.utility.ZoomOutPageTransformer
 import com.ynsuper.screenmirroring.view.adapter.TutorialPagerAdapter
+import java.lang.Exception
 
 class TutorialActivity : AppCompatActivity() {
+    private lateinit var interstitialLoader: InterstitialLoader
     private lateinit var binding: ActivityTutorialBinding
     private var currentItemViewPager = 0
 
@@ -41,9 +46,15 @@ class TutorialActivity : AppCompatActivity() {
         }
         handleClick()
         setContentView(binding.root)
+        loadAdsIntersitial()
 
     }
-
+    private fun loadAdsIntersitial() {
+        interstitialLoader= InterstitialLoader()
+        interstitialLoader.setAdsId(this, AdConfig.AD_ADMOB_SPLASH_INTERSTITIAL_GO_TO,
+            "")
+//        interstitialLoader.showProgress()
+    }
     private fun handleClick() {
         binding.viewpagerTutorial.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
@@ -62,18 +73,18 @@ class TutorialActivity : AppCompatActivity() {
                     0 -> {
                         binding.buttonNext.text = getString(R.string.next_screen)
                         binding.imageArrowLeft.visibility = View.INVISIBLE
-                        binding.textStep.visibility = View.VISIBLE
+//                        binding.textStep.visibility = View.VISIBLE
                     }
                     loadAllImageTutorial().size - 1 -> {
                         binding.imageArrowRight.visibility = View.INVISIBLE
                         binding.buttonNext.text = getString(R.string.start_now)
-                        binding.textStep.visibility = View.GONE
+//                        binding.textStep.visibility = View.GONE
                     }
                     else -> {
                         binding.buttonNext.text = getString(R.string.next_screen)
                         binding.imageArrowRight.visibility = View.VISIBLE
                         binding.imageArrowLeft.visibility = View.VISIBLE
-                        binding.textStep.visibility = View.VISIBLE
+//                        binding.textStep.visibility = View.VISIBLE
 
                     }
                 }
@@ -101,7 +112,22 @@ class TutorialActivity : AppCompatActivity() {
 
         }
         binding.imageClose.setOnClickListener {
-            finish()
+            interstitialLoader.showProgress()
+            interstitialLoader.showInterstitial(object : InterstitialLoader.AdmobListener{
+                override fun onAdLoaded() {
+                    finish()
+                    interstitialLoader.dismissProgress()
+
+                }
+
+                override fun onAdClosed() {
+
+                }
+
+                override fun onAdOpen() {
+                }
+
+            })
         }
 
         binding.buttonNext.setOnClickListener {

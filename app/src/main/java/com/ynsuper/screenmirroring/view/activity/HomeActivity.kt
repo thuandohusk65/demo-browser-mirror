@@ -42,7 +42,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var interstitialLoader: InterstitialLoader
     private var isConnectMirror: Boolean = false
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var unifiedNativeAd: UnifiedNativeAd
+    private lateinit var unifiedNativeAd: com.google.android.gms.ads.nativead.NativeAd
     private lateinit var nativeAdFb: NativeAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +51,16 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+//        if (!SELECT_FROM_SETTING) {
+//        } else {
+//            val intent = Intent(this, SplashActivity::class.java)
+//            startActivity(intent)
+//            SELECT_FROM_SETTING = false
+//
+//            finish()
+//        }
+        checkConnectionScreenMirroring()
+
         checkingInternet()
         loadAdsNative()
     }
@@ -142,25 +152,45 @@ class HomeActivity : AppCompatActivity() {
 
             // check connect for show disconnect
             if (isConnectMirror) {
-                try {
-                    startActivity(Intent("android.settings.CAST_SETTINGS"))
-                } catch (exception1: Exception) {
-                    Toast.makeText(
-                        applicationContext,
-                        R.string.not_support_device,
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                }
-            } else {
                 interstitialLoader.showInterstitial(object : InterstitialLoader.AdmobListener{
                     override fun onAdLoaded() {
+                        try {
+                            startActivity(Intent("android.settings.CAST_SETTINGS"))
+                            SELECT_FROM_SETTING = true
+                        } catch (exception1: Exception) {
+                            Toast.makeText(
+                                applicationContext,
+                                R.string.not_support_device,
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        }
 
                     }
 
                     override fun onAdClosed() {
+
+                    }
+
+                    override fun onAdOpen() {
+                    }
+
+                })
+
+
+            } else {
+                interstitialLoader.showInterstitial(object : InterstitialLoader.AdmobListener{
+                    override fun onAdLoaded() {
                         val intent = Intent(this@HomeActivity, SelectDeviceActivity::class.java)
                         startActivity(intent)
+                    }
+
+                    override fun onAdClosed() {
+
+                    }
+
+                    override fun onAdOpen() {
+                        TODO("Not yet implemented")
                     }
 
                 })
@@ -222,7 +252,7 @@ class HomeActivity : AppCompatActivity() {
             .build()
         val adRequestBuilder = AdRequest.Builder()
         val adLoader = AdLoader.Builder(this,AdConfig.AD_ADMOB_HOME_NATIVE)
-            .forUnifiedNativeAd { it ->
+            .forNativeAd { it ->
                 Log.d("Ynsuper","loadNativeAdGoogle Success")
                 unifiedNativeAd = it
                 showAdsNativeGoogle(unifiedNativeAd)
@@ -242,7 +272,7 @@ class HomeActivity : AppCompatActivity() {
             .build()
         adLoader.loadAd(adRequestBuilder.build())
     }
-    private fun showAdsNativeGoogle(unifiedNativeAd: UnifiedNativeAd?) {
+    private fun showAdsNativeGoogle(unifiedNativeAd: com.google.android.gms.ads.nativead.NativeAd?) {
         Log.d("Ynsuper","showAdsNativeGoogle")
         unifiedNativeAd?.let {
             val adViewNativeGoogle = UtilAd.buildViewNativeGoogleMedium2(this, it)
@@ -340,7 +370,6 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, SplashActivity::class.java)
             startActivity(intent)
             SELECT_FROM_SETTING = false
-
             finish()
         }
     }

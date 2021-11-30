@@ -121,6 +121,7 @@
         app:layout_constraintTop_toBottomOf="@+id/card_buy_remove_ad">
 
         <LinearLayout
+            android:id="@+id/layout_check_update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -142,6 +143,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_feed_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -163,6 +165,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_rateUs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -184,6 +187,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_more_app"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -205,6 +209,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_privacy_policy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

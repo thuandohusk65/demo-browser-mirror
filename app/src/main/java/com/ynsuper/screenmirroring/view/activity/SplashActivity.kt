@@ -39,6 +39,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkRunFirstApp() {
+        finish()
         val sharedPreferences =
             getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         isRunFistApp = sharedPreferences.getBoolean(Constants.KEY_START_FISRT_APP, true)
@@ -47,12 +48,11 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this, TutorialActivity::class.java)
             intent.putExtra(Constants.EXTRA_TUTORIAL, true)
             startActivity(intent)
-            finish()
         } else {
+
             // Show Home App
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 
@@ -61,12 +61,16 @@ class SplashActivity : AppCompatActivity() {
         interstitialLoader.showInterstitial(object : InterstitialLoader.AdmobListener{
             override fun onAdLoaded() {
                 isLoadedAd = true
-            }
-
-            override fun onAdClosed() {
                 if (isLoadedAd){
                     checkRunFirstApp()
                 }
+            }
+
+            override fun onAdClosed() {
+
+            }
+
+            override fun onAdOpen() {
 
             }
 
