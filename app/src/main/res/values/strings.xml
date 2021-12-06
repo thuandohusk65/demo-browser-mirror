@@ -5,10 +5,10 @@
     <string name="text_step_2">Enable connection settings in smart TV\'s settings</string>
     <string name="text_step_3">Select the CONNECT button on the main screen</string>
     <string name="text_step_4">Select the select device button on the screen</string>
-    <string name="text_step_5"></string>
+    <string name="text_step_5" />
     <string name="version">V1.0.0</string>
     <string name="advertisements_may_appear">(Advertisements may appear)</string>
-    <string name="check_for_version">Check for new version...</string>
+    <string name="check_for_version">Check for new version…</string>
     <string name="screen_mirroring">SCREEN MIRRORING</string>
     <string name="checking_network">CHECKING NETWORK</string>
     <string name="check_signal_transmission">Check signal transmission</string>
@@ -21,7 +21,6 @@
     <string name="default_message">Check your Internet connection and try again.</string>
     <string name="please_turn_on">Please turn on</string>
     <string name="wifi">Wifi</string>
-    <string name="close">Close</string>
     <string name="no_advertising">No advertising</string>
     <string name="enjoy_an_amazing_ad_free_experience">Enjoy an amazing ad-free experience</string>
     <string name="buy_now">Buy Now</string>
@@ -30,16 +29,29 @@
     <string name="rate_us_5_stars">Rate us 5-stars</string>
     <string name="feedback_and_suggestions">Feedback and suggestions</string>
     <string name="buy_forever">Buy Forever</string>
-    <string name="last_price"><strike>900.000 đ</strike></string>
+
     <string name="premium_full_version">Premium Full version</string>
     <string name="ready_connect">Ready Connect</string>
     <string name="say_no_with_advertising">Say NO with ADVERTISING</string>
     <string name="upgrade_to_the_ad_free_for_a_better_experience">Upgrade to the ad free for a better experience</string>
     <string name="disconnect">Disconnect</string>
-    <string name="connect">Connect</string>
     <string name="not_support_device">Device not supported</string>
     <string name="channel_id">channelID</string>
-    <string name="please_wait_to_load_your_video_this_action_may_contain_ads">Please wait to load your video! (This action may contain ads!)</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_upgrade_now">Upgrade Now</string>
+    <string name="text_step">Step </string>
+    <string name="next">Next</string>
+
+    <string name="please_wait_to_load_data_dialog">Please wait to load data</string>
+    <string name="this_action_may_contain_ads">This action may contain ads!</string>
+
+    <string name="exit">Exit</string>
+    <string name="sponsored">Sponsored</string>
+    <string name="select_device">Select Device</string>
+    <string name="ad_loading">ad loading</string>
+    <string name="title_feedback">Feedback by Screen Mirroring</string>
+    <string name="you_are_redirected_policy_page">You are redirected to the policy page</string>
+    <string name="not_connect_wifi">Not Connect wifi</string>
+    <string name="you_need_to_connect_to_the_wifi">You need to connect to the wifi that your tv connects to for the most stable connection</string>
+    <string name="try_again">Try Again</string>
 </resources>

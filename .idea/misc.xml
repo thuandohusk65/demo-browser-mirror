@@ -7,10 +7,12 @@
         <entry key="app/src/main/res/drawable/admob_cta_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_rounded_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/bg_dialog_loading_ad.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/bg_no_connect_wifi_shape.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/black_background.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/btn_buy_now_1.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/btn_buy_now_2.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/btn_select_device.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/drawable/btn_try_again.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/ic_ad_label.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/ic_checked.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/drawable/ic_disconnect.xml" value="0.20364583333333333" />
@@ -41,6 +43,7 @@
         <entry key="app/src/main/res/layout/ad_native_space.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/dialog_loading_ads.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/dialog_upgrade.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_no_wifi.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_tutorial.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/layout_notification.xml" value="0.28351449275362317" />
         <entry key="nativetemplatesAdmob/src/main/res/layout/gnt_medium_template_view.xml" value="0.28351449275362317" />

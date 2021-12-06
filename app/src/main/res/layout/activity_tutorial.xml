@@ -1,89 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".view.activity.TutorialActivity">
-    <TextView
-        android:id="@+id/text_title"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:gravity="center"
-        android:text="@string/connection_instructions"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/image_close"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_close_tutorial"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/image_arrow_left"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_left_arrow"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/text_step"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_title" />
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager_tutorial"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_step"
-        app:layout_constraintLeft_toRightOf="@+id/image_arrow_left"
-        app:layout_constraintRight_toLeftOf="@+id/image_arrow_right"
-        app:layout_constraintTop_toBottomOf="@+id/text_title" />
-
-    <ImageView
-        android:id="@+id/image_arrow_right"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_right_arrow"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/text_step"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_title" />
-
-    <TextView
-        android:id="@+id/text_step"
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Step 1/5"
-        android:textColor="@color/main_color"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_next" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".view.activity.TutorialActivity">
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="@string/connection_instructions"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/main_color"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Next"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_close"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_close_tutorial"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_arrow_left"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_left_arrow"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/text_step"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_title" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager_tutorial"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_step"
+            app:layout_constraintLeft_toRightOf="@+id/image_arrow_left"
+            app:layout_constraintRight_toLeftOf="@+id/image_arrow_right"
+            app:layout_constraintTop_toBottomOf="@+id/text_title" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_arrow_right"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_right_arrow"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/text_step"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_title" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="Step 1/5"
+            android:textColor="@color/main_color"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/button_next" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/main_color"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

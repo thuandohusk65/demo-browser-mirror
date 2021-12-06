@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ynsuper.screenmirroring">
+    package="com.nhnextsoft.screenmirroring">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -24,6 +24,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".ScreenMirroringApp"
         android:theme="@style/Theme.ScreenMirroring">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -31,6 +32,7 @@
 
         <activity
             android:name=".view.activity.SplashActivity"
+            android:noHistory="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,11 +45,11 @@
         <activity android:name=".view.activity.SelectDeviceActivity" />
         <activity android:name=".view.activity.RemoveAdsActivity" />
         <activity android:name=".view.activity.SettingActivity" />
+        <activity android:name=".view.activity.FinishAppActivity" />
 
         <service
             android:name=".service.MyForegroundService"
             android:enabled="true"
             android:exported="false" />
     </application>
-
 </manifest>

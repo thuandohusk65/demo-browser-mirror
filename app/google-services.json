@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "944785477826",
+    "project_id": "screen-mirroring-android",
+    "storage_bucket": "screen-mirroring-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944785477826:android:6b30a021ca765a50d06b5b",
+        "android_client_info": {
+          "package_name": "com.screenmirroring.chromecast.miracast.tvcast.smartview.smartcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944785477826-eliu250mvp9p9c71jhkv6j1kgbmtagdg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB82d9eJXLkMWz4ysu700_8C2f7spIalnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944785477826-eliu250mvp9p9c71jhkv6j1kgbmtagdg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
