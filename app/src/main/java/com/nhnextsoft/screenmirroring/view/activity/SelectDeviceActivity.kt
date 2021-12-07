@@ -124,7 +124,7 @@ class SelectDeviceActivity : AppCompatActivity() {
 
 
     private fun showNativeAdmob() {
-        val builder = AdLoader.Builder(this, AdConfig.AD_ADMOB_HOME_UI_NATIVE_ADVANCED)
+        val builder = AdLoader.Builder(this, AdConfig.AD_ADMOB_SELECT_DEVICE_NATIVE_ADVANCED)
         builder.forNativeAd {
             startCheckWifiStatus()
             if (nativeAd != null) {

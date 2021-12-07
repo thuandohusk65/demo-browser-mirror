@@ -7,6 +7,7 @@
     <string name="text_step_4">Select the select device button on the screen</string>
     <string name="text_step_5" />
     <string name="version">V1.0.0</string>
+    <string name="version_app">Version:</string>
     <string name="advertisements_may_appear">(Advertisements may appear)</string>
     <string name="check_for_version">Check for new version…</string>
     <string name="screen_mirroring">SCREEN MIRRORING</string>
@@ -54,4 +55,5 @@
     <string name="not_connect_wifi">Not Connect wifi</string>
     <string name="you_need_to_connect_to_the_wifi">You need to connect to the wifi that your tv connects to for the most stable connection</string>
     <string name="try_again">Try Again</string>
+    <string name="privacy_policy">Privacy policy</string>
 </resources>

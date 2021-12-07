@@ -26,9 +26,7 @@
         android:supportsRtl="true"
         android:name=".ScreenMirroringApp"
         android:theme="@style/Theme.ScreenMirroring">
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
 
         <activity
             android:name=".view.activity.SplashActivity"
@@ -51,5 +49,9 @@
             android:name=".service.MyForegroundService"
             android:enabled="true"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8700388863396989~1393371552"/>
     </application>
 </manifest>

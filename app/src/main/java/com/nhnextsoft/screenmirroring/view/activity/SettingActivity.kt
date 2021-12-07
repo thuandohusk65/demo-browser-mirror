@@ -122,6 +122,8 @@ class SettingActivity : AppCompatActivity() {
                 }.create().show()
 
         }
+
+        (getString(R.string.version_app) + " ${BuildConfig.VERSION_NAME}").also { binding.tvVersion.text = it }
     }
 
     private fun composeEmail(addresses: Array<String>, subject: String, text: String) {

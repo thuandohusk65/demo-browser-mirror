@@ -161,7 +161,7 @@ class TutorialActivity : AppCompatActivity() {
             finish()
         } else {
             interstitialBackHome.setAdsId(this,
-                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
+                AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
                 object : InterstitialHelper.AdHelperListener {
                     override fun onAdLoaded() {
                         super.onAdLoaded()

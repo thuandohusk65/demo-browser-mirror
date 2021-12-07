@@ -32,8 +32,8 @@ class MyForegroundService : Service() {
 
         val notificationLayout = RemoteViews(packageName, R.layout.layout_notification)
         notificationLayout.setTextViewText(R.id.text_name_tv,"Connected to $nameTV")
-//        notificationLayout.setOnClickPendingIntent(R.id.text_disconnect,
-//            onButtonNotificationClick(R.id.text_disconnect))
+        notificationLayout.setOnClickPendingIntent(R.id.text_disconnect,
+            onButtonNotificationClick(R.id.text_disconnect))
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle(getString(R.string.app_name))
