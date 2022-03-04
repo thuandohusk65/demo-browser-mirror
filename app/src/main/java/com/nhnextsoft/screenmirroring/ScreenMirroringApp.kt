@@ -63,5 +63,4 @@ class ScreenMirroringApp : SupportAdsApplication() {
 
     override val listTestDeviceId: List<String> = AdConfig.DEVICES
     override val openAppAdId: String = AdConfig.AD_ADMOB_OPEN_APP
-
 }
