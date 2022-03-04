@@ -4,36 +4,42 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.nhnextsoft.control.AdmodSP
+import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
-import com.nhnextsoft.screenmirroring.ads.InterstitialHelper
+import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySplashBinding
-import com.nhnextsoft.screenmirroring.ads.AdConfig
+import kotlin.math.roundToInt
 
 
 class SplashActivity : AppCompatActivity() {
 
-    private var isAdLoaded: Boolean = false
-    private var isAdLoadError: Boolean = false
+
     private var isTimeOut: Boolean = false
     private var animator: ValueAnimator? = null
-    private val MAX_PROGRESS_SPLASH = 3000
+    private val MAX_PROGRESS_SPLASH = 5000
+    private val ADS_LOADING_TIMEOUT = 30000
     private lateinit var binding: ActivitySplashBinding
-    var interstitialSplash = InterstitialHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Constants.SELECT_FROM_SETTING = false
-        initView()
-        loadInterstitial()
+        if (Build.VERSION.SDK_INT > 29) {
+            AdmodSP.instance?.setOpenActivityAfterShowInterAds(true)
+        } else
+            AdmodSP.instance?.setOpenActivityAfterShowInterAds(false)
+
+        initSplash()
 
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.SCREEN_NAME, "Splash")
@@ -41,65 +47,65 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadInterstitial() {
-        interstitialSplash.isShowDialogLoading = false
-        interstitialSplash.setAdsId(this,
-            AdConfig.AD_ADMOB_SPLASH_INTERSTITIAL,
-            object : InterstitialHelper.AdHelperListener {
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    isAdLoaded = true
-                    gotoNextScreen()
-                    interstitialSplash.showInterstitial()
-                }
-
-                override fun onAdLoadError() {
-                    super.onAdLoadError()
-                    isAdLoadError = true
-                }
-
-            })
-        interstitialSplash.loadAdsInterstitialGoogle()
-
+    private fun initSplash() {
+        Constants.SELECT_FROM_SETTING = false
+        initView()
+        loadInterstitial()
     }
 
-    private fun gotoNextScreen() {
-        val intent = if (AppPreferences().completedTheFirstTutorial == true) gotoHome() else gotoTutorial()
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        if(isAdLoaded){
-            if(!isTimeOut) animator?.cancel()
-            startActivity(intent)
-        }else{
-            if (isAdLoadError){
-                if(!isTimeOut) animator?.cancel()
-                startActivity(intent)
-            }
+    private fun loadInterstitial() {
+//
+        if (AppPreferences().completedTheFirstTutorial == true) {
+            AdmodSP.instance?.loadSplashInterstitial(this,
+                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
+                ADS_LOADING_TIMEOUT.toLong(),
+                3000,
+                object : AdCallback() {
+                    override fun onAdFailedToLoad(i: LoadAdError?) {
+                        super.onAdFailedToLoad(i)
+                        startActivity(gotoHome())
+                    }
+
+                    override fun onAdClosed() {
+                        super.onAdClosed()
+                        startActivity(gotoHome())
+                    }
+                }
+            )
+        } else {
+            startActivity(gotoTutorial())
         }
     }
 
-    private fun gotoHome() = HomeActivity.newIntent(this)
+    private fun gotoHome() = HomeActivity.newIntent(this).apply {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
 
     private fun gotoTutorial() = Intent(this, TutorialActivity::class.java).apply {
         putExtra(Constants.EXTRA_TUTORIAL, true)
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
     private fun initView() {
         binding.progressSplash.max = MAX_PROGRESS_SPLASH
         binding.progressSplash.progress = 0
         startProgressTime()
+
+
     }
 
     private fun startProgressTime() {
         animator = ValueAnimator.ofInt(0, binding.progressSplash.max).apply {
             duration = MAX_PROGRESS_SPLASH.toLong()
             addUpdateListener { animation ->
-                binding.progressSplash.progress = animation.animatedValue as Int
+                binding.progressSplash.progress =
+                    ((animation.animatedValue as Int) * 0.99).roundToInt()
             }
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     isTimeOut = true
-                    gotoNextScreen()
+//                    gotoNextScreen()
                 }
             })
         }

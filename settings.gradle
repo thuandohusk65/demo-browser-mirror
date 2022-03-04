@@ -3,7 +3,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            //IronSource
+            url "https://android-sdk.is.com/"
+        }
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "Screen Mirroring"
 include ':app'
+include ':nh-ads'

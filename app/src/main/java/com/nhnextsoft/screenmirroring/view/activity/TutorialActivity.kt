@@ -6,27 +6,28 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.nhnextsoft.control.AdmodSP
+import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
-import com.nhnextsoft.screenmirroring.ads.InterstitialHelper
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivityTutorialBinding
 import com.nhnextsoft.screenmirroring.model.TutorialModel
 import com.nhnextsoft.screenmirroring.utility.ZoomOutPageTransformer
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
 import com.nhnextsoft.screenmirroring.view.adapter.TutorialPagerAdapter
-import timber.log.Timber
 
 class TutorialActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTutorialBinding
     private var currentItemViewPager = 0
-    private val interstitialBackHome = InterstitialHelper()
+    private var mInterstitialAd: InterstitialAd? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +37,10 @@ class TutorialActivity : AppCompatActivity() {
         initView()
         binding.textStep.text =
             getString(R.string.text_step) + " " + 1 + "/" + (loadAllImageTutorial().size)
+        loadAdInterstial()
     }
 
     private fun initView() {
-
         binding.viewpagerTutorial.setPageTransformer(true, ZoomOutPageTransformer())
         val tutorialPagerAdapter = TutorialPagerAdapter(this, loadAllImageTutorial())
         binding.viewpagerTutorial.adapter = tutorialPagerAdapter
@@ -66,6 +67,17 @@ class TutorialActivity : AppCompatActivity() {
         handleClick()
     }
 
+    private fun loadAdInterstial() {
+        AdmodSP.instance?.getInterstitalAds(this,
+            AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
+            object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    mInterstitialAd = interstitialAd
+                }
+            })
+    }
+
 
     private fun handleClick() {
         binding.viewpagerTutorial.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -76,7 +88,6 @@ class TutorialActivity : AppCompatActivity() {
             ) {
 
             }
-
 
             override fun onPageSelected(position: Int) {
                 @SuppressLint("SetTextI18n")
@@ -134,16 +145,27 @@ class TutorialActivity : AppCompatActivity() {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
                 AppPreferences().completedTheFirstTutorial = true
-                val intent = HomeActivity.newIntent(this).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(intent)
+                AdmodSP.instance?.forceShowInterstitial(this,
+                    mInterstitialAd,
+                    object : AdCallback() {
+                        override fun onAdClosed() {
+                            super.onAdClosed()
+                            gotoHome()
+                        }
+                    })
             }
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
             }
             binding.viewpagerTutorial.currentItem = currentItemViewPager
         }
+    }
+
+    private fun gotoHome() {
+        val intent = HomeActivity.newIntent(this).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(intent)
     }
 
     private fun loadAllImageTutorial(): ArrayList<TutorialModel> {
@@ -160,26 +182,16 @@ class TutorialActivity : AppCompatActivity() {
         if (!isNetworkAvailable()) {
             finish()
         } else {
-            interstitialBackHome.setAdsId(this,
-                AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
-                object : InterstitialHelper.AdHelperListener {
-                    override fun onAdLoaded() {
-                        super.onAdLoaded()
-                        Timber.d("interstitialBackHome onAdLoaded")
-                        finish()
-                        if (interstitialBackHome.isAdLoaded) {
-                            interstitialBackHome.showInterstitial()
-                        }
-                    }
-
-                    override fun onAdLoadError() {
-                        super.onAdLoadError()
-                        interstitialBackHome.progressDialog?.dismiss()
+            AdmodSP.instance?.showInterstitialAdByTimes(
+                this,
+                mInterstitialAd,
+                object : AdCallback() {
+                    override fun onAdClosed() {
+                        super.onAdClosed()
                         finish()
                     }
-
-                })
-            interstitialBackHome.loadAdsInterstitialGoogle()
+                }
+            )
         }
     }
 }
