@@ -55,10 +55,11 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
         myApplication?.registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         appResumeAdId = appOpenAdId
-        //        if (!Purchase.getInstance().isPurchased(application.getApplicationContext()) &&
-//                !isAdAvailable(false) && appOpenAdId != null) {
-//            fetchAd(false);
-//        }
+        if (!AppPurchase.instance.isPurchased(application?.applicationContext) &&
+            !isAdAvailable(false) && appOpenAdId != null
+        ) {
+            fetchAd(false)
+        }
     }
 
     /**
@@ -188,7 +189,7 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
                 NotificationManager.IMPORTANCE_LOW)
             notificationManager.createNotificationChannel(channel)
         }
-        notificationManager.notify(if (isSplash) AdmodSP.SPLASH_ADS else AdmodSP.RESUME_ADS,
+        notificationManager.notify(if (isSplash) Admod.SPLASH_ADS else Admod.RESUME_ADS,
             notification)
         //        if (!BuildConfig.DEBUG){
 //            throw new RuntimeException("Found test ad id on release");
@@ -249,7 +250,7 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
     fun showAdIfAvailable(isSplash: Boolean) {
         // Only show ad if there is not already an app open ad currently showing
         // and an ad is available.
-        if (currentActivity != null && AppPurchase.instance?.isPurchased(currentActivity)) {
+        if (currentActivity != null && AppPurchase.instance.isPurchased(currentActivity)) {
             if (fullScreenContentCallback != null) {
                 fullScreenContentCallback?.onAdDismissedFullScreenContent()
             }
@@ -340,7 +341,7 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
 
     fun loadAndShowSplashAds(adId: String?) {
         isTimeout = false
-        if (currentActivity != null && AppPurchase.instance?.isPurchased(currentActivity)) {
+        if (currentActivity != null && AppPurchase.instance.isPurchased(currentActivity)) {
             if (fullScreenContentCallback != null) {
                 fullScreenContentCallback?.onAdDismissedFullScreenContent()
             }

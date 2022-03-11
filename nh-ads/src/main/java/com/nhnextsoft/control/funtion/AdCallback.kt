@@ -14,5 +14,5 @@ open class AdCallback {
     open fun onInterstitialLoad(interstitialAd: InterstitialAd?) {}
     open fun onAdClicked() {}
     open fun onAdImpression() {}
-    open fun onUnifiedNativeAdLoaded(unifiedNativeAd: NativeAd?) {}
+    open fun onNativeAdLoaded(nativeAd: NativeAd?) {}
 }

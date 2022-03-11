@@ -11,7 +11,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.nhnextsoft.control.AdmodSP
+import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
@@ -37,7 +37,7 @@ class TutorialActivity : AppCompatActivity() {
         initView()
         binding.textStep.text =
             getString(R.string.text_step) + " " + 1 + "/" + (loadAllImageTutorial().size)
-        loadAdInterstial()
+        loadAdInterstitial()
     }
 
     private fun initView() {
@@ -67,8 +67,8 @@ class TutorialActivity : AppCompatActivity() {
         handleClick()
     }
 
-    private fun loadAdInterstial() {
-        AdmodSP.instance?.getInterstitalAds(this,
+    private fun loadAdInterstitial() {
+        Admod.instance?.getInterstitalAds(this,
             AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
             object : AdCallback() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
@@ -145,19 +145,19 @@ class TutorialActivity : AppCompatActivity() {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
                 AppPreferences().completedTheFirstTutorial = true
-                AdmodSP.instance?.forceShowInterstitial(this,
-                    mInterstitialAd,
-                    object : AdCallback() {
-                        override fun onAdClosed() {
-                            super.onAdClosed()
-                            gotoHome()
-                        }
-                    })
             }
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
             }
             binding.viewpagerTutorial.currentItem = currentItemViewPager
+            Admod.instance?.forceShowInterstitial(this,
+                mInterstitialAd,
+                object : AdCallback() {
+                    override fun onAdClosed() {
+                        super.onAdClosed()
+                        gotoHome()
+                    }
+                })
         }
     }
 
@@ -182,7 +182,7 @@ class TutorialActivity : AppCompatActivity() {
         if (!isNetworkAvailable()) {
             finish()
         } else {
-            AdmodSP.instance?.showInterstitialAdByTimes(
+            Admod.instance?.showInterstitialAdByTimes(
                 this,
                 mInterstitialAd,
                 object : AdCallback() {

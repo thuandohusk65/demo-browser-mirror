@@ -97,13 +97,13 @@
             android:id="@+id/textAd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/ads_icon2"
+            android:background="@drawable/bg_icon_ad_label"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
-            android:paddingBottom="2dp"
             android:paddingEnd="10dp"
-            android:text="AD" />
+            android:paddingBottom="2dp"
+            android:text="AD"
+            android:textColor="@color/colorWhite" />
 
     </RelativeLayout>
 

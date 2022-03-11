@@ -1,10 +1,11 @@
 package com.nhnextsoft.screenmirroring.view.activity
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
 import android.hardware.display.DisplayManager.DisplayListener
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
@@ -22,11 +24,18 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.nhnextsoft.control.Admod
+import com.nhnextsoft.control.billing.AppPurchase
+import com.nhnextsoft.control.dialog.DialogExit
+import com.nhnextsoft.control.dialog.InAppDialog
+import com.nhnextsoft.control.funtion.AdCallback
+import com.nhnextsoft.control.funtion.DialogExitListener
+import com.nhnextsoft.nativecarouselads.CrossCarouselActivity
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.Constants.SELECT_FROM_SETTING
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
-import com.nhnextsoft.screenmirroring.ads.InterstitialHelper
+import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
 import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivityHomeBinding
@@ -35,7 +44,6 @@ import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import timber.log.Timber
-import java.util.*
 
 
 class HomeActivity : AppCompatActivity() {
@@ -48,8 +56,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private val interstitialBackFinishApp = InterstitialHelper()
-    private val interstitialSelectDevice = InterstitialHelper()
+    private var nativeAdExit: NativeAd? = null
+    private var nativeAdExitTypeDialog: Int = 1
+
+    private var mInterstitialAd: InterstitialAd? = null
     private var isConnectMirror: Boolean = false
     private lateinit var binding: ActivityHomeBinding
     private var nativeAd: NativeAd? = null
@@ -69,10 +79,38 @@ class HomeActivity : AppCompatActivity() {
         Timber.d("AppPreferences().completedTheFirstTutorial: ${AppPreferences().completedTheFirstTutorial}")
         initView()
         showNativeAdmob()
+        loadAdInterstitial()
         checkConnectionScreenMirroring()
-
         checkingInternet()
+        loadNativeExit()
+        nativeAdExitTypeDialog = DialogExit.getDialogExitType()
 
+        showCrossAnimation()
+    }
+
+    private fun showCrossAnimation() {
+        val scaleDown: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(binding.imageCrossApp,
+            PropertyValuesHolder.ofFloat("scaleX", 1.1f),
+            PropertyValuesHolder.ofFloat("scaleY", 1.1f))
+        scaleDown.duration = 500
+        scaleDown.repeatCount = ObjectAnimator.INFINITE
+        scaleDown.repeatMode = ObjectAnimator.REVERSE
+        scaleDown.start()
+    }
+
+    private fun showCrossApp() {
+        startActivity(CrossCarouselActivity.openIntent(this))
+    }
+
+    private fun loadAdInterstitial() {
+        Admod.instance?.getInterstitalAds(this,
+            AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
+            object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun checkingInternet() {
@@ -137,12 +175,23 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.imageRemoveAds.setOnClickListener {
-            val intent = Intent(this, RemoveAdsActivity::class.java)
-            startActivity(intent)
+            val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+            inAppDialog.callback = object :InAppDialog.ICallback{
+                override fun onPurcharse() {
+                    AppPurchase.instance
+                        .purchase(this@HomeActivity, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+                    inAppDialog.dismiss()
+                }
+            }
+            inAppDialog.show()
         }
         binding.imageSetting.setOnClickListener {
             val intent = Intent(this, SettingActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.imageCrossApp.setOnClickListener {
+            showCrossApp()
         }
     }
 
@@ -160,26 +209,13 @@ class HomeActivity : AppCompatActivity() {
 
             }
         } else {
-            interstitialSelectDevice.setAdsId(this,
-                AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
-                object : InterstitialHelper.AdHelperListener {
-                    override fun onAdLoaded() {
-                        super.onAdLoaded()
-                        Timber.d("interstitialBackFinishApp onAdLoaded")
-                        openSelectDevices()
-                        if (interstitialSelectDevice.isAdLoaded) {
-                            interstitialSelectDevice.showInterstitial()
-                        }
-                    }
 
-                    override fun onAdLoadError() {
-                        super.onAdLoadError()
-                        interstitialSelectDevice.progressDialog?.dismiss()
-                        openSelectDevices()
-                    }
-
-                })
-            interstitialSelectDevice.loadAdsInterstitialGoogle()
+            Admod.instance?.forceShowInterstitial(this, mInterstitialAd, object : AdCallback() {
+                override fun onAdClosed() {
+                    openSelectDevices()
+                    loadAdInterstitial()
+                }
+            })
         }
     }
 
@@ -294,26 +330,32 @@ class HomeActivity : AppCompatActivity() {
         if (!isNetworkAvailable()) {
             startActivity(FinishAppActivity.newIntent(this))
         } else {
-            interstitialBackFinishApp.setAdsId(this,
-                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
-                object : InterstitialHelper.AdHelperListener {
-                    override fun onAdLoaded() {
-                        super.onAdLoaded()
-                        Timber.d("interstitialBackFinishApp onAdLoaded")
-                        startActivity(FinishAppActivity.newIntent(this@HomeActivity))
-                        if (interstitialBackFinishApp.isAdLoaded) {
-                            interstitialBackFinishApp.showInterstitial()
+            if (nativeAdExit != null) {
+                DialogExit.showDialogExit(this,
+                    nativeAdExit!!,
+                    nativeAdExitTypeDialog,
+                    object : DialogExitListener {
+                        override fun onExit(exit: Boolean) {
+                            startActivity(FinishAppActivity.newIntent(this@HomeActivity))
                         }
-                    }
 
-                    override fun onAdLoadError() {
-                        super.onAdLoadError()
-                        interstitialBackFinishApp.progressDialog?.dismiss()
-                        startActivity(FinishAppActivity.newIntent(this@HomeActivity))
-                    }
-
-                })
-            interstitialBackFinishApp.loadAdsInterstitialGoogle()
+                    })
+            } else {
+                startActivity(FinishAppActivity.newIntent(this))
+            }
         }
+    }
+
+    private fun loadNativeExit() {
+        if (nativeAdExit != null) return
+        Admod.instance?.loadNativeAd(this,
+            AdConfig.EXIT_APP_DIALOG_NATIVE,
+            object : AdCallback() {
+
+                override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                    super.onNativeAdLoaded(nativeAd)
+                    nativeAdExit = nativeAd
+                }
+            })
     }
 }

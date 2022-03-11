@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,23 +16,24 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_setting"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:padding="16dp"
-                android:src="@drawable/ic_ui_setting"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_ui_setting" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:text="@string/screen_mirroring"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_setting"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -40,19 +41,30 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:padding="16dp"
-                android:src="@drawable/ic_light"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_light" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_remove_ads"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:padding="16dp"
-                android:visibility="invisible"
-                android:src="@drawable/ic_remove_ad"
+                android:visibility="visible"
                 app:layout_constraintRight_toLeftOf="@+id/image_light"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_remove_ad" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_cross_app"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="8dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/image_remove_ads"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_cross" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -104,11 +116,11 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:drawableLeftCompat="@drawable/ic_cast_connected_24"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pulse_layout"
-            tools:text="Apple TV"
-            app:drawableLeftCompat="@drawable/ic_cast_connected_24" />
+            tools:text="Apple TV" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

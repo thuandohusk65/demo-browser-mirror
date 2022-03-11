@@ -7,12 +7,14 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.nhnextsoft.control.AdmodSP
+import com.nhnextsoft.control.AppOpenManager
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.ads.AdConfig
@@ -34,11 +36,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (Build.VERSION.SDK_INT > 29) {
-            AdmodSP.instance?.setOpenActivityAfterShowInterAds(true)
-        } else
-            AdmodSP.instance?.setOpenActivityAfterShowInterAds(false)
-
         initSplash()
 
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
@@ -56,22 +53,34 @@ class SplashActivity : AppCompatActivity() {
     private fun loadInterstitial() {
 //
         if (AppPreferences().completedTheFirstTutorial == true) {
-            AdmodSP.instance?.loadSplashInterstitial(this,
-                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
-                ADS_LOADING_TIMEOUT.toLong(),
-                3000,
-                object : AdCallback() {
-                    override fun onAdFailedToLoad(i: LoadAdError?) {
-                        super.onAdFailedToLoad(i)
-                        startActivity(gotoHome())
-                    }
-
-                    override fun onAdClosed() {
-                        super.onAdClosed()
-                        startActivity(gotoHome())
-                    }
+//            AdmodSP.instance?.loadSplashInterstitial(this,
+//                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
+//                ADS_LOADING_TIMEOUT.toLong(),
+//                3000,
+//                object : AdCallback() {
+//                    override fun onAdFailedToLoad(i: LoadAdError?) {
+//                        super.onAdFailedToLoad(i)
+//                        startActivity(gotoHome())
+//                    }
+//
+//                    override fun onAdClosed() {
+//                        super.onAdClosed()
+//                        startActivity(gotoHome())
+//                    }
+//                }
+//            )
+            AppOpenManager.instance?.setFullScreenContentCallback(object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent()
+                    startActivity(gotoHome())
                 }
-            )
+
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    super.onAdFailedToShowFullScreenContent(p0)
+                    startActivity(gotoHome())
+                }
+
+            })
         } else {
             startActivity(gotoTutorial())
         }

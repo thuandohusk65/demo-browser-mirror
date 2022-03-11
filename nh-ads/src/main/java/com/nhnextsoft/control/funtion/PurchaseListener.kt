@@ -1,6 +1,6 @@
 package com.nhnextsoft.control.funtion
 
-interface PurchaseListioner {
+interface PurchaseListener {
     fun onProductPurchased(productId: String?, transactionDetails: String?)
     fun displayErrorMessage(errorMsg: String?)
     fun onUserCancelBilling()

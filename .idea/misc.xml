@@ -33,7 +33,7 @@
         <entry key="app/src/main/res/drawable/round_background_upgrade.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_finish_app.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.36205698401667824" />
-        <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.1734375" />
+        <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_select_device.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.5" />
@@ -53,9 +53,12 @@
         <entry key="nh-ads/src/main/res/drawable/ads_icon.xml" value="0.2525" />
         <entry key="nh-ads/src/main/res/drawable/ads_icon2.xml" value="0.2525" />
         <entry key="nh-ads/src/main/res/drawable/bg_card_ads.xml" value="0.2525" />
+        <entry key="nh-ads/src/main/res/drawable/bg_icon_ad_label.xml" value="0.2195" />
         <entry key="nh-ads/src/main/res/drawable/bg_purcharse.xml" value="0.2075" />
         <entry key="nh-ads/src/main/res/drawable/gnt_rounded_corners_shape.xml" value="0.2075" />
+        <entry key="nh-ads/src/main/res/drawable/selector_button_exit_transfer.xml" value="0.3765" />
         <entry key="nh-ads/src/main/res/layout/dialog_inapp.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/dialog_inapp_buy.xml" value="0.2269021739130435" />
         <entry key="nh-ads/src/main/res/layout/dialog_prepair_loading_ads.xml" value="0.3619791666666667" />
         <entry key="nh-ads/src/main/res/layout/fb_native_ad.xml" value="0.2269021739130435" />
         <entry key="nh-ads/src/main/res/layout/fb_native_ad_small.xml" value="0.2" />
@@ -69,8 +72,13 @@
         <entry key="nh-ads/src/main/res/layout/load_fb_native.xml" value="0.2269021739130435" />
         <entry key="nh-ads/src/main/res/layout/load_fb_small_native.xml" value="0.2269021739130435" />
         <entry key="nh-ads/src/main/res/layout/load_native_fan.xml" value="0.2269021739130435" />
-        <entry key="nh-ads/src/main/res/layout/native_admob_ad.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/native_admob_ad.xml" value="0.33" />
+        <entry key="nh-ads/src/main/res/layout/native_exit1.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/native_exit3.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/small_native_admod_ad.xml" value="0.2269021739130435" />
         <entry key="nh-ads/src/main/res/layout/view_dialog_exit1.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/view_dialog_exit2.xml" value="0.2269021739130435" />
+        <entry key="nh-ads/src/main/res/layout/view_dialog_exit3.xml" value="0.2269021739130435" />
       </map>
     </option>
   </component>

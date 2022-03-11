@@ -19,9 +19,12 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.nhnextsoft.control.billing.AppPurchase
+import com.nhnextsoft.control.dialog.InAppDialog
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
+import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
 import com.nhnextsoft.screenmirroring.databinding.ActivitySelectDeviceBinding
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
@@ -85,6 +88,18 @@ class SelectDeviceActivity : AppCompatActivity() {
 
     private fun initView() {
 
+        binding.imageRemoveAds.setOnClickListener {
+            val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+            inAppDialog.callback = object : InAppDialog.ICallback {
+                override fun onPurcharse() {
+                    AppPurchase.instance
+                        .purchase(this@SelectDeviceActivity,
+                            PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+                    inAppDialog.dismiss()
+                }
+            }
+            inAppDialog.show()
+        }
         binding.buttonSelectDevice.setOnClickListener {
 
             try {

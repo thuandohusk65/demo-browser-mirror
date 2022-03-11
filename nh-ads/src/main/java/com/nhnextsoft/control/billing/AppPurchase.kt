@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.android.billingclient.api.*
 import com.nhnextsoft.control.application.AppGlobal
 import com.nhnextsoft.control.funtion.BillingListener
-import com.nhnextsoft.control.funtion.PurchaseListioner
+import com.nhnextsoft.control.funtion.PurchaseListener
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.*
@@ -22,7 +22,7 @@ class AppPurchase private constructor() {
     private var productId: String? = null
     private var listSubcriptionId: MutableList<String> = mutableListOf()
     private var listINAPId: MutableList<String> = mutableListOf()
-    private var purchaseListioner: PurchaseListioner? = null
+    private var purchaseListener: PurchaseListener? = null
     private var billingListener: BillingListener? = null
     var initBillingFinish = false
         private set
@@ -40,8 +40,8 @@ class AppPurchase private constructor() {
     private var idPurchaseCurrent = ""
     private var typeIap = 0
 
-    fun setPurchaseListener(purchaseListener: PurchaseListioner) {
-        this.purchaseListioner = purchaseListener
+    fun setPurchaseListener(purchaseListener: PurchaseListener) {
+        this.purchaseListener = purchaseListener
     }
 
     /**
@@ -95,7 +95,7 @@ class AppPurchase private constructor() {
                 handlePurchase(purchase)
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            if (purchaseListioner != null) purchaseListioner?.onUserCancelBilling()
+            if (purchaseListener != null) purchaseListener?.onUserCancelBilling()
             Timber.d("onPurchasesUpdated:USER_CANCELED ")
         } else {
             Timber.d("onPurchasesUpdated:... ")
@@ -257,7 +257,7 @@ class AppPurchase private constructor() {
     fun purchase(activity: Activity, productId: String): String {
         var productId = productId
         if (skuListINAPFromStore == null) {
-            if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Billing error init")
+            if (purchaseListener != null) purchaseListener?.displayErrorMessage("Billing error init")
             return ""
         }
         if (AppGlobal.BUILD_DEBUG) {
@@ -273,12 +273,12 @@ class AppPurchase private constructor() {
         val responseCode = billingClient?.launchBillingFlow(activity, billingFlowParams)
         when (responseCode?.responseCode) {
             BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Billing not supported for type of request")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Billing not supported for type of request")
                 return "Billing not supported for type of request"
             }
             BillingClient.BillingResponseCode.ITEM_NOT_OWNED, BillingClient.BillingResponseCode.DEVELOPER_ERROR -> return ""
             BillingClient.BillingResponseCode.ERROR -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Error completing request")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Error completing request")
                 return "Error completing request"
             }
             BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> return "Error processing request."
@@ -287,11 +287,11 @@ class AppPurchase private constructor() {
             BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> return "Play Store service is not connected now"
             BillingClient.BillingResponseCode.SERVICE_TIMEOUT -> return "Timeout"
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Network error.")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Network error.")
                 return "Network Connection down"
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Request Canceled")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Request Canceled")
                 return "Request Canceled"
             }
             BillingClient.BillingResponseCode.OK -> return "Subscribed Successfully"
@@ -301,7 +301,7 @@ class AppPurchase private constructor() {
 
     fun subscribe(activity: Activity, SubsId: String): String {
         if (skuListSubsFromStore == null) {
-            if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Billing error init")
+            if (purchaseListener != null) purchaseListener?.displayErrorMessage("Billing error init")
             return ""
         }
         if (AppGlobal.BUILD_DEBUG) {
@@ -321,12 +321,12 @@ class AppPurchase private constructor() {
         val responseCode = billingClient?.launchBillingFlow(activity, billingFlowParams)
         when (responseCode?.responseCode) {
             BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Billing not supported for type of request")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Billing not supported for type of request")
                 return "Billing not supported for type of request"
             }
             BillingClient.BillingResponseCode.ITEM_NOT_OWNED, BillingClient.BillingResponseCode.DEVELOPER_ERROR -> return ""
             BillingClient.BillingResponseCode.ERROR -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Error completing request")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Error completing request")
                 return "Error completing request"
             }
             BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> return "Error processing request."
@@ -335,11 +335,11 @@ class AppPurchase private constructor() {
             BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> return "Play Store service is not connected now"
             BillingClient.BillingResponseCode.SERVICE_TIMEOUT -> return "Timeout"
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Network error.")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Network error.")
                 return "Network Connection down"
             }
             BillingClient.BillingResponseCode.USER_CANCELED -> {
-                if (purchaseListioner != null) purchaseListioner?.displayErrorMessage("Request Canceled")
+                if (purchaseListener != null) purchaseListener?.displayErrorMessage("Request Canceled")
                 return "Request Canceled"
             }
             BillingClient.BillingResponseCode.OK -> return "Subscribed Successfully"
@@ -386,7 +386,7 @@ class AppPurchase private constructor() {
         //tracking adjust
         val price = getPriceWithoutCurrency(idPurchaseCurrent, typeIap)
         val currentcy = getCurrency(idPurchaseCurrent, typeIap)
-        if (purchaseListioner != null) purchaseListioner?.onProductPurchased(purchase.orderId,
+        if (purchaseListener != null) purchaseListener?.onProductPurchased(purchase.orderId,
             purchase.originalJson)
         if (isConsumePurchase) {
             val consumeParams = ConsumeParams.newBuilder()
@@ -443,7 +443,7 @@ class AppPurchase private constructor() {
         return skuDetails.priceAmountMicros.toDouble()
     }
 
-    private fun formatCurrency(price: Double, currency: String): String {
+    fun formatCurrency(price: Double, currency: String): String {
         val format = NumberFormat.getCurrencyInstance()
         format.maximumFractionDigits = 0
         format.currency = Currency.getInstance(currency)

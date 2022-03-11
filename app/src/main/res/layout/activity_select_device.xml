@@ -33,6 +33,16 @@
             app:layout_constraintLeft_toRightOf="@+id/image_back"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageRemoveAds"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_remove_ad" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -67,9 +77,9 @@
             android:id="@+id/progress_wifi"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            app:lottie_rawRes="@raw/circle_progress"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/circle_progress" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -116,13 +126,14 @@
             android:text="@string/test_connection_speed"
             android:textColor="@color/white"
             android:textSize="16sp" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progress_speed"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            app:lottie_rawRes="@raw/circle_progress"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/circle_progress" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_check_speed"
@@ -173,9 +184,9 @@
             android:id="@+id/progress_duration"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            app:lottie_rawRes="@raw/circle_progress"
             app:lottie_autoPlay="true"
-            app:lottie_loop="true"/>
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/circle_progress" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_check_duration"
@@ -204,8 +215,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="@string/select_device"
-        android:textSize="14sp"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_3" />

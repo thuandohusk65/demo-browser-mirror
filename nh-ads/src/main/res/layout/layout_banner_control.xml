@@ -16,6 +16,6 @@
         android:id="@+id/fl_loading"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
-        <include layout="@layout/load_fb_banner" />
+        <include layout="@layout/load_banner" />
     </FrameLayout>
 </RelativeLayout>

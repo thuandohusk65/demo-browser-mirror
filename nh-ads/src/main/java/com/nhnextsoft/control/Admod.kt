@@ -42,7 +42,7 @@ import com.nhnextsoft.control.funtion.RewardCallback
 import timber.log.Timber
 import java.util.*
 
-class AdmodSP private constructor() {
+class Admod private constructor() {
     private var currentClicked = 0
     private var nativeId: String? = null
     private var numShowAds = 3
@@ -52,10 +52,10 @@ class AdmodSP private constructor() {
     private var dialog: PrepareLoadingAdsDialog? = null
     private var isTimeout // xử lý timeout show ads
             = false
-    private var isShowLoadingSplash =
-        false //kiểm tra trạng thái ad splash, ko cho load, show khi đang show loading ads splash
+    private var isShowLoadingSplash = false //kiểm tra trạng thái ad splash, ko cho load, show khi đang show loading ads splash
     private var isFan = false
-    private var isAdcolony = false
+
+    //    private var isAdcolony = false
     private var isAppLovin = false
     var isTimeDelay = false //xử lý delay time show ads, = true mới show ads
     private var openActivityAfterShowInterAds = false
@@ -73,9 +73,9 @@ class AdmodSP private constructor() {
         isFan = fan
     }
 
-    fun setColony(adcolony: Boolean) {
-        isAdcolony = adcolony
-    }
+//    fun setColony(adcolony: Boolean) {
+//        isAdcolony = adcolony
+//    }
 
     fun setAppLovin(appLovin: Boolean) {
         isAppLovin = appLovin
@@ -371,7 +371,7 @@ class AdmodSP private constructor() {
         interstitialAd = null
         getInterstitalAds(activity, id, object : AdCallback() {
             override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                interstitialAd.also { this@AdmodSP.interstitialAd = it }
+                interstitialAd.also { this@Admod.interstitialAd = it }
                 if (interstitialAd == null) {
                     adListener?.onAdFailedToLoad(null)
                     return
@@ -957,7 +957,7 @@ class AdmodSP private constructor() {
             .build()
         val adLoader = AdLoader.Builder(context, id)
             .forNativeAd { nativeAd ->
-                callback?.onUnifiedNativeAdLoaded(nativeAd)
+                callback?.onNativeAdLoaded(nativeAd)
                 nativeAd.setOnPaidEventListener { adValue: AdValue? ->
 //                            AdjustDebug.pushTrackEventAdmod(adValue);
                     logPaidAdImpression(
@@ -1250,8 +1250,8 @@ class AdmodSP private constructor() {
         }
         RewardedAd.load(context, id, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdLoaded(rewardedAd: RewardedAd) {
-                this@AdmodSP.rewardedAd = rewardedAd
-                this@AdmodSP.rewardedAd?.onPaidEventListener =
+                this@Admod.rewardedAd = rewardedAd
+                this@Admod.rewardedAd?.onPaidEventListener =
                     OnPaidEventListener { adValue: AdValue? ->
 //                    AdjustDebug.pushTrackEventAdmod(adValue);
                         logPaidAdImpression(
@@ -1288,8 +1288,8 @@ class AdmodSP private constructor() {
         RewardedAd.load(context, id, adRequest, object : RewardedAdLoadCallback() {
             override fun onAdLoaded(rewardedAd: RewardedAd) {
                 callback.onAdLoaded()
-                this@AdmodSP.rewardedAd = rewardedAd
-                this@AdmodSP.rewardedAd?.onPaidEventListener =
+                this@Admod.rewardedAd = rewardedAd
+                this@Admod.rewardedAd?.onPaidEventListener =
                     OnPaidEventListener { adValue: AdValue? ->
 //                    AdjustDebug.pushTrackEventAdmod(adValue);
                         logPaidAdImpression(
@@ -1403,10 +1403,12 @@ class AdmodSP private constructor() {
 
     companion object {
 
-        var instance: AdmodSP? = null
+
+        var instance: Admod? = null
+            @JvmName("getInstance")
             get() {
                 if (field == null) {
-                    field = AdmodSP()
+                    field = Admod()
                     field?.isShowLoadingSplash = false
                 }
                 return field

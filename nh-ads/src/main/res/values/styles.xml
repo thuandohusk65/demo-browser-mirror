@@ -15,7 +15,7 @@
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">left</item>
-        <item name="android:background">@drawable/ads_icon</item>
+        <item name="android:background">@drawable/bg_icon_ad_label</item>
         <item name="android:paddingLeft">3.0dip</item>
         <item name="android:paddingRight">6.0dip</item>
         <item name="android:paddingBottom">1.0dip</item>

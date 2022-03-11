@@ -14,27 +14,44 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.nhnextsoft.control.Admod
+import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.BuildConfig
 import com.nhnextsoft.screenmirroring.R
+import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySettingBinding
+import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
 import java.util.*
 
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
-
+    private var mInterstitialAd: InterstitialAd? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingBinding.inflate(layoutInflater)
         initView()
         setContentView(binding.root)
+        loadAdInterstitial()
+    }
+
+    private fun loadAdInterstitial() {
+        Admod.instance?.getInterstitalAds(this,
+            AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
+            object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun initView() {
         binding.imageBack.setOnClickListener {
-            finish()
+            onBackPressed()
         }
         binding.buttonBuyNow.animation =
             AnimationUtils.loadAnimation(this, R.anim.anim_zoom_buy_now)
@@ -187,6 +204,23 @@ class SettingActivity : AppCompatActivity() {
                     Intent.ACTION_VIEW,
                     Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
                 )
+            )
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!isNetworkAvailable()) {
+            finish()
+        } else {
+            Admod.instance?.showInterstitialAdByTimes(
+                this,
+                mInterstitialAd,
+                object : AdCallback() {
+                    override fun onAdClosed() {
+                        super.onAdClosed()
+                        finish()
+                    }
+                }
             )
         }
     }
