@@ -4,20 +4,16 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.nhnextsoft.control.AppOpenManager
-import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
-import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySplashBinding
 import kotlin.math.roundToInt
@@ -69,14 +65,17 @@ class SplashActivity : AppCompatActivity() {
 //                    }
 //                }
 //            )
-            AppOpenManager.instance?.setFullScreenContentCallback(object : FullScreenContentCallback() {
+            AppOpenManager.instance?.setFullScreenContentCallback(object :
+                FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     super.onAdDismissedFullScreenContent()
+                    AppOpenManager.instance?.removeFullScreenContentCallback()
                     startActivity(gotoHome())
                 }
 
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                     super.onAdFailedToShowFullScreenContent(p0)
+                    AppOpenManager.instance?.removeFullScreenContentCallback()
                     startActivity(gotoHome())
                 }
 
