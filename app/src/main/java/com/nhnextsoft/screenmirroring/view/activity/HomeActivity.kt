@@ -330,17 +330,22 @@ class HomeActivity : AppCompatActivity() {
         if (!isNetworkAvailable()) {
             startActivity(FinishAppActivity.newIntent(this))
         } else {
-            if (nativeAdExit != null) {
-                DialogExit.showDialogExit(this,
-                    nativeAdExit!!,
-                    nativeAdExitTypeDialog,
-                    object : DialogExitListener {
-                        override fun onExit(exit: Boolean) {
-                            startActivity(FinishAppActivity.newIntent(this@HomeActivity))
-                        }
-
-                    })
-            } else {
+            try {
+                if (nativeAdExit != null) {
+                    nativeAdExit?.let { nativeAd ->
+                        DialogExit.showDialogExit(this,
+                            nativeAd,
+                            nativeAdExitTypeDialog,
+                            object : DialogExitListener {
+                                override fun onExit(exit: Boolean) {
+                                    startActivity(FinishAppActivity.newIntent(this@HomeActivity))
+                                }
+                            })
+                    }
+                } else {
+                    startActivity(FinishAppActivity.newIntent(this))
+                }
+            } catch (err: Exception) {
                 startActivity(FinishAppActivity.newIntent(this))
             }
         }
