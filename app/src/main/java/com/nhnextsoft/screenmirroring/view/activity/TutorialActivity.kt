@@ -145,19 +145,19 @@ class TutorialActivity : AppCompatActivity() {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
                 AppPreferences().completedTheFirstTutorial = true
+                Admod.instance?.forceShowInterstitial(this,
+                    mInterstitialAd,
+                    object : AdCallback() {
+                        override fun onAdClosed() {
+                            super.onAdClosed()
+                            gotoHome()
+                        }
+                    })
             }
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
             }
             binding.viewpagerTutorial.currentItem = currentItemViewPager
-            Admod.instance?.forceShowInterstitial(this,
-                mInterstitialAd,
-                object : AdCallback() {
-                    override fun onAdClosed() {
-                        super.onAdClosed()
-                        gotoHome()
-                    }
-                })
         }
     }
 
