@@ -25,9 +25,12 @@ import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
+import com.nhnextsoft.screenmirroring.config.AppConfigRemote
+import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySelectDeviceBinding
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
+import timber.log.Timber
 
 
 class SelectDeviceActivity : AppCompatActivity() {
@@ -37,19 +40,29 @@ class SelectDeviceActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectDeviceBinding
     private var nativeAd: NativeAd? = null
     private var isLoadNative: Boolean = false
+    private var numberOfTimesDisplayed: Int? = null
+    private var numberOfImpressionsPerDay: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySelectDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-
+        checkShowDialogRemoveAds()
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.SCREEN_NAME, "SelectDevice")
             param(FirebaseAnalytics.Param.SCREEN_CLASS, "SelectDeviceActivity")
         }
     }
 
+    private fun checkShowDialogRemoveAds() {
+        numberOfTimesDisplayed = AppPreferences().numberOfTimesDialogRemoveAdsDisplayed
+        numberOfImpressionsPerDay = AppPreferences().numberOfDialogRemoveAdsImpressionsPerDay
+        Timber.d("showDialog ${numberOfTimesDisplayed} ${numberOfImpressionsPerDay}")
+        if((numberOfTimesDisplayed?.compareTo(numberOfImpressionsPerDay!!)?: 0) < 0) {
+            showDialogRemoveAds()
+        }
+    }
 
     private fun startCheckWifiStatus() {
         Handler(Looper.getMainLooper()).postDelayed(kotlin.run {
@@ -86,19 +99,23 @@ class SelectDeviceActivity : AppCompatActivity() {
         }, TIME_LOADING_PROGRESS)
     }
 
-    private fun initView() {
-
-        binding.imageRemoveAds.setOnClickListener {
-            val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
-            inAppDialog.callback = object : InAppDialog.ICallback {
-                override fun onPurcharse() {
-                    AppPurchase.instance
-                        .purchase(this@SelectDeviceActivity,
-                            PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
-                    inAppDialog.dismiss()
-                }
+    private fun showDialogRemoveAds() {
+        val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+        inAppDialog.callback = object : InAppDialog.ICallback {
+            override fun onPurcharse() {
+                AppPurchase.instance
+                    .purchase(this@SelectDeviceActivity,
+                        PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+                inAppDialog.dismiss()
             }
-            inAppDialog.show()
+        }
+        AppPreferences().numberOfTimesDialogRemoveAdsDisplayed = numberOfTimesDisplayed?.plus(1)
+        inAppDialog.show()
+    }
+
+    private fun initView() {
+        binding.imageRemoveAds.setOnClickListener {
+            showDialogRemoveAds();
         }
         binding.buttonSelectDevice.setOnClickListener {
 
@@ -132,9 +149,7 @@ class SelectDeviceActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (window.decorView.rootView.isShown) {
             showNativeAdmob()
-        }
     }
 
 

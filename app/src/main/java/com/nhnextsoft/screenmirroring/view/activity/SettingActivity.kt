@@ -17,11 +17,13 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.nhnextsoft.control.Admod
-import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
+import com.nhnextsoft.control.billing.AppPurchase
+import com.nhnextsoft.control.dialog.InAppDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.BuildConfig
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
+import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
 import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySettingBinding
@@ -92,8 +94,15 @@ class SettingActivity : AppCompatActivity() {
             }
         }
         binding.buttonBuyNow.setOnClickListener {
-            val intent = Intent(this, RemoveAdsActivity::class.java)
-            startActivity(intent)
+            val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+            inAppDialog.callback = object : InAppDialog.ICallback{
+                override fun onPurcharse() {
+                    AppPurchase.instance
+                        .purchase(this@SettingActivity, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
+                    inAppDialog.dismiss()
+                }
+            }
+            inAppDialog.show()
         }
         binding.layoutCheckUpdate.setOnClickListener {
             openAppInStore()
@@ -233,7 +242,6 @@ class SettingActivity : AppCompatActivity() {
         )
     }
     override fun onBackPressed() {
-        Timber.d("onBackPressed"+ isLoadedAdInterstitial)
         if (!isNetworkAvailable()) {
             finish()
         } else {

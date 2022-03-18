@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.15625" />
         <entry key="app/src/main/res/drawable/ad_splash_background.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_cta_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_rounded_corners_shape.xml" value="0.35625" />
@@ -35,8 +36,8 @@
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.36205698401667824" />
         <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_select_device.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.1734375" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad_splash.xml" value="0.1875" />
