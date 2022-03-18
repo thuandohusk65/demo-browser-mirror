@@ -10,6 +10,7 @@ import com.nhnextsoft.control.billing.AppPurchase
 import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
 import com.nhnextsoft.screenmirroring.ads.PurchaseConstants.PRODUCT_ID_REMOTE_ADS
+import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.config.Preferences
 import com.nhnextsoft.screenmirroring.utility.extensions.ReleaseTree
@@ -46,7 +47,7 @@ class ScreenMirroringApp : SupportAdsApplication() {
             AppPurchase.instance.discount = 1.5
         }
         AppOpenManager.instance?.disableAppResumeWithActivity(AdActivity::class.java)
-//        AppOpenManager.instance?.disableAppResumeWithActivity(SplashActivity::class.java)
+//
         Admod.instance?.setOpenActivityAfterShowInterAds(false)
         AppPurchase.instance.initBilling(this,
             PurchaseConstants.listINAPId,
@@ -57,9 +58,13 @@ class ScreenMirroringApp : SupportAdsApplication() {
             Admod.instance?.setOpenActivityAfterShowInterAds(false)
 
         if (AppPreferences().completedTheFirstTutorial == true) {
-            AppOpenManager.instance?.setSplashActivity(SplashActivity::class.java,
-                AdConfig.AD_ADMOB_OPEN_APP_SPLASH,
-                10000)
+            if (AppConfigRemote().isUsingAdsOpenApp == true) {
+                AppOpenManager.instance?.setSplashActivity(SplashActivity::class.java,
+                    AdConfig.AD_ADMOB_OPEN_APP_SPLASH,
+                    10000)
+            }else{
+                AppOpenManager.instance?.disableAppResumeWithActivity(SplashActivity::class.java)
+            }
         }
 
     }
