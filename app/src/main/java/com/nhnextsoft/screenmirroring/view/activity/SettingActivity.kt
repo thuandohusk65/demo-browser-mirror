@@ -19,6 +19,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.billing.AppPurchase
 import com.nhnextsoft.control.dialog.InAppDialog
+import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.BuildConfig
 import com.nhnextsoft.screenmirroring.R
