@@ -33,8 +33,9 @@ import java.util.*
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
     private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
-    private var isLoadedAdInterstitial: Boolean = false;
+    private var isLoadedAdInterstitial: Boolean = false
     private var mInterstitialAd: InterstitialAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingBinding.inflate(layoutInflater)
