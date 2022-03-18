@@ -17,12 +17,14 @@ import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import com.nhnextsoft.control.analytic.FirebaseAnalyticsUtil.logPaidAdImpression
 import com.nhnextsoft.control.billing.AppPurchase
 import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
+
 import timber.log.Timber
 import java.util.*
 
 class AppOpenManager private constructor() : ActivityLifecycleCallbacks, LifecycleObserver {
     private var appResumeAd: AppOpenAd? = null
     private var splashAd: AppOpenAd? = null
+    private var isUsingAdsOpenAppInSplash: Boolean = true
     private var loadCallback: AppOpenAdLoadCallback? = null
     private var fullScreenContentCallback: FullScreenContentCallback? = null
     private var appResumeAdId: String? = null
@@ -390,6 +392,7 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
                 }
             }
         }
+
         val request = adRequest
         AppOpenAd.load(
             myApplication, splashAdId, request,

@@ -8,14 +8,20 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.AppOpenManager
+import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
+import com.nhnextsoft.screenmirroring.ads.AdConfig
+import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySplashBinding
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 
@@ -33,7 +39,6 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initSplash()
-
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.SCREEN_NAME, "Splash")
             param(FirebaseAnalytics.Param.SCREEN_CLASS, "SplashActivity")
@@ -47,39 +52,36 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun loadInterstitial() {
-//
         if (AppPreferences().completedTheFirstTutorial == true) {
-//            AdmodSP.instance?.loadSplashInterstitial(this,
-//                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
-//                ADS_LOADING_TIMEOUT.toLong(),
-//                3000,
-//                object : AdCallback() {
-//                    override fun onAdFailedToLoad(i: LoadAdError?) {
-//                        super.onAdFailedToLoad(i)
-//                        startActivity(gotoHome())
-//                    }
-//
-//                    override fun onAdClosed() {
-//                        super.onAdClosed()
-//                        startActivity(gotoHome())
-//                    }
-//                }
-//            )
-            AppOpenManager.instance?.setFullScreenContentCallback(object :
-                FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent()
-                    AppOpenManager.instance?.removeFullScreenContentCallback()
-                    startActivity(gotoHome())
-                }
+            if (AppConfigRemote().isUsingAdsOpenApp == true) {
+                AppOpenManager.instance?.setFullScreenContentCallback(object :
+                    FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        AppOpenManager.instance?.removeFullScreenContentCallback()
+                        startActivity(gotoHome())
+                    }
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
+                        AppOpenManager.instance?.removeFullScreenContentCallback()
+                        startActivity(gotoHome())
+                    }
+                })
+            } else {
+                Admod.instance?.loadSplashInterstitial(this,
+                    AdConfig.AD_ADMOB_SPLASH_INTERSTITIAL,
+                    10000,
+                    5000,
+                    object : AdCallback() {
+                         override fun onAdClosed() {
+                             startActivity(gotoHome())
+                        }
+                        override fun onAdFailedToLoad(i: LoadAdError?) {
+                            startActivity(gotoHome())
+                        }
+                    })
+            }
 
-                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    super.onAdFailedToShowFullScreenContent(p0)
-                    AppOpenManager.instance?.removeFullScreenContentCallback()
-                    startActivity(gotoHome())
-                }
-
-            })
         } else {
             startActivity(gotoTutorial())
         }
