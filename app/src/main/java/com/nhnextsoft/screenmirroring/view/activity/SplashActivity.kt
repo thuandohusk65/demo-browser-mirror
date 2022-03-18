@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
+import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -14,8 +15,10 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.nhnextsoft.control.AppOpenManager
 import com.nhnextsoft.screenmirroring.Constants
+import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySplashBinding
+import java.util.*
 import kotlin.math.roundToInt
 
 
@@ -34,6 +37,18 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
         initSplash()
 
+        AppPreferences().numberOfDialogRemoveAdsImpressionsPerDay = AppConfigRemote().numberOfDialogRemoveAdsImpressionsPerDay
+        val settings = PreferenceManager.getDefaultSharedPreferences(this)
+        val lastTimeStarted = settings.getInt("last_time_started", -1)
+        val calendar: Calendar = Calendar.getInstance()
+        val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
+
+        if (today != lastTimeStarted) {
+            AppPreferences().numberOfTimesDialogRemoveAdsDisplayed = 0
+            val editor = settings.edit()
+            editor.putInt("last_time_started", today)
+            editor.commit()
+        }
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.SCREEN_NAME, "Splash")
             param(FirebaseAnalytics.Param.SCREEN_CLASS, "SplashActivity")
