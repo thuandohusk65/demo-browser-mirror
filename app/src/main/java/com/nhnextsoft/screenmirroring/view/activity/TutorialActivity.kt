@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.nhnextsoft.control.Admod
+import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
@@ -22,19 +24,22 @@ import com.nhnextsoft.screenmirroring.model.TutorialModel
 import com.nhnextsoft.screenmirroring.utility.ZoomOutPageTransformer
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
 import com.nhnextsoft.screenmirroring.view.adapter.TutorialPagerAdapter
+import timber.log.Timber
 
 class TutorialActivity : AppCompatActivity() {
 
+    private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
     private lateinit var binding: ActivityTutorialBinding
     private var currentItemViewPager = 0
     private var mInterstitialAd: InterstitialAd? = null
-
+    private var isLoadedAdInterstitial: Boolean = false;
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTutorialBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+        modalLoadingAd = PrepareLoadingAdsDialog(this)
         binding.textStep.text =
             getString(R.string.text_step) + " " + 1 + "/" + (loadAllImageTutorial().size)
         loadAdInterstitial()
@@ -74,6 +79,10 @@ class TutorialActivity : AppCompatActivity() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                     super.onInterstitialLoad(interstitialAd)
                     mInterstitialAd = interstitialAd
+                    isLoadedAdInterstitial = true
+                }
+                override fun onAdFailedToLoad(i: LoadAdError?) {
+                    isLoadedAdInterstitial = true
                 }
             })
     }
@@ -145,19 +154,19 @@ class TutorialActivity : AppCompatActivity() {
             currentItemViewPager += 1
             if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
                 AppPreferences().completedTheFirstTutorial = true
+                Admod.instance?.forceShowInterstitial(this,
+                    mInterstitialAd,
+                    object : AdCallback() {
+                        override fun onAdClosed() {
+                            super.onAdClosed()
+                            gotoHome()
+                        }
+                    })
             }
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
             }
             binding.viewpagerTutorial.currentItem = currentItemViewPager
-            Admod.instance?.forceShowInterstitial(this,
-                mInterstitialAd,
-                object : AdCallback() {
-                    override fun onAdClosed() {
-                        super.onAdClosed()
-                        gotoHome()
-                    }
-                })
         }
     }
 
@@ -178,20 +187,43 @@ class TutorialActivity : AppCompatActivity() {
         return arrTutorial
     }
 
+    private fun showAd(): Unit {
+        Admod.instance?.forceShowInterstitial(
+            this,
+            mInterstitialAd,
+            object : AdCallback() {
+                override fun onAdClosed() {
+                    super.onAdClosed()
+                    finish()
+                }
+            }
+        )
+    }
     override fun onBackPressed() {
         if (!isNetworkAvailable()) {
             finish()
         } else {
-            Admod.instance?.showInterstitialAdByTimes(
-                this,
-                mInterstitialAd,
-                object : AdCallback() {
-                    override fun onAdClosed() {
-                        super.onAdClosed()
-                        finish()
-                    }
-                }
-            )
+            if (isLoadedAdInterstitial) {
+                showAd()
+            } else {
+                modalLoadingAd.show()
+                Admod.instance?.getInterstitalAds(this,
+                    AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
+                    object : AdCallback() {
+                        override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                            super.onInterstitialLoad(interstitialAd)
+                            mInterstitialAd = interstitialAd
+                            isLoadedAdInterstitial = true
+                            modalLoadingAd.dismiss()
+                            showAd()
+                        }
+                        override fun onAdFailedToLoad(i: LoadAdError?) {
+                            isLoadedAdInterstitial = true
+                            modalLoadingAd.dismiss()
+                            finish()
+                        }
+                    })
+            }
         }
     }
 }

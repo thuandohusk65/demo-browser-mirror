@@ -28,6 +28,7 @@ import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.billing.AppPurchase
 import com.nhnextsoft.control.dialog.DialogExit
 import com.nhnextsoft.control.dialog.InAppDialog
+import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.control.funtion.DialogExitListener
 import com.nhnextsoft.nativecarouselads.CrossCarouselActivity
@@ -56,6 +57,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
     private var nativeAdExit: NativeAd? = null
     private var nativeAdExitTypeDialog: Int = 1
 
@@ -64,10 +66,12 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private var nativeAd: NativeAd? = null
     private var isLoadNative: Boolean = false
+    private var isLoadedAdInterstitial: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
+        modalLoadingAd = PrepareLoadingAdsDialog(this)
         setContentView(binding.root)
 
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
@@ -109,6 +113,11 @@ class HomeActivity : AppCompatActivity() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                     super.onInterstitialLoad(interstitialAd)
                     mInterstitialAd = interstitialAd
+                    isLoadedAdInterstitial = true
+                }
+                override fun onAdFailedToLoad(i: LoadAdError?) {
+                    super.onAdFailedToLoad(i)
+                    isLoadedAdInterstitial = true
                 }
             })
     }
@@ -195,6 +204,15 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun showAd(): Unit {
+        Admod.instance?.forceShowInterstitial(this, mInterstitialAd, object : AdCallback() {
+            override fun onAdClosed() {
+                openSelectDevices()
+                loadAdInterstitial()
+            }
+        })
+    }
+
     private fun openScreenMirroring() {
         if (isConnectMirror) {
             try {
@@ -209,13 +227,29 @@ class HomeActivity : AppCompatActivity() {
 
             }
         } else {
+            if (isLoadedAdInterstitial) {
+                showAd()
+            } else {
+                modalLoadingAd.show()
+                Admod.instance?.getInterstitalAds(this,
+                    AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
+                    object : AdCallback() {
+                        override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                            super.onInterstitialLoad(interstitialAd)
+                            mInterstitialAd = interstitialAd
+                            isLoadedAdInterstitial = true
+                            modalLoadingAd.dismiss()
+                            showAd()
+                        }
+                        override fun onAdFailedToLoad(i: LoadAdError?) {
+                            super.onAdFailedToLoad(i)
+                            isLoadedAdInterstitial = true
+                            modalLoadingAd.dismiss()
+                            openSelectDevices()
+                        }
+                    })
+            }
 
-            Admod.instance?.forceShowInterstitial(this, mInterstitialAd, object : AdCallback() {
-                override fun onAdClosed() {
-                    openSelectDevices()
-                    loadAdInterstitial()
-                }
-            })
         }
     }
 
@@ -330,17 +364,22 @@ class HomeActivity : AppCompatActivity() {
         if (!isNetworkAvailable()) {
             startActivity(FinishAppActivity.newIntent(this))
         } else {
-            if (nativeAdExit != null) {
-                DialogExit.showDialogExit(this,
-                    nativeAdExit!!,
-                    nativeAdExitTypeDialog,
-                    object : DialogExitListener {
-                        override fun onExit(exit: Boolean) {
-                            startActivity(FinishAppActivity.newIntent(this@HomeActivity))
-                        }
-
-                    })
-            } else {
+            try {
+                if (nativeAdExit != null) {
+                    nativeAdExit?.let { nativeAd ->
+                        DialogExit.showDialogExit(this,
+                            nativeAd,
+                            nativeAdExitTypeDialog,
+                            object : DialogExitListener {
+                                override fun onExit(exit: Boolean) {
+                                    startActivity(FinishAppActivity.newIntent(this@HomeActivity))
+                                }
+                            })
+                    }
+                } else {
+                    startActivity(FinishAppActivity.newIntent(this))
+                }
+            } catch (err: Exception) {
                 startActivity(FinishAppActivity.newIntent(this))
             }
         }
@@ -351,7 +390,6 @@ class HomeActivity : AppCompatActivity() {
         Admod.instance?.loadNativeAd(this,
             AdConfig.EXIT_APP_DIALOG_NATIVE,
             object : AdCallback() {
-
                 override fun onNativeAdLoaded(nativeAd: NativeAd?) {
                     super.onNativeAdLoaded(nativeAd)
                     nativeAdExit = nativeAd

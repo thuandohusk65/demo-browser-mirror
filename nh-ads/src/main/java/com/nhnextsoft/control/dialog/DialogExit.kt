@@ -18,15 +18,15 @@ object DialogExit {
         dialogExitAppExtend.show()
     }
 
-    fun showDialogExit(context: Context, nativeAd: NativeAd, type: Int, adView: NativeAdView?, dialogExitListener:DialogExitListener) {
-        val dialogExitAppExtend = DialogExitAppExtend(context, nativeAd, type, adView)
-        dialogExitAppExtend.setCancelable(false)
-        val w = WindowManager.LayoutParams.MATCH_PARENT
-        val h = ViewGroup.LayoutParams.MATCH_PARENT
-        dialogExitAppExtend.window!!.setLayout(w, h)
-        dialogExitAppExtend.dialogExitListener = dialogExitListener
-        dialogExitAppExtend.show()
-    }
+//    fun showDialogExit(context: Context, nativeAd: NativeAd, type: Int, adView: NativeAdView?, dialogExitListener:DialogExitListener) {
+//        val dialogExitAppExtend = DialogExitAppExtend(context, nativeAd, type, adView)
+//        dialogExitAppExtend.setCancelable(false)
+//        val w = WindowManager.LayoutParams.MATCH_PARENT
+//        val h = ViewGroup.LayoutParams.MATCH_PARENT
+//        dialogExitAppExtend.window!!.setLayout(w, h)
+//        dialogExitAppExtend.dialogExitListener = dialogExitListener
+//        dialogExitAppExtend.show()
+//    }
 
     fun getDialogExitType():Int = (1..3).random()
 }
