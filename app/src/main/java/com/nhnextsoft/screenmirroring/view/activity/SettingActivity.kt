@@ -26,10 +26,8 @@ import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
 import com.nhnextsoft.screenmirroring.config.AppConfigRemote
-import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivitySettingBinding
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
-import timber.log.Timber
 import java.util.*
 
 
