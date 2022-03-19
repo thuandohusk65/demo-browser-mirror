@@ -13,6 +13,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.nhnextsoft.control.Admod
+import com.nhnextsoft.control.AppOpenManager
 import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
@@ -28,11 +29,14 @@ import timber.log.Timber
 
 class TutorialActivity : AppCompatActivity() {
 
+    private var isFirstOpenEnd: Boolean = false;
     private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
     private lateinit var binding: ActivityTutorialBinding
     private var currentItemViewPager = 0
     private var mInterstitialAd: InterstitialAd? = null
-    private var isLoadedAdInterstitial: Boolean = false;
+    private var isLoadedAdInterstitial: Boolean = false
+    private var isLoadedNext: Boolean = false
+    private var isFirstOpen = false;
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +64,7 @@ class TutorialActivity : AppCompatActivity() {
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, "TutorialActivity")
                 param("FROM_SCREEN", "SPLASH")
             }
+            isFirstOpen = true
         } else {
             Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, "Tutorial")
@@ -108,11 +113,13 @@ class TutorialActivity : AppCompatActivity() {
                     0 -> {
                         binding.buttonNext.text = getString(R.string.next_screen)
                         binding.imageArrowLeft.visibility = View.INVISIBLE
+                        isFirstOpenEnd = false
 //                        binding.textStep.visibility = View.VISIBLE
                     }
                     loadAllImageTutorial().size - 1 -> {
                         binding.imageArrowRight.visibility = View.INVISIBLE
                         binding.buttonNext.text = getString(R.string.start_now)
+                        isFirstOpenEnd = true
 //                        binding.textStep.visibility = View.GONE
                     }
                     else -> {
@@ -152,16 +159,37 @@ class TutorialActivity : AppCompatActivity() {
 
         binding.buttonNext.setOnClickListener {
             currentItemViewPager += 1
-            if (binding.buttonNext.text.equals(getString(R.string.start_now))) {
+            if (isFirstOpenEnd) {
                 AppPreferences().completedTheFirstTutorial = true
-                Admod.instance?.forceShowInterstitial(this,
-                    mInterstitialAd,
-                    object : AdCallback() {
-                        override fun onAdClosed() {
-                            super.onAdClosed()
-                            gotoHome()
-                        }
-                    })
+
+                if (isLoadedAdInterstitial) {
+                    Admod.instance?.forceShowInterstitial(this,
+                        mInterstitialAd,
+                        object : AdCallback() {
+                            override fun onAdClosed() {
+                                super.onAdClosed()
+                                gotoHome()
+                            }
+                        })
+                }else{
+                    Admod.instance?.getInterstitalAds(this,
+                        AdConfig.AD_ADMOB_TUTORIAL_BACK_HOME_INTERSTITIAL,
+                        object : AdCallback() {
+                            override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                                super.onInterstitialLoad(interstitialAd)
+                                mInterstitialAd = interstitialAd
+                                isLoadedAdInterstitial = true
+                                modalLoadingAd.dismiss()
+                                showAd()
+                            }
+                            override fun onAdFailedToLoad(i: LoadAdError?) {
+                                isLoadedAdInterstitial = true
+                                modalLoadingAd.dismiss()
+                                gotoHome()
+                            }
+                        })
+                }
+                AppOpenManager.instance?.enableAppResumeWithActivity(TutorialActivity::class.java)
             }
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
@@ -196,7 +224,7 @@ class TutorialActivity : AppCompatActivity() {
             object : AdCallback() {
                 override fun onAdClosed() {
                     super.onAdClosed()
-                    finish()
+                    gotoHome()
                 }
             }
         )
@@ -222,7 +250,7 @@ class TutorialActivity : AppCompatActivity() {
                         override fun onAdFailedToLoad(i: LoadAdError?) {
                             isLoadedAdInterstitial = true
                             modalLoadingAd.dismiss()
-                            finish()
+                            gotoHome()
                         }
                     })
             }
