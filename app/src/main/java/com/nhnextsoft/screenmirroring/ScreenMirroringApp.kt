@@ -1,8 +1,16 @@
 package com.nhnextsoft.screenmirroring
 
+import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.gms.ads.AdActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.AppOpenManager
 import com.nhnextsoft.control.application.SupportAdsApplication
@@ -31,13 +39,7 @@ class ScreenMirroringApp : SupportAdsApplication() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         Preferences.init(this)
         initAds()
-
-//        AppPreferences().addListener(object : Preferences.SharedPrefsListener {
-//            override fun onSharedPrefChanged(property: KProperty<*>) {
-//                Timber.d("property:${property.name} | $property")
-//            }
-//
-//        })
+        listenerMessagingFirebase()
     }
 
     private fun initAds() {
@@ -67,6 +69,25 @@ class ScreenMirroringApp : SupportAdsApplication() {
             }
         }
 
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    private fun listenerMessagingFirebase () {
+        Firebase.messaging.isAutoInitEnabled = true
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Timber.d("Fetching FCM registration token failed ${task.exception}")
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.app_name, token)
+            Timber.d("TOKEN ==== ${token}")
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun enableAdsResume(): Boolean = true
