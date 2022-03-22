@@ -43,6 +43,7 @@ import com.nhnextsoft.screenmirroring.databinding.ActivityHomeBinding
 import com.nhnextsoft.screenmirroring.service.MyForegroundService
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
+import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import timber.log.Timber
 
@@ -57,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
+    private lateinit var modalLoadingAd: LoadDataDialog
     private var nativeAdExit: NativeAd? = null
     private var nativeAdExitTypeDialog: Int = 1
 
@@ -69,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        modalLoadingAd = PrepareLoadingAdsDialog(this)
+        modalLoadingAd = LoadDataDialog(this)
         setContentView(binding.root)
 
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
