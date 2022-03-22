@@ -56,4 +56,6 @@
     <string name="you_need_to_connect_to_the_wifi">You need to connect to the wifi that your tv connects to for the most stable connection</string>
     <string name="try_again">Try Again</string>
     <string name="privacy_policy">Privacy policy</string>
+    <string name="loading_data">Loading Data</string>
+    <string name="may_contain_advertising">May contain advertising</string>
 </resources>

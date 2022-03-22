@@ -43,6 +43,7 @@ import com.nhnextsoft.screenmirroring.databinding.ActivityHomeBinding
 import com.nhnextsoft.screenmirroring.service.MyForegroundService
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
+import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import timber.log.Timber
 
@@ -57,21 +58,19 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
+    private lateinit var modalLoadingAd: LoadDataDialog
     private var nativeAdExit: NativeAd? = null
     private var nativeAdExitTypeDialog: Int = 1
 
-    private var mInterstitialAd: InterstitialAd? = null
     private var isConnectMirror: Boolean = false
     private lateinit var binding: ActivityHomeBinding
     private var nativeAd: NativeAd? = null
     private var isLoadNative: Boolean = false
-    private var isLoadedAdInterstitial: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        modalLoadingAd = PrepareLoadingAdsDialog(this)
+        modalLoadingAd = LoadDataDialog(this)
         setContentView(binding.root)
 
         Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
@@ -83,19 +82,19 @@ class HomeActivity : AppCompatActivity() {
         Timber.d("AppPreferences().completedTheFirstTutorial: ${AppPreferences().completedTheFirstTutorial}")
         initView()
         showNativeAdmob()
-        loadAdInterstitial()
         checkConnectionScreenMirroring()
         checkingInternet()
         loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
-
         showCrossAnimation()
     }
 
     private fun showCrossAnimation() {
-        val scaleDown: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(binding.imageCrossApp,
+        val scaleDown: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            binding.imageCrossApp,
             PropertyValuesHolder.ofFloat("scaleX", 1.1f),
-            PropertyValuesHolder.ofFloat("scaleY", 1.1f))
+            PropertyValuesHolder.ofFloat("scaleY", 1.1f)
+        )
         scaleDown.duration = 500
         scaleDown.repeatCount = ObjectAnimator.INFINITE
         scaleDown.repeatMode = ObjectAnimator.REVERSE
@@ -104,22 +103,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showCrossApp() {
         startActivity(CrossCarouselActivity.openIntent(this))
-    }
-
-    private fun loadAdInterstitial() {
-        Admod.instance?.getInterstitalAds(this,
-            AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
-            object : AdCallback() {
-                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                    super.onInterstitialLoad(interstitialAd)
-                    mInterstitialAd = interstitialAd
-                    isLoadedAdInterstitial = true
-                }
-                override fun onAdFailedToLoad(i: LoadAdError?) {
-                    super.onAdFailedToLoad(i)
-                    isLoadedAdInterstitial = true
-                }
-            })
     }
 
     private fun checkingInternet() {
@@ -185,7 +168,7 @@ class HomeActivity : AppCompatActivity() {
         }
         binding.imageRemoveAds.setOnClickListener {
             val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
-            inAppDialog.callback = object :InAppDialog.ICallback{
+            inAppDialog.callback = object : InAppDialog.ICallback {
                 override fun onPurcharse() {
                     AppPurchase.instance
                         .purchase(this@HomeActivity, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
@@ -204,11 +187,17 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAd(): Unit {
-        Admod.instance?.forceShowInterstitial(this, mInterstitialAd, object : AdCallback() {
+    private fun loadAdInterstitial(adCallback: AdCallback) {
+        Admod.instance?.getInterstitalAds(
+            this,
+            AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL, adCallback
+        )
+    }
+
+    private fun showAdInterstitial(interstitialAd: InterstitialAd?) {
+        Admod.instance?.forceShowInterstitial(this, interstitialAd, object : AdCallback() {
             override fun onAdClosed() {
                 openSelectDevices()
-                loadAdInterstitial()
             }
         })
     }
@@ -227,29 +216,20 @@ class HomeActivity : AppCompatActivity() {
 
             }
         } else {
-            if (isLoadedAdInterstitial) {
-                showAd()
-            } else {
-                modalLoadingAd.show()
-                Admod.instance?.getInterstitalAds(this,
-                    AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
-                    object : AdCallback() {
-                        override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                            super.onInterstitialLoad(interstitialAd)
-                            mInterstitialAd = interstitialAd
-                            isLoadedAdInterstitial = true
-                            modalLoadingAd.dismiss()
-                            showAd()
-                        }
-                        override fun onAdFailedToLoad(i: LoadAdError?) {
-                            super.onAdFailedToLoad(i)
-                            isLoadedAdInterstitial = true
-                            modalLoadingAd.dismiss()
-                            openSelectDevices()
-                        }
-                    })
-            }
+            modalLoadingAd.show()
+            loadAdInterstitial(object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    modalLoadingAd.dismiss()
+                    showAdInterstitial(interstitialAd)
+                }
 
+                override fun onAdFailedToLoad(i: LoadAdError?) {
+                    super.onAdFailedToLoad(i)
+                    modalLoadingAd.dismiss()
+                    openSelectDevices()
+                }
+            })
         }
     }
 
