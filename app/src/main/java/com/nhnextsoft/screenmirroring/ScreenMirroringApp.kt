@@ -86,7 +86,7 @@ class ScreenMirroringApp : SupportAdsApplication() {
             // Log and toast
             val msg = getString(R.string.app_name, token)
             Timber.d("TOKEN ==== ${token}")
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
 
