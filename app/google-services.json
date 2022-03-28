@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "944785477826-m6tbddklc6h5rsk8dtpkvoc7m0mse5lr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.screenmirroring.chromecast.miracast.tvcast.smartview.smartcast",
+            "certificate_hash": "277a22915a06b4bbf441dcbea26d64f599f0031b"
+          }
+        },
+        {
           "client_id": "944785477826-eliu250mvp9p9c71jhkv6j1kgbmtagdg.apps.googleusercontent.com",
           "client_type": 3
         }
