@@ -27,4 +27,8 @@
         <item>ca-app-pub-3940256099942544/1044960115</item>
     </string-array>
 
+    <string name="stream_fragment_no_address">No address found</string>
+
+    <string name="error_ip_address_not_found">IP address not found.\nTry to disable \"Use WiFi only\" in settings.</string>
+
 </resources>

@@ -43,6 +43,7 @@ import com.nhnextsoft.screenmirroring.databinding.ActivityHomeBinding
 import com.nhnextsoft.screenmirroring.service.MyForegroundService
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
+import com.nhnextsoft.screenmirroring.view.activity.stream.StreamActivity
 import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import timber.log.Timber
@@ -87,6 +88,11 @@ class HomeActivity : AppCompatActivity() {
         loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
         showCrossAnimation()
+
+        binding.btnOpenStream.setOnClickListener{
+            Timber.d("onPress OpenStream")
+            startActivity(StreamActivity.newIntent(this))
+        }
     }
 
     private fun showCrossAnimation() {

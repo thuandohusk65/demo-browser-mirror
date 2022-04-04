@@ -27,4 +27,9 @@
     <color name="gntOutline">#E0E0E0</color>
     <color name="text_exit">#2152FF</color>
 
+    <color name="colorBtnStartStop">#00A389</color>
+    <color name="colorError">#D2283D</color>
+    <color name="colorErrorText">#FFFFFF</color>
+    <color name="colorErrorBackgroundStart">#FB334C</color>
+    <color name="colorErrorBackgroundEnd">#D2283D</color>
 </resources>

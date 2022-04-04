@@ -46,10 +46,17 @@
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.FinishAppActivity" />
 
+        <activity android:name=".view.activity.stream.StreamActivity" />
+
         <service
             android:name=".service.MyForegroundService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".service.AppService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

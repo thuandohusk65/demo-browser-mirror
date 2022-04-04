@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.15625" />
+        <entry key="app/src/main/res/drawable-v24/ic_fab_start_24dp.xml" value="0.157" />
         <entry key="app/src/main/res/drawable/ad_splash_background.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_cta_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_rounded_corners_shape.xml" value="0.35625" />
@@ -16,10 +17,14 @@
         <entry key="app/src/main/res/drawable/btn_try_again.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/ic_ad_label.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/ic_checked.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/drawable/ic_copy_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_disconnect.xml" value="0.20364583333333333" />
+        <entry key="app/src/main/res/drawable/ic_open_in_new_24dp.xml" value="0.2" />
+        <entry key="app/src/main/res/drawable/ic_qrcode_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_remove_ad.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_right_arrow.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_round_feedback.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/ic_share_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_shield.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_speed_control.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_step_1.xml" value="0.35625" />
@@ -38,6 +43,7 @@
         <entry key="app/src/main/res/layout/activity_select_device.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_stream.xml" value="0.18070652173913043" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.1734375" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad_splash.xml" value="0.1875" />
@@ -45,6 +51,7 @@
         <entry key="app/src/main/res/layout/dialog_loading_ads.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/dialog_upgrade.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_no_wifi.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/item_device_address.xml" value="0.19157608695652173" />
         <entry key="app/src/main/res/layout/item_tutorial.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/layout_notification.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3921875" />
@@ -56,6 +63,7 @@
         <entry key="nh-ads/src/main/res/drawable/bg_card_ads.xml" value="0.2525" />
         <entry key="nh-ads/src/main/res/drawable/bg_icon_ad_label.xml" value="0.2195" />
         <entry key="nh-ads/src/main/res/drawable/bg_purcharse.xml" value="0.2075" />
+        <entry key="nh-ads/src/main/res/drawable/error_background.xml" value="0.163" />
         <entry key="nh-ads/src/main/res/drawable/gnt_rounded_corners_shape.xml" value="0.2075" />
         <entry key="nh-ads/src/main/res/drawable/selector_button_exit_transfer.xml" value="0.3765" />
         <entry key="nh-ads/src/main/res/layout/dialog_inapp.xml" value="0.2269021739130435" />

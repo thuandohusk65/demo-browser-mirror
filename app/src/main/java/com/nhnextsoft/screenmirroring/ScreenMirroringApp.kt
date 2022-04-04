@@ -6,6 +6,8 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import com.elvishew.xlog.LogLevel
+import com.elvishew.xlog.XLog
 import com.google.android.gms.ads.AdActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.ktx.Firebase
@@ -21,8 +23,13 @@ import com.nhnextsoft.screenmirroring.ads.PurchaseConstants.PRODUCT_ID_REMOTE_AD
 import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.config.Preferences
+import com.nhnextsoft.screenmirroring.di.baseKoinModule
 import com.nhnextsoft.screenmirroring.utility.extensions.ReleaseTree
 import com.nhnextsoft.screenmirroring.view.activity.SplashActivity
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import timber.log.Timber
 
 
@@ -39,7 +46,13 @@ class ScreenMirroringApp : SupportAdsApplication() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         Preferences.init(this)
         initAds()
+        initLogger()
         listenerMessagingFirebase()
+        startKoin {
+            androidLogger(Level.ERROR)
+            androidContext(this@ScreenMirroringApp)
+            modules(baseKoinModule)
+        }
     }
 
     private fun initAds() {
@@ -69,6 +82,10 @@ class ScreenMirroringApp : SupportAdsApplication() {
             }
         }
 
+    }
+
+    private fun initLogger() {
+        XLog.init(LogLevel.ALL);
     }
 
     @SuppressLint("StringFormatInvalid")
