@@ -26,6 +26,7 @@ import com.nhnextsoft.screenmirroring.config.Preferences
 import com.nhnextsoft.screenmirroring.di.baseKoinModule
 import com.nhnextsoft.screenmirroring.utility.extensions.ReleaseTree
 import com.nhnextsoft.screenmirroring.view.activity.SplashActivity
+import com.nhnextsoft.screenmirroring.view.activity.TutorialActivity
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -68,7 +69,7 @@ class ScreenMirroringApp : SupportAdsApplication() {
             PurchaseConstants.listINAPId,
             PurchaseConstants.listSubsId)
         if (Build.VERSION.SDK_INT > 29)
-            Admod.instance?.setOpenActivityAfterShowInterAds(true)
+            Admod.instance?.setOpenActivityAfterShowInterAds(false)
         else
             Admod.instance?.setOpenActivityAfterShowInterAds(false)
 
@@ -79,6 +80,7 @@ class ScreenMirroringApp : SupportAdsApplication() {
                     10000)
             }else{
                 AppOpenManager.instance?.disableAppResumeWithActivity(SplashActivity::class.java)
+                AppOpenManager.instance?.disableAppResumeWithActivity(TutorialActivity::class.java)
             }
         }
 
