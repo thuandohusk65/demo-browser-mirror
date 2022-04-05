@@ -86,4 +86,15 @@
 
     <string name="guide_text_1">Connect to the same Wi-fi network and turn off the VPN</string>
     <string name="guide_text_2">Open this website on the other device</string>
+
+<!--    dialog rate app-->
+
+    <string name="good_rate_title">We like you too!</string>
+    <string name="good_rate_description">Thanks for your feedback!</string>
+    <string name="medium_rate_description">Please leave us some feedback!</string>
+    <string name="rate_us">Rate us</string>
+    <string name="bad_rate_title">Oh, No!</string>
+    <string name="appreciate_rating_us">We are working hard to provide a better user experience. We really appreciate you rating us.</string>
+    <string name="rate_us_on_google_play">Rate us on google play</string>
+    <string name="the_best_we_could_get">The best we could get :)</string>
 </resources>

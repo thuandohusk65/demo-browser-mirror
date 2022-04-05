@@ -46,6 +46,7 @@ import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
 import com.nhnextsoft.screenmirroring.view.activity.stream.StreamActivity
 import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
+import com.nhnextsoft.screenmirroring.view.dialog.RateAppDialog
 import timber.log.Timber
 
 
@@ -92,6 +93,9 @@ class HomeActivity : AppCompatActivity() {
         binding.btnOpenStream.setOnClickListener{
             Timber.d("onPress OpenStream")
             startActivity(StreamActivity.newIntent(this))
+        }
+        binding.btnDialogReview.setOnClickListener {
+            RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }
     }
 

@@ -15,10 +15,4 @@ class LoadDataDialog(
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_loading_data)
     }
-
-    fun hideLoadingAdsText() {
-        findViewById<View>(R.id.loading_dialog_tv).visibility = View.INVISIBLE
-    }
-
-
 }

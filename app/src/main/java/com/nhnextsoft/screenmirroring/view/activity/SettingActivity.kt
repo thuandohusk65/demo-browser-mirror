@@ -32,6 +32,7 @@ import java.util.*
 
 
 class SettingActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySettingBinding
     private lateinit var modalLoadingAd: PrepareLoadingAdsDialog
     private var isLoadedAdInterstitial: Boolean = false
@@ -107,35 +108,7 @@ class SettingActivity : AppCompatActivity() {
             openAppInStore()
         }
         binding.layoutFeedBack.setOnClickListener {
-            var systemInfo = "\n\n\n\n==== SYSTEM-INFO ===\n"
-            systemInfo += "Device : " + Build.DEVICE + "\n"
-            systemInfo += "SDK Version : " + Build.VERSION.SDK_INT + "\n"
-            systemInfo += "App Version : " + BuildConfig.VERSION_NAME + "\n"
-            systemInfo += "Language : " + Locale.getDefault().language + "\n"
-            systemInfo += "TimeZone : " + TimeZone.getDefault().id + "\n"
-            systemInfo += "Total Memory : " + getTotalMemory() + "\n"
-            systemInfo += "Free Memory : " + getAvaiableMemory() + "\n"
-            systemInfo += "Device Type : " + Build.MODEL + "\n"
-            systemInfo += "Data Type : " + networkType() + "\n"
-
-
-            val email = "taptapstudioapp+screenmirroring@gmail.com"
-            val subject = "Feedback by Screen Mirroring"
-            val chooserTitle = getString(R.string.title_feedback)
-
-            try {
-                composeEmail(arrayOf(email), subject, systemInfo)
-            } catch (e: Exception) {
-                ShareCompat.IntentBuilder(this)
-                    .setType("message/rfc822")
-                    .addEmailTo(email)
-                    .setSubject(subject)
-                    .setText("" + systemInfo)
-//                .setHtmlText(systemInfo) //If you are using HTML in your body text
-                    .setChooserTitle(chooserTitle)
-                    .startChooser()
-            }
-
+            feedBackToEmail()
         }
         binding.layoutRateUs.setOnClickListener {
             openAppInStore()
@@ -163,6 +136,37 @@ class SettingActivity : AppCompatActivity() {
         (getString(R.string.version_app) + " ${BuildConfig.VERSION_NAME}").also { binding.tvVersion.text = it }
     }
 
+    fun feedBackToEmail() {
+        var systemInfo = "\n\n\n\n==== SYSTEM-INFO ===\n"
+        systemInfo += "Device : " + Build.DEVICE + "\n"
+        systemInfo += "SDK Version : " + Build.VERSION.SDK_INT + "\n"
+        systemInfo += "App Version : " + BuildConfig.VERSION_NAME + "\n"
+        systemInfo += "Language : " + Locale.getDefault().language + "\n"
+        systemInfo += "TimeZone : " + TimeZone.getDefault().id + "\n"
+        systemInfo += "Total Memory : " + getTotalMemory() + "\n"
+        systemInfo += "Free Memory : " + getAvaiableMemory() + "\n"
+        systemInfo += "Device Type : " + Build.MODEL + "\n"
+        systemInfo += "Data Type : " + networkType() + "\n"
+
+
+        val email = "taptapstudioapp+screenmirroring@gmail.com"
+        val subject = "Feedback by Screen Mirroring"
+        val chooserTitle = getString(R.string.title_feedback)
+
+        try {
+            composeEmail(arrayOf(email), subject, systemInfo)
+        } catch (e: Exception) {
+            ShareCompat.IntentBuilder(this)
+                .setType("message/rfc822")
+                .addEmailTo(email)
+                .setSubject(subject)
+                .setText("" + systemInfo)
+//                .setHtmlText(systemInfo) //If you are using HTML in your body text
+                .setChooserTitle(chooserTitle)
+                .startChooser()
+        }
+
+    }
     private fun composeEmail(addresses: Array<String>, subject: String, text: String) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:") // only email apps should handle this
