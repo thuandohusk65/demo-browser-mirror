@@ -48,6 +48,7 @@ import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import com.nhnextsoft.screenmirroring.view.dialog.RateAppDialog
 import timber.log.Timber
+import java.util.*
 
 
 class HomeActivity : AppCompatActivity() {
@@ -68,6 +69,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private var nativeAd: NativeAd? = null
     private var isLoadNative: Boolean = false
+
+    private var onShowDialogRating: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,12 +93,9 @@ class HomeActivity : AppCompatActivity() {
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
         showCrossAnimation()
 
-        binding.btnOpenStream.setOnClickListener{
+        binding.btnOpenStream.setOnClickListener {
             Timber.d("onPress OpenStream")
             startActivity(StreamActivity.newIntent(this))
-        }
-        binding.btnDialogReview.setOnClickListener {
-            RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }
     }
 
@@ -261,6 +261,23 @@ class HomeActivity : AppCompatActivity() {
             startActivity(intent)
             SELECT_FROM_SETTING = false
             finish()
+        }
+
+        showDialogRate()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onShowDialogRating = true
+    }
+
+    private fun showDialogRate() {
+        val calendar: Calendar = Calendar.getInstance()
+        val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
+        var isShowDialog = today != AppPreferences().isLastTimeOpenReviewDialog
+        Timber.d("showDialogRate: onShowDialogRating: $onShowDialogRating -- isReviewed: ${AppPreferences().isReviewedOnGoogle == false} -- isShowDialog: $isShowDialog ")
+        if (onShowDialogRating && AppPreferences().isReviewedOnGoogle == false && isShowDialog) {
+            RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }
     }
 

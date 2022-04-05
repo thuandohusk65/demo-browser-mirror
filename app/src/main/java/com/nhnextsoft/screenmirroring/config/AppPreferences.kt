@@ -4,4 +4,6 @@ class AppPreferences : Preferences(name = "app_preferences") {
     var completedTheFirstTutorial by booleanPref(defaultValue = false)
     var numberOfDialogRemoveAdsImpressionsPerDay by intPref(defaultValue = 1)
     var numberOfTimesDialogRemoveAdsDisplayed by intPref(defaultValue = 0)
+    var isReviewedOnGoogle by booleanPref(defaultValue = false)
+    var isLastTimeOpenReviewDialog by intPref(defaultValue = -1)
 }

@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.nhnextsoft.screenmirroring.BuildConfig
 import com.nhnextsoft.screenmirroring.R
+import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.DialogRateAppBinding
 import timber.log.Timber
 import java.util.*
@@ -85,12 +86,20 @@ class RateAppDialog : DialogFragment() {
                 request?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         // We got the ReviewInfo object
+                        AppPreferences().isReviewedOnGoogle = true
                         val reviewInfo = task.result
                     } else {
 
                     }
                 }
             }
+            dismiss()
+        }
+
+        binding.textLate.setOnClickListener {
+            val calendar: Calendar = Calendar.getInstance()
+            val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
+            AppPreferences().isLastTimeOpenReviewDialog = today
             dismiss()
         }
     }
