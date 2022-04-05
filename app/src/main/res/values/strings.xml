@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Screen Mirroring</string>
     <string name="connection_instructions">CONNECTION INSTRUCTIONS</string>
-    <string name="text_step_1">Smartphone and smart TV need to connect to the same WIFI network</string>
+    <string name="text_step_1">Step 1: Smartphone and smart TV need to connect to the same WIFI network \n\n Step 2: Enable connection settings in smart TV\'s settings</string>
     <string name="text_step_2">Enable connection settings in smart TV\'s settings</string>
     <string name="text_step_3">Select the CONNECT button on the main screen</string>
     <string name="text_step_4">Select the select device button on the screen</string>

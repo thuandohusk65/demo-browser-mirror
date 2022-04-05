@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -35,8 +37,10 @@ class TutorialActivity : AppCompatActivity() {
     private var currentItemViewPager = 0
     private var mInterstitialAd: InterstitialAd? = null
     private var isLoadedAdInterstitial: Boolean = false
-    private var isLoadedNext: Boolean = false
     private var isFirstOpen = false;
+    private var nativeAd: NativeAd? = null
+    private var isLoadNative: Boolean = false
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,18 +51,20 @@ class TutorialActivity : AppCompatActivity() {
         binding.textStep.text =
             getString(R.string.text_step) + " " + 1 + "/" + (loadAllImageTutorial().size)
         loadAdInterstitial()
+        showNativeAdmob()
     }
 
     private fun initView() {
         binding.viewpagerTutorial.setPageTransformer(true, ZoomOutPageTransformer())
         val tutorialPagerAdapter = TutorialPagerAdapter(this, loadAllImageTutorial())
         binding.viewpagerTutorial.adapter = tutorialPagerAdapter
-        binding.imageArrowRight.visibility = View.VISIBLE
+        binding.textNextStep.visibility = View.VISIBLE
+        binding.textBackStep.visibility = View.GONE
         if (intent.hasExtra(Constants.EXTRA_TUTORIAL)
             && intent.getBooleanExtra(Constants.EXTRA_TUTORIAL, false)
         ) {
             binding.imageClose.visibility = View.GONE
-            binding.buttonNext.visibility = View.VISIBLE
+            binding.textNextStep.visibility = View.VISIBLE
             Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, "FirstTutorial")
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, "TutorialActivity")
@@ -72,9 +78,32 @@ class TutorialActivity : AppCompatActivity() {
                 param("FROM_SCREEN", "Home")
             }
             binding.imageClose.visibility = View.VISIBLE
-            binding.buttonNext.visibility = View.GONE
+            binding.textNextStep.visibility = View.GONE
         }
         handleClick()
+    }
+
+    private fun showNativeAdmob() {
+        val builder = AdLoader.Builder(this, AdConfig.AD_ADMOB_SELECT_DEVICE_NATIVE_ADVANCED)
+        builder.forNativeAd {
+            if (nativeAd != null) {
+                nativeAd?.destroy()
+            }
+            isLoadNative = true
+            nativeAd = it
+            Admod.instance?.populateUnifiedNativeAdView(this, it, binding.nativeAdView)
+        }
+        val videoOptions = VideoOptions.Builder().build()
+        val adOptions = NativeAdOptions.Builder()
+            .setVideoOptions(videoOptions)
+            .build()
+        builder.withNativeAdOptions(adOptions)
+        val adLoader = builder.withAdListener(object : AdListener() {
+            override fun onAdFailedToLoad(errorCode: LoadAdError) {
+                isLoadNative = false
+            }
+        }).build()
+        adLoader.loadAd(AdRequest.Builder().build())
     }
 
     private fun loadAdInterstitial() {
@@ -111,23 +140,16 @@ class TutorialActivity : AppCompatActivity() {
 
                 when (position) {
                     0 -> {
-                        binding.buttonNext.text = getString(R.string.next_screen)
-                        binding.imageArrowLeft.visibility = View.INVISIBLE
                         isFirstOpenEnd = false
-//                        binding.textStep.visibility = View.VISIBLE
+                        binding.textBackStep.visibility = View.GONE
                     }
                     loadAllImageTutorial().size - 1 -> {
-                        binding.imageArrowRight.visibility = View.INVISIBLE
-                        binding.buttonNext.text = getString(R.string.start_now)
+                        binding.textNextStep.text = getString(R.string.start_now)
                         isFirstOpenEnd = true
-//                        binding.textStep.visibility = View.GONE
                     }
                     else -> {
-                        binding.buttonNext.text = getString(R.string.next_screen)
-                        binding.imageArrowRight.visibility = View.VISIBLE
-                        binding.imageArrowLeft.visibility = View.VISIBLE
-//                        binding.textStep.visibility = View.VISIBLE
-
+                        binding.textNextStep.text = getString(R.string.next_screen)
+                        binding.textBackStep.visibility = View.VISIBLE
                     }
                 }
             }
@@ -138,14 +160,14 @@ class TutorialActivity : AppCompatActivity() {
 
 
         })
-        binding.imageArrowLeft.setOnClickListener {
+        binding.textBackStep.setOnClickListener {
             currentItemViewPager -= 1
             if (currentItemViewPager <= 0) {
                 currentItemViewPager = 0
             }
             binding.viewpagerTutorial.currentItem = currentItemViewPager
         }
-        binding.imageArrowRight.setOnClickListener {
+        binding.textNextStep.setOnClickListener {
             currentItemViewPager += 1
             if (currentItemViewPager >= loadAllImageTutorial().size) {
                 currentItemViewPager = loadAllImageTutorial().size - 1
@@ -157,7 +179,7 @@ class TutorialActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        binding.buttonNext.setOnClickListener {
+        binding.textNextStep.setOnClickListener {
             currentItemViewPager += 1
             if (isFirstOpenEnd) {
                 AppPreferences().completedTheFirstTutorial = true
@@ -210,9 +232,9 @@ class TutorialActivity : AppCompatActivity() {
     private fun loadAllImageTutorial(): ArrayList<TutorialModel> {
         val arrTutorial = ArrayList<TutorialModel>()
         arrTutorial.add(TutorialModel(R.drawable.ic_step_1, R.string.text_step_1))
-        arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
+//        arrTutorial.add(TutorialModel(R.drawable.ic_step_2, R.string.text_step_2))
         arrTutorial.add(TutorialModel(R.drawable.ic_step_3, R.string.text_step_3))
-        arrTutorial.add(TutorialModel(R.drawable.ic_step_4, R.string.text_step_4))
+//        arrTutorial.add(TutorialModel(R.drawable.ic_step_4, R.string.text_step_4))
         arrTutorial.add(TutorialModel(R.drawable.ic_step_5, R.string.text_step_5))
         return arrTutorial
     }
