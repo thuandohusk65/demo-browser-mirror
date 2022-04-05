@@ -1,15 +1,23 @@
 package com.nhnextsoft.screenmirroring.view.activity.stream
 
 
-import android.app.Activity
+import android.app.*
 import android.content.*
+import android.media.RingtoneManager
 import android.media.projection.MediaProjectionManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
@@ -17,17 +25,17 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.elvishew.xlog.XLog
 import com.nhnextsoft.screenmirroring.R
+import com.nhnextsoft.screenmirroring.ScreenMirroringApp
 import com.nhnextsoft.screenmirroring.databinding.ActivityStreamBinding
-import com.nhnextsoft.screenmirroring.databinding.ItemDeviceAddressBinding
 import com.nhnextsoft.screenmirroring.service.AppService
 import com.nhnextsoft.screenmirroring.service.ServiceMessage
 import com.nhnextsoft.screenmirroring.service.helper.IntentAction
 import info.dvkr.screenstream.data.model.AppError
-import info.dvkr.screenstream.data.model.FatalError
 import info.dvkr.screenstream.data.model.FixableError
 import info.dvkr.screenstream.data.other.asString
 import info.dvkr.screenstream.data.other.getLog
 import info.dvkr.screenstream.data.other.setUnderlineSpan
+import info.dvkr.screenstream.data.settings.Settings
 import info.dvkr.screenstream.data.settings.SettingsReadOnly
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Job
@@ -37,9 +45,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import info.dvkr.screenstream.data.settings.Settings
 
 
 class StreamActivity : AppCompatActivity() {
@@ -72,7 +77,7 @@ class StreamActivity : AppCompatActivity() {
         binding = ActivityStreamBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[StreamViewModel::class.java]
-
+        showNotification()
         binding.imageBack.setOnClickListener {
             onBackPressed()
         }
@@ -86,6 +91,7 @@ class StreamActivity : AppCompatActivity() {
 
                     IntentAction.StopStream.sendToAppService(this@StreamActivity)
                     isStopStream = true
+                    NotificationManagerCompat.from(this).cancelAll();
                     onBackPressed()
                 }
                 .setNegativeButton(android.R.string.no, null)
@@ -103,6 +109,11 @@ class StreamActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.stream_fragment_copied, Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        NotificationManagerCompat.from(this).cancelAll();
     }
 
     private fun setNewPortAndReStart() {
@@ -274,4 +285,36 @@ class StreamActivity : AppCompatActivity() {
         showError(serviceMessage.appError)
     }
 
+    private fun showNotification() {
+        val intent = Intent(this, ScreenMirroringApp::class.java)
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val channelId = getString(R.string.app_name)
+        val defaultSoundUri =
+            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder =
+            NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("$channelId - Phản chiếu màn hình")
+                .setContentText("Quyền riêng tư của bạn đang được bảo v...")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setPriority(10)
+                .setContentIntent(pendingIntent)
+                .setOngoing(true)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(2 , notificationBuilder.build())
+    }
 }
