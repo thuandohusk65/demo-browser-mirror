@@ -12,6 +12,7 @@
     <string name="check_for_version">Check for new version…</string>
     <string name="screen_mirroring">SCREEN MIRRORING</string>
     <string name="checking_network">CHECKING NETWORK</string>
+    <string name="stream_screen">SCREEN STREAM</string>
     <string name="check_signal_transmission">Check signal transmission</string>
     <string name="test_connection_speed">Test connection speed</string>
     <string name="check_the_connection_distance">Check the connection distance</string>
@@ -74,6 +75,7 @@
     <string name="permission_activity_cast_permission_required">ScreenStream application requires Screen Cast permission to capture screen.</string>
     <string name="permission_activity_error_title">Error</string>
     <string name="permission_activity_error_unknown">Unknown error</string>
+    <string name="stream_fragment_copied">Copied</string>
 
     <string name="error_title">Error</string>
     <string name="error_port_in_use">Port already in use. Choose another one.</string>
@@ -82,4 +84,6 @@
     <string name="error_wrong_image_format">System returns image in unknown format. No fix available. Sorry.</string>
     <string name="error_exit">Exit</string>
 
+    <string name="guide_text_1">Connect to the same Wi-fi network and turn off the VPN</string>
+    <string name="guide_text_2">Open this website on the other device</string>
 </resources>

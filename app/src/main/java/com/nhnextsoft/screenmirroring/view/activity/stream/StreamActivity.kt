@@ -7,6 +7,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -37,12 +38,16 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import info.dvkr.screenstream.data.settings.Settings
 
 
 class StreamActivity : AppCompatActivity() {
 
     private val settingsReadOnly: SettingsReadOnly by inject()
+    private val clipboard: ClipboardManager? by lazy {
+        ContextCompat.getSystemService(this, ClipboardManager::class.java)
+    }
 
     private lateinit var binding: ActivityStreamBinding
     private val settings: Settings by inject()
@@ -51,7 +56,7 @@ class StreamActivity : AppCompatActivity() {
     private var isBound: Boolean = false
     private var isCastPermissionsPending: Boolean = false
     private var permissionsErrorDialog: MaterialDialog? = null
-
+    private var isStopStream: Boolean = false
     var viewModel: StreamViewModel? = null
 
     companion object {
@@ -68,6 +73,10 @@ class StreamActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[StreamViewModel::class.java]
 
+        binding.imageBack.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.btnStopStream.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Want to disconnect?")
@@ -76,11 +85,22 @@ class StreamActivity : AppCompatActivity() {
                     Timber.d("onPress Stop Stream")
 
                     IntentAction.StopStream.sendToAppService(this@StreamActivity)
+                    isStopStream = true
                     onBackPressed()
                 }
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show()
+        }
+
+        binding.ivItemDeviceAddressCopy.setOnClickListener {
+            clipboard?.setPrimaryClip(
+                ClipData.newPlainText(
+                    binding.tvItemDeviceAddress.text,
+                    binding.tvItemDeviceAddress.text
+                )
+            )
+            Toast.makeText(this, R.string.stream_fragment_copied, Toast.LENGTH_LONG).show()
         }
 
     }
@@ -211,54 +231,42 @@ class StreamActivity : AppCompatActivity() {
     }
 
     private fun showError(appError: AppError?) {
-        if (appError == null) {
-            binding.tvFragmentStreamError.visibility = View.GONE
-        } else {
-            when (appError) {
-                is FixableError.AddressInUseException -> setNewPortAndReStart()
-            }
-            XLog.d(getLog("showError", appError.toString()))
-            binding.tvFragmentStreamError.text = when (appError) {
-                is FixableError.AddressInUseException -> getString(R.string.error_port_in_use)
-                is FixableError.CastSecurityException -> getString(R.string.error_invalid_media_projection)
-                is FixableError.AddressNotFoundException -> getString(R.string.error_ip_address_not_found)
-                is FatalError.BitmapFormatException -> getString(R.string.error_wrong_image_format)
-                else -> appError.toString()
-            }
-            binding.tvFragmentStreamError.visibility = View.VISIBLE
+        when (appError) {
+            is FixableError.AddressInUseException -> setNewPortAndReStart()
         }
     }
 
     private fun startStreamScreen() {
         IntentAction.StartStream.sendToAppService(this@StreamActivity)
         binding.btnStopStream.visibility = View.VISIBLE
+        binding.btnStopStream.isEnabled = true
     }
 
     private fun onServiceStateMessage(serviceMessage: ServiceMessage.ServiceState) {
         Timber.d("onServiceStateMessage ${serviceMessage}")
         // Interfaces
-        binding.llFragmentStreamAddresses.removeAllViews()
+//        binding.llFragmentStreamAddresses.removeAllViews()
         checkPermission(serviceMessage)
-        if (serviceMessage.appError == null && !serviceMessage.isStreaming && !serviceMessage.isWaitingForPermission && !serviceMessage.isBusy) {
+        if (!isStopStream && serviceMessage.appError == null && !serviceMessage.isStreaming && !serviceMessage.isWaitingForPermission && !serviceMessage.isBusy) {
             startStreamScreen()
         }
         if (serviceMessage.netInterfaces.isEmpty()) {
-            with(
-                ItemDeviceAddressBinding.inflate(
-                    layoutInflater,
-                    binding.llFragmentStreamAddresses,
-                    false
-                )
-            ) {
-                tvItemDeviceAddressName.text = ""
-                binding.llFragmentStreamAddresses.addView(this.root)
-            }
+//            with(
+//                ItemDeviceAddressBinding.inflate(
+//                    layoutInflater,
+//                    binding.llFragmentStreamAddresses,
+//                    false
+//                )
+//            ) {
+//                tvItemDeviceAddressName.text = ""
+//                binding.llFragmentStreamAddresses.addView(this.root)
+//            }
         } else {
             serviceMessage.netInterfaces.sortedBy { it.address.asString() }
                 .forEach { netInterface ->
                     val fullAddress =
                         "http://${netInterface.address.asString()}:${settingsReadOnly.severPort}"
-                    binding.streamForm.tvItemDeviceAddress.text = fullAddress.setUnderlineSpan()
+                    binding.tvItemDeviceAddress.text = fullAddress.setUnderlineSpan()
 
                 }
         }
