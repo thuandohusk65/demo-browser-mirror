@@ -84,7 +84,7 @@ class TutorialActivity : AppCompatActivity() {
     }
 
     private fun showNativeAdmob() {
-        val builder = AdLoader.Builder(this, AdConfig.AD_ADMOB_SELECT_DEVICE_NATIVE_ADVANCED)
+        val builder = AdLoader.Builder(this, AdConfig.AD_ADMOB_TUTORIAL_NATIVE_ADVANCED)
         builder.forNativeAd {
             if (nativeAd != null) {
                 nativeAd?.destroy()
