@@ -62,6 +62,7 @@ class StreamActivity : AppCompatActivity() {
     private var isCastPermissionsPending: Boolean = false
     private var permissionsErrorDialog: MaterialDialog? = null
     private var isStopStream: Boolean = false
+    private var isCheckedPermission: Boolean = false
     var viewModel: StreamViewModel? = null
 
     companion object {
@@ -216,7 +217,7 @@ class StreamActivity : AppCompatActivity() {
     }
 
     private fun checkPermission(serviceMessage: ServiceMessage.ServiceState) {
-        if (serviceMessage.isWaitingForPermission) {
+        if (serviceMessage.isWaitingForPermission && !isCheckedPermission) {
             if (isCastPermissionsPending) {
                 XLog.i(getLog("onServiceMessage", "Ignoring: isCastPermissionsPending == true"))
             } else {
@@ -229,7 +230,9 @@ class StreamActivity : AppCompatActivity() {
                     startActivityForResult(
                         createScreenCaptureIntent, SCREEN_CAPTURE_REQUEST_CODE//,options.toBundle()
                     )
+                    isCheckedPermission = true
                 } catch (ex: ActivityNotFoundException) {
+                    isCheckedPermission = true
                     showErrorDialog(
                         R.string.permission_activity_error_title_activity_not_found,
                         R.string.permission_activity_error_activity_not_found
