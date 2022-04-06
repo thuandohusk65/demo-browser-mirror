@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.ads.*
@@ -21,6 +22,7 @@ import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
+import com.nhnextsoft.screenmirroring.config.AppConfigRemote
 import com.nhnextsoft.screenmirroring.config.AppPreferences
 import com.nhnextsoft.screenmirroring.databinding.ActivityTutorialBinding
 import com.nhnextsoft.screenmirroring.model.TutorialModel
@@ -52,6 +54,22 @@ class TutorialActivity : AppCompatActivity() {
             getString(R.string.text_step) + " " + 1 + "/" + (loadAllImageTutorial().size)
         loadAdInterstitial()
         showNativeAdmob()
+        loadAds()
+    }
+
+    private fun loadAds() {
+        Timber.d("LoadAd Tutorial ${AppConfigRemote().isUsingAdsBannerInTutorial}")
+        if (AppConfigRemote().isUsingAdsBannerInTutorial == true) {
+            binding.flAdplaceholder.visibility = View.GONE
+            loadBanner()
+        } else {
+            binding.bannerContainer.visibility = View.GONE
+            showNativeAdmob()
+        }
+    }
+
+    private fun loadBanner() {
+        Admod.instance?.loadBannerWithAdSize(this, AdConfig.AD_ADMOB_TUTORIAL_BANNER, AdSize.MEDIUM_RECTANGLE)
     }
 
     private fun initView() {

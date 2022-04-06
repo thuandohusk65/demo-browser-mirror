@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/ad_splash_background.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_cta_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_rounded_corners_shape.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/background_fl_adplaceholder.xml" value="0.209" />
         <entry key="app/src/main/res/drawable/bg_dialog_loading_ad.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/bg_no_connect_wifi_shape.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/black_background.xml" value="0.35625" />

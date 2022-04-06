@@ -662,6 +662,73 @@ class Admod private constructor() {
     }
 
     /**
+     * Load quảng cáo banner với adSize
+     * @param mActivity
+     * @param id
+     */
+
+    fun loadBannerWithAdSize(mActivity: Activity, id: String, adSize: AdSize) {
+        val adContainer = mActivity.findViewById<FrameLayout>(R.id.banner_container)
+        val containerShimmer: ShimmerFrameLayout =
+            mActivity.findViewById(R.id.shimmer_container_banner)
+        setBannerWithAdSize(mActivity, id, adContainer, containerShimmer, adSize)
+    }
+
+    private fun setBannerWithAdSize(
+        mActivity: Activity,
+        id: String,
+        adContainer: FrameLayout,
+        containerShimmer: ShimmerFrameLayout,
+        adSize: AdSize,
+    ) {
+        if (listOf(*mActivity.resources.getStringArray(R.array.list_id_test)).contains(id)) {
+            showTestIdAlert(mActivity, BANNER_ADS, id)
+        }
+        if (AppPurchase.instance?.isPurchased(mActivity)) {
+            containerShimmer.visibility = View.GONE
+            return
+        }
+        containerShimmer.visibility = View.VISIBLE
+        containerShimmer.startShimmer()
+        try {
+            val adView = AdView(mActivity)
+            adView.adUnitId = id
+            adContainer.addView(adView)
+            adView.adSize = adSize
+            adView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            adView.loadAd(adRequest)
+            adView.adListener = object : AdListener() {
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    super.onAdFailedToLoad(loadAdError)
+                    containerShimmer.stopShimmer()
+                    adContainer.visibility = View.GONE
+                    containerShimmer.visibility = View.GONE
+                }
+
+                override fun onAdLoaded() {
+                    Timber.d("Banner adapter class name: " + adView.responseInfo.mediationAdapterClassName)
+                    containerShimmer.stopShimmer()
+                    containerShimmer.visibility = View.GONE
+                    adContainer.visibility = View.VISIBLE
+                    if (adView != null) {
+                        adView.onPaidEventListener = OnPaidEventListener { adValue: AdValue? ->
+//                            AdjustDebug.pushTrackEventAdmod(adValue);
+                            logPaidAdImpression(
+                                adValue!!,
+                                adView.adUnitId,
+                                adView.responseInfo
+                                    .mediationAdapterClassName)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Timber.d(e)
+            e.printStackTrace()
+        }
+    }
+
+    /**
      * Load quảng cáo Banner Trong Activity
      *
      * @param mActivity
