@@ -100,8 +100,30 @@ class HomeActivity : AppCompatActivity() {
             Timber.d("onPress OpenStream")
             RequestSeeAdRewardedDialog.newInstance().show(supportFragmentManager, "RequestSeeAdRewardedDialog")
         }
+
+        binding.btnVideo.setOnClickListener {
+            showCastInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
+        }
     }
 
+    private fun openCastVideo() {
+        Timber.d("onPress btnVideo")
+    }
+
+    private fun showCastInterstitial(adId: String) {
+        modalLoadingAd.show()
+        loadAdInterstitial(adId, object : AdCallback() {
+            override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                super.onInterstitialLoad(interstitialAd)
+                modalLoadingAd.dismiss()
+            }
+
+            override fun onAdFailedToLoad(i: LoadAdError?) {
+                super.onAdFailedToLoad(i)
+                modalLoadingAd.dismiss()
+            }
+        })
+    }
     private fun showCrossApp() {
         startActivity(CrossCarouselActivity.openIntent(this))
     }
@@ -187,10 +209,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadAdInterstitial(adCallback: AdCallback) {
+    private fun loadAdInterstitial(adId: String, adCallback: AdCallback) {
         Admod.instance?.getInterstitalAds(
             this,
-            AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL, adCallback
+            adId, adCallback
         )
     }
 
@@ -217,7 +239,7 @@ class HomeActivity : AppCompatActivity() {
             }
         } else {
             modalLoadingAd.show()
-            loadAdInterstitial(object : AdCallback() {
+            loadAdInterstitial(AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL, object : AdCallback() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                     super.onInterstitialLoad(interstitialAd)
                     modalLoadingAd.dismiss()
@@ -265,7 +287,6 @@ class HomeActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
         var isShowDialog = today != AppPreferences().isLastTimeOpenReviewDialog
-        Timber.d("showDialogRate: onShowDialogRating: $onShowDialogRating -- isReviewed: ${AppPreferences().isReviewedOnGoogle == false} -- isShowDialog: $isShowDialog ")
         if (onShowDialogRating && AppPreferences().isReviewedOnGoogle == false && isShowDialog) {
             RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }

@@ -128,7 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/viewMain">
 
             <Button
-                android:id="@+id/btnOpenStream9"
+                android:id="@+id/btnVideo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dp"
@@ -147,7 +147,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btnOpenStream11"
+                android:id="@+id/btnImage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
@@ -162,11 +162,11 @@
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:backgroundTint="#FFFFFF"
-                app:layout_constraintStart_toEndOf="@+id/btnOpenStream9"
+                app:layout_constraintStart_toEndOf="@+id/btnVideo"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/btnOpenStream12"
+                android:id="@+id/btnWeb"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="44dp"
@@ -182,10 +182,10 @@
                 android:textStyle="bold"
                 app:backgroundTint="#FFFFFF"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btnOpenStream9" />
+                app:layout_constraintTop_toBottomOf="@+id/btnVideo" />
 
             <Button
-                android:id="@+id/btnOpenStream13"
+                android:id="@+id/btnYoutube"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -200,7 +200,7 @@
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:backgroundTint="#FFFFFF"
-                app:layout_constraintStart_toEndOf="@+id/btnOpenStream12"
+                app:layout_constraintStart_toEndOf="@+id/btnWeb"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
