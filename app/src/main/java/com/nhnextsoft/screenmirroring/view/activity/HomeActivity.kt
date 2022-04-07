@@ -1,7 +1,5 @@
 package com.nhnextsoft.screenmirroring.view.activity
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
@@ -28,7 +26,6 @@ import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.billing.AppPurchase
 import com.nhnextsoft.control.dialog.DialogExit
 import com.nhnextsoft.control.dialog.InAppDialog
-import com.nhnextsoft.control.dialog.PrepareLoadingAdsDialog
 import com.nhnextsoft.control.funtion.AdCallback
 import com.nhnextsoft.control.funtion.DialogExitListener
 import com.nhnextsoft.nativecarouselads.CrossCarouselActivity
@@ -47,6 +44,7 @@ import com.nhnextsoft.screenmirroring.view.activity.stream.StreamActivity
 import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
 import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
 import com.nhnextsoft.screenmirroring.view.dialog.RateAppDialog
+import com.nhnextsoft.screenmirroring.view.dialog.RequestSeeAdRewardedDialog
 import timber.log.Timber
 import java.util.*
 
@@ -92,9 +90,15 @@ class HomeActivity : AppCompatActivity() {
         loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
 
+//        binding.btnTest.setOnClickListener{
+//            MobileAds.openAdInspector(this) {
+//                // Error will be non-null if ad inspector closed due to an error.
+//            }
+//        }
+
         binding.btnOpenStream.setOnClickListener {
             Timber.d("onPress OpenStream")
-            startActivity(StreamActivity.newIntent(this))
+            RequestSeeAdRewardedDialog.newInstance().show(supportFragmentManager, "RequestSeeAdRewardedDialog")
         }
     }
 

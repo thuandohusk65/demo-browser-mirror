@@ -84,20 +84,7 @@ class StreamActivity : AppCompatActivity() {
         }
 
         binding.btnStopStream.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Want to disconnect?")
-                .setMessage("Connection will be interrupted.")
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    Timber.d("onPress Stop Stream")
-
-                    IntentAction.StopStream.sendToAppService(this@StreamActivity)
-                    isStopStream = true
-                    NotificationManagerCompat.from(this).cancelAll();
-                    onBackPressed()
-                }
-                .setNegativeButton(android.R.string.no, null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
+            showDialogStopService()
         }
 
         binding.ivItemDeviceAddressCopy.setOnClickListener {
@@ -112,9 +99,60 @@ class StreamActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        val projectionManager =
+            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        IntentAction.CastIntent(projectionManager.createScreenCaptureIntent())
+            .sendToAppService(this@StreamActivity)
+
+        serviceMessageLiveData.observe(this) { serviceMessage ->
+            when (serviceMessage) {
+                is ServiceMessage.ServiceState -> onServiceStateMessage(serviceMessage)
+            }
+        }
+        bindService(
+            AppService.getAppServiceIntent(this),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+
+    }
+
+    override fun onStop() {
+        if (isBound) {
+            serviceMessageFlowJob?.cancel()
+            serviceMessageFlowJob = null
+            unbindService(serviceConnection)
+            isBound = false
+        }
+        super.onStop()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         NotificationManagerCompat.from(this).cancelAll();
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        showDialogStopService()
+    }
+
+    private fun showDialogStopService() {
+        AlertDialog.Builder(this)
+            .setTitle("Want to disconnect?")
+            .setMessage("Connection will be interrupted.")
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                Timber.d("onPress Stop Stream")
+                IntentAction.StopStream.sendToAppService(this@StreamActivity)
+                isStopStream = true
+                NotificationManagerCompat.from(this).cancelAll();
+                finish()
+            }
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
     }
 
     private fun setNewPortAndReStart() {
@@ -146,36 +184,6 @@ class StreamActivity : AppCompatActivity() {
             serviceMessageFlowJob = null
             isBound = false
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val projectionManager =
-            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        IntentAction.CastIntent(projectionManager.createScreenCaptureIntent())
-            .sendToAppService(this@StreamActivity)
-
-        serviceMessageLiveData.observe(this) { serviceMessage ->
-            when (serviceMessage) {
-                is ServiceMessage.ServiceState -> onServiceStateMessage(serviceMessage)
-            }
-        }
-        bindService(
-            AppService.getAppServiceIntent(this),
-            serviceConnection,
-            Context.BIND_AUTO_CREATE
-        )
-
-    }
-
-    override fun onStop() {
-        if (isBound) {
-            serviceMessageFlowJob?.cancel()
-            serviceMessageFlowJob = null
-            unbindService(serviceConnection)
-            isBound = false
-        }
-        super.onStop()
     }
 
     private fun showErrorDialog(
@@ -217,6 +225,7 @@ class StreamActivity : AppCompatActivity() {
     }
 
     private fun checkPermission(serviceMessage: ServiceMessage.ServiceState) {
+        Timber.d("checkPermission $isCheckedPermission")
         if (serviceMessage.isWaitingForPermission && !isCheckedPermission) {
             if (isCastPermissionsPending) {
                 XLog.i(getLog("onServiceMessage", "Ignoring: isCastPermissionsPending == true"))
@@ -291,7 +300,8 @@ class StreamActivity : AppCompatActivity() {
     private fun showNotification() {
         val intent = Intent(this, ScreenMirroringApp::class.java)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val channelId = getString(R.string.app_name)
         val defaultSoundUri =
@@ -307,7 +317,8 @@ class StreamActivity : AppCompatActivity() {
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -318,6 +329,6 @@ class StreamActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(2 , notificationBuilder.build())
+        notificationManager.notify(2, notificationBuilder.build())
     }
 }

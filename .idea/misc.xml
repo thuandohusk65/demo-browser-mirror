@@ -41,6 +41,7 @@
         <entry key="app/src/main/res/drawable/ic_step_5.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_stream.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_ui_setting.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/ic_watching.xml" value="0.194" />
         <entry key="app/src/main/res/drawable/ic_web.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_wifi.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_wifi_24dp.xml" value="0.35625" />
@@ -49,6 +50,7 @@
         <entry key="app/src/main/res/drawable/piclist_selector_btn_done2.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/round_background_item_store.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/round_background_upgrade.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/shape_gradient.xml" value="0.2245" />
         <entry key="app/src/main/res/layout/activity_finish_app.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.2" />
@@ -63,7 +65,8 @@
         <entry key="app/src/main/res/layout/dialog_loading_ads.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/dialog_loading_data.xml" value="0.11324697033012955" />
         <entry key="app/src/main/res/layout/dialog_no_internet.xml" value="0.18631006346328197" />
-        <entry key="app/src/main/res/layout/dialog_rate_app.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/dialog_rate_app.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_request_see_ad_rewarded.xml" value="0.165" />
         <entry key="app/src/main/res/layout/dialog_upgrade.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_no_wifi.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_device_address.xml" value="0.19157608695652173" />

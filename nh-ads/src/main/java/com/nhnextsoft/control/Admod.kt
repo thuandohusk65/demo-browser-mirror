@@ -3,10 +3,7 @@ package com.nhnextsoft.control
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
-import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.os.Process
+import android.os.*
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -31,6 +28,8 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.nhnextsoft.control.analytic.FirebaseAnalyticsUtil.logPaidAdImpression
 import com.nhnextsoft.control.application.AppGlobal
 import com.nhnextsoft.control.billing.AppPurchase
@@ -52,11 +51,13 @@ class Admod private constructor() {
     private var dialog: PrepareLoadingAdsDialog? = null
     private var isTimeout // xử lý timeout show ads
             = false
-    private var isShowLoadingSplash = false //kiểm tra trạng thái ad splash, ko cho load, show khi đang show loading ads splash
+    private var isShowLoadingSplash =
+        false //kiểm tra trạng thái ad splash, ko cho load, show khi đang show loading ads splash
     private var isFan = false
 
     //    private var isAdcolony = false
     private var isAppLovin = false
+    private var isPangle = false
     var isTimeDelay = false //xử lý delay time show ads, = true mới show ads
     private var openActivityAfterShowInterAds = false
 
@@ -79,6 +80,10 @@ class Admod private constructor() {
 
     fun setAppLovin(appLovin: Boolean) {
         isAppLovin = appLovin
+    }
+
+    fun setPangle(pangle: Boolean) {
+        isPangle = pangle
     }
 
     /**
@@ -116,9 +121,11 @@ class Admod private constructor() {
             Timber.i("$initializationStatus")
         }
         if (BuildConfig.DEBUG) {
-            MobileAds.setRequestConfiguration(RequestConfiguration.Builder()
-                .setTestDeviceIds(testDeviceList)
-                .build())
+            MobileAds.setRequestConfiguration(
+                RequestConfiguration.Builder()
+                    .setTestDeviceIds(testDeviceList)
+                    .build()
+            )
         }
         this.context = context
     }
@@ -160,6 +167,11 @@ class Admod private constructor() {
                     .build()
                 builder.addNetworkExtrasBundle(ApplovinAdapter::class.java, extras)
             }
+//            if (isPangle) {
+//                val extrasPangle = Bundle()
+//                builder.addCustomEventExtrasBundle(AdmobNativeFeedAdAdapter::class.java, extrasPangle)
+//            }
+
             //        builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
             return builder.build()
         }
@@ -272,7 +284,8 @@ class Admod private constructor() {
                     adValue,
                     mInterstitialSplash?.adUnitId,
                     mInterstitialSplash?.responseInfo
-                        ?.mediationAdapterClassName)
+                        ?.mediationAdapterClassName
+                )
             }
             Timber.d("onShowSplash onPaidEventListener")
         }
@@ -394,7 +407,8 @@ class Admod private constructor() {
                         adValue,
                         interstitialAd.adUnitId,
                         interstitialAd.responseInfo
-                            .mediationAdapterClassName)
+                            .mediationAdapterClassName
+                    )
                 }
             }
 
@@ -432,13 +446,19 @@ class Admod private constructor() {
 //        if (mutableListOf(*context.resources.getStringArray(R.array.list_id_test)).contains(id)) {
 //            showTestIdAlert(context, INTERS_ADS, id)
 //        }
-        if (AppPurchase.instance.isPurchased(activity) || getNumClickAdsPerDay(activity,
-                id) >= maxClickAds
+        if (AppPurchase.instance.isPurchased(activity) || getNumClickAdsPerDay(
+                activity,
+                id
+            ) >= maxClickAds
         ) {
-            Timber.i("isPurchased ${AppPurchase.instance.isPurchased(activity)} getNumClickAdsPerDay ${
-                getNumClickAdsPerDay(activity,
-                    id)
-            }")
+            Timber.i(
+                "isPurchased ${AppPurchase.instance.isPurchased(activity)} getNumClickAdsPerDay ${
+                    getNumClickAdsPerDay(
+                        activity,
+                        id
+                    )
+                }"
+            )
             adCallback.onInterstitialLoad(null)
         }
         Timber.i("start loading $id")
@@ -455,7 +475,8 @@ class Admod private constructor() {
                             adValue,
                             interstitialAd.adUnitId,
                             interstitialAd.responseInfo
-                                .mediationAdapterClassName)
+                                .mediationAdapterClassName
+                        )
                     }
                     Timber.i("onAdLoaded")
                 }
@@ -620,8 +641,10 @@ class Admod private constructor() {
                     }
                     if (openActivityAfterShowInterAds && callback != null) {
                         callback.onAdClosed()
-                        Handler(Looper.getMainLooper()).postDelayed({ if (dialog != null && dialog?.isShowing == true && !activity.isDestroyed) dialog?.dismiss() },
-                            1500)
+                        Handler(Looper.getMainLooper()).postDelayed(
+                            { if (dialog != null && dialog?.isShowing == true && !activity.isDestroyed) dialog?.dismiss() },
+                            1500
+                        )
                     }
                     mInterstitialAd.show(activity)
                 }, 800)
@@ -872,7 +895,8 @@ class Admod private constructor() {
                                 adValue!!,
                                 adView.adUnitId,
                                 adView.responseInfo
-                                    .mediationAdapterClassName)
+                                    .mediationAdapterClassName
+                            )
                         }
                     }
                 }
@@ -927,7 +951,8 @@ class Admod private constructor() {
                                 adValue!!,
                                 adView.adUnitId,
                                 adView.responseInfo
-                                    .mediationAdapterClassName)
+                                    .mediationAdapterClassName
+                            )
                         }
                     }
                 }
@@ -960,10 +985,12 @@ class Admod private constructor() {
         return if (useInlineAdaptive) {
             AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(
                 mActivity,
-                adWidth)
+                adWidth
+            )
         } else AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
             mActivity,
-            adWidth)
+            adWidth
+        )
     }
 
     /**
@@ -990,22 +1017,26 @@ class Admod private constructor() {
         val frameLayout = mActivity.findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val containerShimmer: ShimmerFrameLayout =
             mActivity.findViewById(R.id.shimmer_container_small_native)
-        loadNative(mActivity,
+        loadNative(
+            mActivity,
             containerShimmer,
             frameLayout,
             adUnitId,
-            R.layout.small_native_admod_ad)
+            R.layout.small_native_admod_ad
+        )
     }
 
     fun loadSmallNativeFragment(mActivity: Activity, adUnitId: String, parent: View) {
         val frameLayout = parent.findViewById<FrameLayout>(R.id.fl_adplaceholder)
         val containerShimmer: ShimmerFrameLayout =
             parent.findViewById(R.id.shimmer_container_small_native)
-        loadNative(mActivity,
+        loadNative(
+            mActivity,
             containerShimmer,
             frameLayout,
             adUnitId,
-            R.layout.small_native_admod_ad)
+            R.layout.small_native_admod_ad
+        )
     }
 
     fun loadNativeAd(context: Context, id: String, callback: AdCallback?) {
@@ -1030,7 +1061,8 @@ class Admod private constructor() {
                     logPaidAdImpression(
                         adValue!!,
                         "",
-                        "native")
+                        "native"
+                    )
                 }
             }
             .withAdListener(object : AdListener() {
@@ -1088,7 +1120,8 @@ class Admod private constructor() {
                     logPaidAdImpression(
                         adValue!!,
                         "",
-                        "native")
+                        "native"
+                    )
                 }
                 populateUnifiedNativeAdView(context, nativeAd, adView)
                 frameLayout.removeAllViews()
@@ -1144,7 +1177,8 @@ class Admod private constructor() {
                     logPaidAdImpression(
                         adValue!!,
                         "",
-                        "native")
+                        "native"
+                    )
                 }
                 populateUnifiedNativeAdView(context, nativeAd, adView)
                 frameLayout.removeAllViews()
@@ -1236,7 +1270,8 @@ class Admod private constructor() {
                 Objects.requireNonNull(adView.iconView).visibility = View.GONE
             } else {
                 (adView.iconView as ImageView).setImageDrawable(
-                    nativeAd.icon.drawable)
+                    nativeAd.icon.drawable
+                )
                 adView.iconView.visibility = View.VISIBLE
             }
         } catch (e: Exception) {
@@ -1295,6 +1330,9 @@ class Admod private constructor() {
         adView.setNativeAd(nativeAd)
     }
 
+    var rewardedInterstitialAd: RewardedInterstitialAd? = null
+        private set
+
     var rewardedAd: RewardedAd? = null
         private set
 
@@ -1324,7 +1362,8 @@ class Admod private constructor() {
                         logPaidAdImpression(
                             adValue!!,
                             "",
-                            "native")
+                            "native"
+                        )
                     }
             }
 
@@ -1362,7 +1401,47 @@ class Admod private constructor() {
                         logPaidAdImpression(
                             adValue!!,
                             "",
-                            "native")
+                            "native"
+                        )
+                    }
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                callback.onAdFailedToLoad(loadAdError)
+                Timber.e("RewardedAd onAdFailedToLoad: " + loadAdError.message)
+            }
+        })
+    }
+
+    /**
+     * Khởi tạo quảng cáo reward interstitial
+     *
+     * @param context
+     * @param id
+     */
+    fun initRewardedInterstitialAds(context: Context, id: String, callback: AdCallback) {
+        if (Arrays.asList(*context.resources.getStringArray(R.array.list_id_test)).contains(id)) {
+            showTestIdAlert(context, REWARD_ADS, id)
+        }
+        if (AppPurchase.instance?.isPurchased(context)) {
+            return
+        }
+        nativeId = id
+        if (AppPurchase.instance.isPurchased(context)) {
+            return
+        }
+
+        RewardedInterstitialAd.load(context, id, adRequest, object : RewardedInterstitialAdLoadCallback() {
+            override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
+                callback.onAdLoaded()
+                this@Admod.rewardedInterstitialAd = rewardedAd
+                this@Admod.rewardedInterstitialAd?.onPaidEventListener =
+                    OnPaidEventListener { adValue: AdValue? ->
+                        logPaidAdImpression(
+                            adValue!!,
+                            "",
+                            "native"
+                        )
                     }
             }
 
@@ -1401,6 +1480,42 @@ class Admod private constructor() {
                 }
             }
             rewardedAd?.show(context) { rewardItem ->
+                if (adCallback != null) {
+                    adCallback.onUserEarnedReward(rewardItem)
+                    initRewardAds(context, nativeId)
+                }
+            }
+        }
+    }
+
+    /**
+     * Show quảng cáo reward interstitial và nhận kết quả trả về
+     *
+     * @param context
+     * @param adCallback
+     */
+    fun showRewardInterstitialAds(context: Activity, adCallback: RewardCallback?) {
+        if (AppPurchase.instance?.isPurchased(context)) {
+            adCallback?.onUserEarnedReward(null)
+            return
+        }
+        if (rewardedInterstitialAd == null) {
+            initRewardAds(context, nativeId)
+            adCallback?.onRewardedAdFailedToShow(0)
+            return
+        } else {
+            rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent()
+                    adCallback?.onRewardedAdClosed()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    super.onAdFailedToShowFullScreenContent(adError)
+                    adCallback?.onRewardedAdFailedToShow(adError.code)
+                }
+            }
+            rewardedInterstitialAd?.show(context) { rewardItem ->
                 if (adCallback != null) {
                     adCallback.onUserEarnedReward(rewardItem)
                     initRewardAds(context, nativeId)
@@ -1455,9 +1570,11 @@ class Admod private constructor() {
         val notificationManager = NotificationManagerCompat.from(context)
         notification.flags = notification.flags or Notification.FLAG_AUTO_CANCEL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("warning_ads",
+            val channel = NotificationChannel(
+                "warning_ads",
                 "Warning Ads",
-                NotificationManager.IMPORTANCE_LOW)
+                NotificationManager.IMPORTANCE_LOW
+            )
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(typeAds, notification)
