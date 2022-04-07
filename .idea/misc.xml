@@ -18,11 +18,17 @@
         <entry key="app/src/main/res/drawable/btn_buy_now_2.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/btn_select_device.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/drawable/btn_try_again.xml" value="0.3921875" />
+        <entry key="app/src/main/res/drawable/button_home.xml" value="0.231" />
         <entry key="app/src/main/res/drawable/ic_ad_label.xml" value="0.3921875" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.1885" />
         <entry key="app/src/main/res/drawable/ic_checked.xml" value="0.23958333333333334" />
         <entry key="app/src/main/res/drawable/ic_copy_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_disconnect.xml" value="0.20364583333333333" />
+        <entry key="app/src/main/res/drawable/ic_heart.xml" value="0.2" />
+        <entry key="app/src/main/res/drawable/ic_image.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1295" />
+        <entry key="app/src/main/res/drawable/ic_mirror.xml" value="0.169" />
+        <entry key="app/src/main/res/drawable/ic_mirroring.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_open_in_new_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_qrcode_24dp.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/ic_remove_ad.xml" value="0.35625" />
@@ -33,7 +39,9 @@
         <entry key="app/src/main/res/drawable/ic_speed_control.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_step_1.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_step_5.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/ic_stream.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_ui_setting.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable/ic_web.xml" value="0.169" />
         <entry key="app/src/main/res/drawable/ic_wifi.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_wifi_24dp.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/ic_wireless_duration.xml" value="0.35625" />
@@ -42,7 +50,7 @@
         <entry key="app/src/main/res/drawable/round_background_item_store.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/round_background_upgrade.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_finish_app.xml" value="0.2234375" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_select_device.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.165" />

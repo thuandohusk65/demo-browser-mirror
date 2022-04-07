@@ -67,63 +67,145 @@
                 app:srcCompat="@drawable/ic_cross" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <com.nhnextsoft.screenmirroring.utility.pulse.MultiPulseLayout
-            android:id="@+id/pulse_layout"
-            android:layout_width="200dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/viewMain"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_toolbar"
-            app:mpa_duration="1500"
-            app:mpa_paint_style="fill"
-            app:mpa_purse_color="@color/main_color"
-            app:mpa_purse_count="2"
-            app:mpa_start_radius="70dp"
-            app:mpa_stroke_width="200dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_cast"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/ic_connect"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/text_state_connect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/ready_connect"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_cast" />
-        </com.nhnextsoft.screenmirroring.utility.pulse.MultiPulseLayout>
-
-        <TextView
-            android:id="@+id/text_device"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:padding="8dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:drawableLeftCompat="@drawable/ic_cast_connected_24"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/ctl_cast_view"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pulse_layout"
-            tools:text="Apple TV" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_toolbar"
+            app:layout_constraintVertical_bias="0.002">
+
+            <Button
+                android:id="@+id/pulseLayout"
+                android:layout_width="150dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="76dp"
+                android:layout_weight=".45"
+                android:drawableLeft="@drawable/ic_mirroring"
+                android:background="@drawable/button_home"
+                android:text="Screen Mirror"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnOpenStream"
+                android:layout_width="150dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="76dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight=".45"
+                android:background="@drawable/button_home"
+                android:drawableLeft="@drawable/ic_stream"
+                android:text="Stream HTTP"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+            android:id="@+id/ctl_cast_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/ctl_nativeAdView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewMain">
+
+            <Button
+                android:id="@+id/btnOpenStream9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="40dp"
+                android:layout_weight=".25"
+                android:background="@drawable/button_home"
+                android:drawableTop="@drawable/ic_stream"
+                android:paddingVertical="8dp"
+                android:text="Video"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnOpenStream11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="40dp"
+                android:layout_weight=".25"
+                android:background="@drawable/button_home"
+                android:drawableTop="@drawable/ic_image"
+                android:paddingVertical="8dp"
+                android:text="Image"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/btnOpenStream9"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnOpenStream12"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:layout_weight=".25"
+                android:background="@drawable/button_home"
+                android:drawableTop="@drawable/ic_web"
+                android:paddingVertical="8dp"
+                android:layout_marginStart="80dp"
+                android:text="Web"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOpenStream9" />
+
+            <Button
+                android:id="@+id/btnOpenStream13"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="168dp"
+                android:layout_weight=".25"
+                android:background="@drawable/button_home"
+                android:drawableTop="@drawable/ic_youtube"
+                android:paddingVertical="8dp"
+                android:text="Youtube"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintStart_toEndOf="@+id/btnOpenStream12"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctl_nativeAdView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -250,17 +332,5 @@
 
             </com.google.android.gms.ads.nativead.NativeAdView>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/btnOpenStream"
-            android:layout_width="193dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="96dp"
-            android:layout_marginBottom="356dp"
-            android:text="Phản chiếu trình duyệt"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -91,24 +91,11 @@ class HomeActivity : AppCompatActivity() {
         checkingInternet()
         loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
-        showCrossAnimation()
 
         binding.btnOpenStream.setOnClickListener {
             Timber.d("onPress OpenStream")
             startActivity(StreamActivity.newIntent(this))
         }
-    }
-
-    private fun showCrossAnimation() {
-        val scaleDown: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
-            binding.imageCrossApp,
-            PropertyValuesHolder.ofFloat("scaleX", 1.1f),
-            PropertyValuesHolder.ofFloat("scaleY", 1.1f)
-        )
-        scaleDown.duration = 500
-        scaleDown.repeatCount = ObjectAnimator.INFINITE
-        scaleDown.repeatMode = ObjectAnimator.REVERSE
-        scaleDown.start()
     }
 
     private fun showCrossApp() {
@@ -128,16 +115,16 @@ class HomeActivity : AppCompatActivity() {
             // connect mirroring
             isConnectMirror = true
             val displayMirror = displayManager.displays.get(1)
-            binding.textDevice.visibility = View.VISIBLE
-            binding.textDevice.text = displayMirror.name
-            binding.imageCast.setImageResource(R.drawable.ic_disconnect_2)
-            binding.textStateConnect.text = getString(R.string.disconnect)
+//            binding.textDevice.visibility = View.VISIBLE
+//            binding.textDevice.text = displayMirror.name
+//            binding.imageCast.setImageResource(R.drawable.ic_disconnect_2)
+//            binding.textStateConnect.text = getString(R.string.disconnect)
         } else {
             // not connect
             isConnectMirror = false
-            binding.textDevice.visibility = View.GONE
-            binding.imageCast.setImageResource(R.drawable.ic_connect)
-            binding.textStateConnect.text = getString(R.string.ready_connect)
+//            binding.textDevice.visibility = View.GONE
+//            binding.imageCast.setImageResource(R.drawable.ic_connect)
+//            binding.textStateConnect.text = getString(R.string.ready_connect)
         }
         val displayListener: DisplayListener = object : DisplayListener {
             override fun onDisplayAdded(displayId: Int) {
@@ -167,7 +154,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.pulseLayout.start()
         binding.pulseLayout.setOnClickListener {
             openScreenMirroring()
         }
