@@ -8,7 +8,6 @@ import android.media.projection.MediaProjectionManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -24,6 +23,7 @@ import androidx.lifecycle.coroutineScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.elvishew.xlog.XLog
+import com.nhnextsoft.screenmirroring.Global
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ScreenMirroringApp
 import com.nhnextsoft.screenmirroring.databinding.ActivityStreamBinding
@@ -63,6 +63,8 @@ class StreamActivity : AppCompatActivity() {
     private var permissionsErrorDialog: MaterialDialog? = null
     private var isStopStream: Boolean = false
     private var isCheckedPermission: Boolean = false
+    private var isCastPermissionGranted: Boolean = false
+
     var viewModel: StreamViewModel? = null
 
     companion object {
@@ -97,6 +99,17 @@ class StreamActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.stream_fragment_copied, Toast.LENGTH_LONG).show()
         }
 
+        binding.txGuide3.setOnClickListener {
+            if(!isCastPermissionGranted) {
+                Timber.d("Request CastPermission ")
+                val projectionManager =
+                    getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+                val createScreenCaptureIntent = projectionManager.createScreenCaptureIntent()
+                startActivityForResult(
+                    createScreenCaptureIntent, SCREEN_CAPTURE_REQUEST_CODE//,options.toBundle()
+                )
+            }
+        }
     }
 
     override fun onStart() {
@@ -136,7 +149,6 @@ class StreamActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        showDialogStopService()
     }
 
     private fun showDialogStopService() {
@@ -145,10 +157,7 @@ class StreamActivity : AppCompatActivity() {
             .setMessage("Connection will be interrupted.")
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 Timber.d("onPress Stop Stream")
-                IntentAction.StopStream.sendToAppService(this@StreamActivity)
-                isStopStream = true
-                NotificationManagerCompat.from(this).cancelAll();
-                finish()
+                stopStreamScreen()
             }
             .setNegativeButton(android.R.string.no, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -208,10 +217,11 @@ class StreamActivity : AppCompatActivity() {
                 XLog.d(getLog("onActivityResult", "Cast permission granted"))
                 require(data != null) { "onActivityResult: data = null" }
                 IntentAction.CastIntent(data).sendToAppService(this@StreamActivity)
+                isCastPermissionGranted = true
             } else {
                 XLog.w(getLog("onActivityResult", "Cast permission denied"))
-
                 IntentAction.CastPermissionsDenied.sendToAppService(this@StreamActivity)
+                isCastPermissionGranted = false
                 isCastPermissionsPending = false
 
                 showErrorDialog(
@@ -261,8 +271,15 @@ class StreamActivity : AppCompatActivity() {
 
     private fun startStreamScreen() {
         IntentAction.StartStream.sendToAppService(this@StreamActivity)
-        binding.btnStopStream.visibility = View.VISIBLE
-        binding.btnStopStream.isEnabled = true
+        Global.IS_RUNNING_STREAM_HTTP = true
+    }
+
+    private fun stopStreamScreen() {
+        IntentAction.StopStream.sendToAppService(this@StreamActivity)
+        isStopStream = true
+        Global.IS_RUNNING_STREAM_HTTP = false
+        NotificationManagerCompat.from(this).cancelAll();
+        finish()
     }
 
     private fun onServiceStateMessage(serviceMessage: ServiceMessage.ServiceState) {
@@ -272,6 +289,11 @@ class StreamActivity : AppCompatActivity() {
         checkPermission(serviceMessage)
         if (!isStopStream && serviceMessage.appError == null && !serviceMessage.isStreaming && !serviceMessage.isWaitingForPermission && !serviceMessage.isBusy) {
             startStreamScreen()
+        }
+        if(serviceMessage.isStreaming) {
+            binding.btnStopStream.visibility = View.VISIBLE
+            binding.btnStopStream.isEnabled = true
+            binding.txGuide3.visibility = View.GONE
         }
         if (serviceMessage.netInterfaces.isEmpty()) {
 //            with(

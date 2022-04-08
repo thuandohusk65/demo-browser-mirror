@@ -31,6 +31,7 @@ import com.nhnextsoft.control.funtion.DialogExitListener
 import com.nhnextsoft.nativecarouselads.CrossCarouselActivity
 import com.nhnextsoft.screenmirroring.Constants
 import com.nhnextsoft.screenmirroring.Constants.SELECT_FROM_SETTING
+import com.nhnextsoft.screenmirroring.Global
 import com.nhnextsoft.screenmirroring.R
 import com.nhnextsoft.screenmirroring.ads.AdConfig
 import com.nhnextsoft.screenmirroring.ads.PurchaseConstants
@@ -97,33 +98,37 @@ class HomeActivity : AppCompatActivity() {
 //        }
 
         binding.btnOpenStream.setOnClickListener {
-            Timber.d("onPress OpenStream")
-            RequestSeeAdRewardedDialog.newInstance().show(supportFragmentManager, "RequestSeeAdRewardedDialog")
+            Timber.d("onPress OpenStream ${Global.IS_RUNNING_STREAM_HTTP}")
+            if(Global.IS_RUNNING_STREAM_HTTP) {
+                startActivity(StreamActivity.newIntent(this))
+            } else {
+                RequestSeeAdRewardedDialog.newInstance()
+                    .show(supportFragmentManager, "RequestSeeAdRewardedDialog")
+            }
         }
 
         binding.btnVideo.setOnClickListener {
-            showCastInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
+            showCastInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL, object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    modalLoadingAd.dismiss()
+                    Timber.d("onPress btnVideo")
+                }
+
+                override fun onAdFailedToLoad(i: LoadAdError?) {
+                    super.onAdFailedToLoad(i)
+                    modalLoadingAd.dismiss()
+                    Timber.d("onPress btnVideo")
+                }
+            })
         }
     }
 
-    private fun openCastVideo() {
-        Timber.d("onPress btnVideo")
-    }
-
-    private fun showCastInterstitial(adId: String) {
+    private fun showCastInterstitial(adId: String, adCallback: AdCallback) {
         modalLoadingAd.show()
-        loadAdInterstitial(adId, object : AdCallback() {
-            override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                super.onInterstitialLoad(interstitialAd)
-                modalLoadingAd.dismiss()
-            }
-
-            override fun onAdFailedToLoad(i: LoadAdError?) {
-                super.onAdFailedToLoad(i)
-                modalLoadingAd.dismiss()
-            }
-        })
+        loadAdInterstitial(adId, adCallback)
     }
+
     private fun showCrossApp() {
         startActivity(CrossCarouselActivity.openIntent(this))
     }
@@ -239,19 +244,21 @@ class HomeActivity : AppCompatActivity() {
             }
         } else {
             modalLoadingAd.show()
-            loadAdInterstitial(AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL, object : AdCallback() {
-                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                    super.onInterstitialLoad(interstitialAd)
-                    modalLoadingAd.dismiss()
-                    showAdInterstitial(interstitialAd)
-                }
+            loadAdInterstitial(
+                AdConfig.AD_ADMOB_HOME_TO_SELECT_DEVICE_INTERSTITIAL,
+                object : AdCallback() {
+                    override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                        super.onInterstitialLoad(interstitialAd)
+                        modalLoadingAd.dismiss()
+                        showAdInterstitial(interstitialAd)
+                    }
 
-                override fun onAdFailedToLoad(i: LoadAdError?) {
-                    super.onAdFailedToLoad(i)
-                    modalLoadingAd.dismiss()
-                    openSelectDevices()
-                }
-            })
+                    override fun onAdFailedToLoad(i: LoadAdError?) {
+                        super.onAdFailedToLoad(i)
+                        modalLoadingAd.dismiss()
+                        openSelectDevices()
+                    }
+                })
         }
     }
 

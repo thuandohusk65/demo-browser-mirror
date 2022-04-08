@@ -72,7 +72,7 @@
     <string name="permission_activity_error_title_activity_not_found">Permission dialog error</string>
     <string name="permission_activity_error_activity_not_found">Android bug. Don\'t check \"Don\'t show again\" at the rights request dialogue to capture the screen. If you already did so, reinstall the app.</string>
     <string name="permission_activity_cast_permission_required_title">Permission required</string>
-    <string name="permission_activity_cast_permission_required">ScreenStream application requires Screen Cast permission to capture screen.</string>
+    <string name="permission_activity_cast_permission_required">Screen Mirroring application requires Screen Cast permission to capture screen.</string>
     <string name="permission_activity_error_title">Error</string>
     <string name="permission_activity_error_unknown">Unknown error</string>
     <string name="stream_fragment_copied">Copied</string>
@@ -86,6 +86,7 @@
 
     <string name="guide_text_1">Connect to the same Wi-fi network and turn off the VPN</string>
     <string name="guide_text_2">Open this website on the other device</string>
+    <string name="guide_text_3">Requires permission to capture screen</string>
 
 <!--    dialog rate app-->
 

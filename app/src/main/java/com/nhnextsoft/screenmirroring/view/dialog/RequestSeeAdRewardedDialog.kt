@@ -45,7 +45,11 @@ class RequestSeeAdRewardedDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setWidthPercent(90)
         binding.btnWatchingAd.setOnClickListener {
-            showRewardedAd()
+            if(isLoadAdSuccess) {
+                showRewardedAd()
+            } else {
+                startActivity(StreamActivity.newIntent(requireActivity()))
+            }
         }
         binding.textCancel.setOnClickListener {
             dismiss()
@@ -118,8 +122,8 @@ class RequestSeeAdRewardedDialog : DialogFragment() {
         override fun onRewardedAdClosed() {
             Timber.d("onRewardedAdClosed $isRewarded")
             if (isRewarded) {
-                dismiss()
                 startActivity(StreamActivity.newIntent(requireActivity()))
+                dismiss()
             } else {
                 // TODO
             }
