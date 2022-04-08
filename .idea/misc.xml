@@ -5,8 +5,10 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.15625" />
         <entry key="../../.gradle/caches/transforms-3/c4fe68ce6c0e788b66192e67123a2d52/transformed/core-1.7.0/res/layout/custom_dialog.xml" value="0.1885766092475068" />
+        <entry key="app/src/main/res/drawable-v24/background_dialog.xml" value="0.2055" />
         <entry key="app/src/main/res/drawable-v24/ic_fab_start_24dp.xml" value="0.157" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1295" />
+        <entry key="app/src/main/res/drawable-v24/shape_dialog_indicator.xml" value="0.2055" />
         <entry key="app/src/main/res/drawable/ad_splash_background.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_cta_corners_shape.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/admob_rounded_corners_shape.xml" value="0.35625" />
@@ -51,6 +53,9 @@
         <entry key="app/src/main/res/drawable/round_background_item_store.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/round_background_upgrade.xml" value="0.35625" />
         <entry key="app/src/main/res/drawable/shape_gradient.xml" value="0.2245" />
+        <entry key="app/src/main/res/layout/activity_cast_image.xml" value="0.1470713980333476" />
+        <entry key="app/src/main/res/layout/activity_cast_video.xml" value="0.16844805472424113" />
+        <entry key="app/src/main/res/layout/activity_cast_youtube.xml" value="0.1470713980333476" />
         <entry key="app/src/main/res/layout/activity_finish_app.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_remove_ad.xml" value="0.2" />
@@ -59,9 +64,11 @@
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_stream.xml" value="0.18070652173913043" />
         <entry key="app/src/main/res/layout/activity_tutorial.xml" value="0.1734375" />
+        <entry key="app/src/main/res/layout/activity_web.xml" value="0.1470713980333476" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/ad_facebook_native_ad_splash.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/ad_native_space.xml" value="0.28351449275362317" />
+        <entry key="app/src/main/res/layout/dialog_feature_comming_soon.xml" value="0.18313689936536717" />
         <entry key="app/src/main/res/layout/dialog_loading_ads.xml" value="0.1875" />
         <entry key="app/src/main/res/layout/dialog_loading_data.xml" value="0.11324697033012955" />
         <entry key="app/src/main/res/layout/dialog_no_internet.xml" value="0.18631006346328197" />
@@ -69,9 +76,11 @@
         <entry key="app/src/main/res/layout/dialog_request_see_ad_rewarded.xml" value="0.165" />
         <entry key="app/src/main/res/layout/dialog_upgrade.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_no_wifi.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/frame_feature_comming_soon.xml" value="0.1813236627379873" />
         <entry key="app/src/main/res/layout/item_device_address.xml" value="0.19157608695652173" />
         <entry key="app/src/main/res/layout/item_tutorial.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/layout_notification.xml" value="0.28351449275362317" />
+        <entry key="app/src/main/res/menu/expanded_controller.xml" value="0.16032492518170158" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1775" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3921875" />
         <entry key="nativetemplatesAdmob/src/main/res/layout/gnt_medium_template_view.xml" value="0.28351449275362317" />

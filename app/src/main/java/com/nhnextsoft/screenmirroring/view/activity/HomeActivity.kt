@@ -41,11 +41,12 @@ import com.nhnextsoft.screenmirroring.databinding.ActivityHomeBinding
 import com.nhnextsoft.screenmirroring.service.MyForegroundService
 import com.nhnextsoft.screenmirroring.utility.extensions.checkConnectWifi
 import com.nhnextsoft.screenmirroring.utility.extensions.isNetworkAvailable
+import com.nhnextsoft.screenmirroring.view.activity.image.ImageActivity
 import com.nhnextsoft.screenmirroring.view.activity.stream.StreamActivity
-import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
-import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
-import com.nhnextsoft.screenmirroring.view.dialog.RateAppDialog
-import com.nhnextsoft.screenmirroring.view.dialog.RequestSeeAdRewardedDialog
+import com.nhnextsoft.screenmirroring.view.activity.video.VideoActivity
+import com.nhnextsoft.screenmirroring.view.activity.web.WebActivity
+import com.nhnextsoft.screenmirroring.view.activity.youtube.YoutubeActivity
+import com.nhnextsoft.screenmirroring.view.dialog.*
 import timber.log.Timber
 import java.util.*
 
@@ -90,41 +91,26 @@ class HomeActivity : AppCompatActivity() {
         checkingInternet()
         loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
-
-//        binding.btnTest.setOnClickListener{
-//            MobileAds.openAdInspector(this) {
-//                // Error will be non-null if ad inspector closed due to an error.
-//            }
-//        }
-
-        binding.btnOpenStream.setOnClickListener {
-            Timber.d("onPress OpenStream ${Global.IS_RUNNING_STREAM_HTTP}")
-            if(Global.IS_RUNNING_STREAM_HTTP) {
-                startActivity(StreamActivity.newIntent(this))
-            } else {
-                RequestSeeAdRewardedDialog.newInstance()
-                    .show(supportFragmentManager, "RequestSeeAdRewardedDialog")
-            }
-        }
-
-        binding.btnVideo.setOnClickListener {
-            showCastInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL, object : AdCallback() {
-                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                    super.onInterstitialLoad(interstitialAd)
-                    modalLoadingAd.dismiss()
-                    Timber.d("onPress btnVideo")
-                }
-
-                override fun onAdFailedToLoad(i: LoadAdError?) {
-                    super.onAdFailedToLoad(i)
-                    modalLoadingAd.dismiss()
-                    Timber.d("onPress btnVideo")
-                }
-            })
-        }
     }
 
-    private fun showCastInterstitial(adId: String, adCallback: AdCallback) {
+    private fun eventCast(intent: Intent) {
+        showCastAdInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL, object : AdCallback() {
+            override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                super.onInterstitialLoad(interstitialAd)
+                modalLoadingAd.dismiss()
+                showAdInterstitial(interstitialAd, intent)
+                Timber.d("btnVideo onInterstitialLoad")
+            }
+            override fun onAdFailedToLoad(i: LoadAdError?) {
+                super.onAdFailedToLoad(i)
+                modalLoadingAd.dismiss()
+                startActivity(intent)
+                Timber.d("btnVideo onAdFailedToLoad")
+            }
+        })
+    }
+
+    private fun showCastAdInterstitial(adId: String, adCallback: AdCallback) {
         modalLoadingAd.show()
         loadAdInterstitial(adId, adCallback)
     }
@@ -212,6 +198,33 @@ class HomeActivity : AppCompatActivity() {
         binding.imageCrossApp.setOnClickListener {
             showCrossApp()
         }
+
+        binding.btnOpenStream.setOnClickListener {
+            Timber.d("onPress OpenStream ${Global.IS_RUNNING_STREAM_HTTP}")
+            if(Global.IS_RUNNING_STREAM_HTTP) {
+                startActivity(StreamActivity.newIntent(this))
+            } else {
+                RequestSeeAdRewardedDialog.newInstance()
+                    .show(supportFragmentManager, "RequestSeeAdRewardedDialog")
+            }
+        }
+
+        binding.btnVideo.setOnClickListener {
+            val intent = Intent(this, VideoActivity::class.java)
+            eventCast(intent)
+        }
+        binding.btnImage.setOnClickListener {
+            val intent = Intent(this, ImageActivity::class.java)
+            eventCast(intent)
+        }
+        binding.btnWeb.setOnClickListener {
+            val intent = Intent(this, WebActivity::class.java)
+            eventCast(intent)
+        }
+        binding.btnYoutube.setOnClickListener {
+            val intent = Intent(this, YoutubeActivity::class.java)
+            eventCast(intent)
+        }
     }
 
     private fun loadAdInterstitial(adId: String, adCallback: AdCallback) {
@@ -221,10 +234,10 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
-    private fun showAdInterstitial(interstitialAd: InterstitialAd?) {
+    private fun showAdInterstitial(interstitialAd: InterstitialAd?, intent: Intent) {
         Admod.instance?.forceShowInterstitial(this, interstitialAd, object : AdCallback() {
             override fun onAdClosed() {
-                openSelectDevices()
+                startActivity(intent)
             }
         })
     }
@@ -250,7 +263,8 @@ class HomeActivity : AppCompatActivity() {
                     override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                         super.onInterstitialLoad(interstitialAd)
                         modalLoadingAd.dismiss()
-                        showAdInterstitial(interstitialAd)
+                        val intent = Intent(this@HomeActivity, SelectDeviceActivity::class.java)
+                        showAdInterstitial(interstitialAd, intent)
                     }
 
                     override fun onAdFailedToLoad(i: LoadAdError?) {

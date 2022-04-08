@@ -32,4 +32,7 @@
     <color name="colorErrorText">#FFFFFF</color>
     <color name="colorErrorBackgroundStart">#FB334C</color>
     <color name="colorErrorBackgroundEnd">#D2283D</color>
+
+    <color name="colorDialogAdsTitle">#f2bb17</color>
+
 </resources>

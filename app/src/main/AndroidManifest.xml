@@ -45,6 +45,10 @@
         <activity android:name=".view.activity.RemoveAdsActivity" />
         <activity android:name=".view.activity.SettingActivity" />
         <activity android:name=".view.activity.FinishAppActivity" />
+        <activity android:name=".view.activity.video.VideoActivity" />
+        <activity android:name=".view.activity.image.ImageActivity" />
+        <activity android:name=".view.activity.web.WebActivity" />
+        <activity android:name=".view.activity.youtube.YoutubeActivity" />
 
         <activity android:name=".view.activity.stream.StreamActivity" />
 
