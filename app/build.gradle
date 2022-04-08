@@ -2,7 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
+//    id 'kotlin-android-extensions'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
@@ -12,7 +13,7 @@ plugins {
 
 def versionMajor = 1 // phien ban
 def versionMinor = 0 //
-def versionPatch = 3 //
+def versionPatch = 4 //
 def versionBuild = 79 // bump for dogfood builds, public betas, etc.
 
 applovin {
@@ -68,7 +69,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
 
     implementation 'androidx.mediarouter:mediarouter:1.2.6'
-    implementation "com.airbnb.android:lottie:5.0.2"
+    implementation "com.airbnb.android:lottie:5.0.3"
     implementation 'androidx.work:work-runtime:2.7.1'
 
     //ad
@@ -78,7 +79,7 @@ dependencies {
     implementation 'com.facebook.android:audience-network-sdk:6.8.0'
 
     implementation platform('com.google.firebase:firebase-bom:29.2.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.2'
     implementation 'com.google.firebase:firebase-config-ktx:21.0.2'
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.9'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.6'
@@ -94,7 +95,7 @@ dependencies {
 
     implementation("io.insert-koin:koin-android:3.1.5")
     implementation("com.github.iamironz:binaryprefs:1.0.1")
-    implementation 'com.elvishew:xlog:1.10.1'
+    implementation 'com.elvishew:xlog:1.11.0'
 
     implementation("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:color:3.3.0")

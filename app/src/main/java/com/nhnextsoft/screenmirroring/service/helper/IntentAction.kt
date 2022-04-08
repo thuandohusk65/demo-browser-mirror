@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Parcel
 import android.os.Parcelable
 import com.nhnextsoft.screenmirroring.service.AppService
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
-sealed class IntentAction() : Parcelable {
+sealed class IntentAction : Parcelable {
     internal companion object {
         private const val EXTRA_PARCELABLE = "EXTRA_PARCELABLE"
         fun fromIntent(intent: Intent?): IntentAction? = intent?.getParcelableExtra(EXTRA_PARCELABLE)

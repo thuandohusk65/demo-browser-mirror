@@ -1,7 +1,6 @@
 package com.nhnextsoft.screenmirroring
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,7 +10,6 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import timber.log.Timber
@@ -27,14 +25,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         showNotification(remoteMessage.notification?.title, remoteMessage.notification?.body)
     }
+
     override fun onNewToken(token: String) {
         Log.d("TAG", "Refreshed token: $token")
     }
+
     @SuppressLint("ServiceCast")
     private fun showNotification(title: String?, body: String?) {
         val intent = Intent(this, ScreenMirroringApp::class.java)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val channelId = getString(R.string.app_name)
         val defaultSoundUri =
@@ -50,7 +51,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -61,6 +63,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(1 , notificationBuilder.build())
+        notificationManager.notify(1, notificationBuilder.build())
     }
 }

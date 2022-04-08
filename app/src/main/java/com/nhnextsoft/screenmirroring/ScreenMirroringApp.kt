@@ -1,10 +1,7 @@
 package com.nhnextsoft.screenmirroring
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.elvishew.xlog.LogLevel
 import com.elvishew.xlog.XLog
@@ -65,9 +62,11 @@ class ScreenMirroringApp : SupportAdsApplication() {
         AppOpenManager.instance?.disableAppResumeWithActivity(AdActivity::class.java)
 //
         Admod.instance?.setOpenActivityAfterShowInterAds(false)
-        AppPurchase.instance.initBilling(this,
+        AppPurchase.instance.initBilling(
+            this,
             PurchaseConstants.listINAPId,
-            PurchaseConstants.listSubsId)
+            PurchaseConstants.listSubsId
+        )
         if (Build.VERSION.SDK_INT > 29)
             Admod.instance?.setOpenActivityAfterShowInterAds(false)
         else
@@ -75,10 +74,12 @@ class ScreenMirroringApp : SupportAdsApplication() {
 
         if (AppPreferences().completedTheFirstTutorial == true) {
             if (AppConfigRemote().isUsingAdsOpenApp == true) {
-                AppOpenManager.instance?.setSplashActivity(SplashActivity::class.java,
+                AppOpenManager.instance?.setSplashActivity(
+                    SplashActivity::class.java,
                     AdConfig.AD_ADMOB_OPEN_APP_SPLASH,
-                    10000)
-            }else{
+                    10000
+                )
+            } else {
                 AppOpenManager.instance?.disableAppResumeWithActivity(SplashActivity::class.java)
                 AppOpenManager.instance?.disableAppResumeWithActivity(TutorialActivity::class.java)
             }
@@ -87,11 +88,17 @@ class ScreenMirroringApp : SupportAdsApplication() {
     }
 
     private fun initLogger() {
-        XLog.init(LogLevel.ALL);
+        if (BuildConfig.DEBUG) {
+            XLog.init(LogLevel.ALL)
+        } else {
+            XLog.init(LogLevel.ERROR)
+        }
+
+
     }
 
     @SuppressLint("StringFormatInvalid")
-    private fun listenerMessagingFirebase () {
+    private fun listenerMessagingFirebase() {
         Firebase.messaging.isAutoInitEnabled = true
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -103,8 +110,8 @@ class ScreenMirroringApp : SupportAdsApplication() {
             val token = task.result
 
             // Log and toast
-            val msg = getString(R.string.app_name, token)
-            Timber.d("TOKEN ==== ${token}")
+//            val msg = getString(R.string.app_name, token)
+            Timber.d("TOKEN ==== $token")
 //            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
