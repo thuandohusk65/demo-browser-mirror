@@ -45,7 +45,7 @@ class RequestSeeAdRewardedDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setWidthPercent(90)
         binding.btnWatchingAd.setOnClickListener {
-            if(isLoadAdSuccess) {
+            if (isLoadAdSuccess) {
                 showRewardedAd()
             } else {
                 startActivity(StreamActivity.newIntent(requireActivity()))
@@ -104,13 +104,17 @@ class RequestSeeAdRewardedDialog : DialogFragment() {
 
     private fun loadAds() {
         if (AppConfigRemote().isUsingRewardedInterstitialDialog == true) {
-            Admod.instance?.initRewardedInterstitialAds(requireActivity(),
+            Admod.instance?.initRewardedInterstitialAds(
+                requireActivity(),
                 AdConfig.AD_ADMOB_OPEN_STREAM_WEB_REWARDED_INTERSTITIAL,
-                adCallback)
+                adCallback
+            )
         } else {
-            Admod.instance?.initRewardAds(requireActivity(),
+            Admod.instance?.initRewardAds(
+                requireActivity(),
                 AdConfig.AD_ADMOB_OPEN_STREAM_WEB_REWARDED,
-                adCallback)
+                adCallback
+            )
         }
     }
 
@@ -137,7 +141,9 @@ class RequestSeeAdRewardedDialog : DialogFragment() {
     private fun showRewardedAd() {
         if (AppConfigRemote().isUsingRewardedInterstitialDialog == true) {
             Timber.d("showRewardInterstitialAds")
-            Admod.instance?.showRewardInterstitialAds(requireActivity(), rewardCallback)
+            if (context != null) {
+                Admod.instance?.showRewardInterstitialAds(requireActivity(), rewardCallback)
+            }
         } else {
             Timber.d("showRewardAds")
             Admod.instance?.showRewardAds(requireActivity(), rewardCallback)
