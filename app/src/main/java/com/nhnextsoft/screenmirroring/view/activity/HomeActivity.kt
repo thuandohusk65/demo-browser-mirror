@@ -62,7 +62,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private lateinit var modalLoadingAd: LoadDataDialog
-    private var nativeAdExit: NativeAd? = null
     private var nativeAdExitTypeDialog: Int = 1
 
     private var isConnectMirror: Boolean = false
@@ -89,25 +88,27 @@ class HomeActivity : AppCompatActivity() {
         showNativeAdmob()
         checkConnectionScreenMirroring()
         checkingInternet()
-        loadNativeExit()
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
     }
 
     private fun eventCast(intent: Intent) {
-        showCastAdInterstitial(AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL, object : AdCallback() {
-            override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                super.onInterstitialLoad(interstitialAd)
-                modalLoadingAd.dismiss()
-                showAdInterstitial(interstitialAd, intent)
-                Timber.d("btnVideo onInterstitialLoad")
-            }
-            override fun onAdFailedToLoad(i: LoadAdError?) {
-                super.onAdFailedToLoad(i)
-                modalLoadingAd.dismiss()
-                startActivity(intent)
-                Timber.d("btnVideo onAdFailedToLoad")
-            }
-        })
+        showCastAdInterstitial(
+            AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL,
+            object : AdCallback() {
+                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                    super.onInterstitialLoad(interstitialAd)
+                    modalLoadingAd.dismiss()
+                    showAdInterstitial(interstitialAd, intent)
+                    Timber.d("btnVideo onInterstitialLoad")
+                }
+
+                override fun onAdFailedToLoad(i: LoadAdError?) {
+                    super.onAdFailedToLoad(i)
+                    modalLoadingAd.dismiss()
+                    startActivity(intent)
+                    Timber.d("btnVideo onAdFailedToLoad")
+                }
+            })
     }
 
     private fun showCastAdInterstitial(adId: String, adCallback: AdCallback) {
@@ -201,7 +202,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.btnOpenStream.setOnClickListener {
             Timber.d("onPress OpenStream ${Global.IS_RUNNING_STREAM_HTTP}")
-            if(Global.IS_RUNNING_STREAM_HTTP) {
+            if (Global.IS_RUNNING_STREAM_HTTP) {
                 startActivity(StreamActivity.newIntent(this))
             } else {
                 RequestSeeAdRewardedDialog.newInstance()
@@ -397,6 +398,23 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDialogAd(nativeAd: NativeAd?) {
+        if (nativeAd != null) {
+            DialogExit.showDialogExit(this,
+                nativeAd,
+                nativeAdExitTypeDialog,
+                object : DialogExitListener {
+                    override fun onExit(exit: Boolean) {
+                        if (exit) {
+                            startActivity(FinishAppActivity.newIntent(this@HomeActivity))
+                        }
+                    }
+                })
+        } else {
+            startActivity(FinishAppActivity.newIntent(this))
+        }
+
+    }
 
     override fun onBackPressed() {
 //        super.onBackPressed()
@@ -404,35 +422,22 @@ class HomeActivity : AppCompatActivity() {
             startActivity(FinishAppActivity.newIntent(this))
         } else {
             try {
-                if (nativeAdExit != null) {
-                    nativeAdExit?.let { nativeAd ->
-                        DialogExit.showDialogExit(this,
-                            nativeAd,
-                            nativeAdExitTypeDialog,
-                            object : DialogExitListener {
-                                override fun onExit(exit: Boolean) {
-                                    startActivity(FinishAppActivity.newIntent(this@HomeActivity))
-                                }
-                            })
-                    }
-                } else {
-                    startActivity(FinishAppActivity.newIntent(this))
-                }
+                modalLoadingAd.show()
+                Admod.instance?.loadNativeAd(this,
+                    AdConfig.EXIT_APP_DIALOG_NATIVE,
+                    object : AdCallback() {
+                        override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                            super.onNativeAdLoaded(nativeAd)
+                            modalLoadingAd.dismiss()
+                            showDialogAd(nativeAd)
+
+                        }
+                    })
+
             } catch (err: Exception) {
+                Timber.d("Exception -- $err")
                 startActivity(FinishAppActivity.newIntent(this))
             }
         }
-    }
-
-    private fun loadNativeExit() {
-        if (nativeAdExit != null) return
-        Admod.instance?.loadNativeAd(this,
-            AdConfig.EXIT_APP_DIALOG_NATIVE,
-            object : AdCallback() {
-                override fun onNativeAdLoaded(nativeAd: NativeAd?) {
-                    super.onNativeAdLoaded(nativeAd)
-                    nativeAdExit = nativeAd
-                }
-            })
     }
 }

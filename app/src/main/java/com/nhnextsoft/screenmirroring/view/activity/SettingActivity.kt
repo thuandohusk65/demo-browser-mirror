@@ -44,23 +44,6 @@ class SettingActivity : AppCompatActivity() {
         modalLoadingAd = PrepareLoadingAdsDialog(this)
         initView()
         setContentView(binding.root)
-        loadAdInterstitial()
-    }
-
-    private fun loadAdInterstitial() {
-        Admod.instance?.getInterstitalAds(this,
-            AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
-            object : AdCallback() {
-                override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                    super.onInterstitialLoad(interstitialAd)
-                    mInterstitialAd = interstitialAd
-                    isLoadedAdInterstitial = true
-                }
-                override fun onAdFailedToLoad(i: LoadAdError?) {
-                    super.onAdFailedToLoad(i)
-                    isLoadedAdInterstitial = true
-                }
-            })
     }
 
     private fun initView() {
@@ -85,17 +68,19 @@ class SettingActivity : AppCompatActivity() {
 
         when (AppConfigRemote().bannerUpdateType) {
             2 -> {
-                binding.buttonBuyNow.background = ContextCompat.getDrawable(this, R.drawable.btn_buy_now_2)
+                binding.buttonBuyNow.background =
+                    ContextCompat.getDrawable(this, R.drawable.btn_buy_now_2)
                 binding.imageBackgroundNoAds.setImageResource(R.drawable.bg_remove_ad_2)
             }
             else -> {
-                binding.buttonBuyNow.background = ContextCompat.getDrawable(this, R.drawable.btn_buy_now_1)
+                binding.buttonBuyNow.background =
+                    ContextCompat.getDrawable(this, R.drawable.btn_buy_now_1)
                 binding.imageBackgroundNoAds.setImageResource(R.drawable.bg_remove_ad)
             }
         }
         binding.buttonBuyNow.setOnClickListener {
             val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
-            inAppDialog.callback = object : InAppDialog.ICallback{
+            inAppDialog.callback = object : InAppDialog.ICallback {
                 override fun onPurcharse() {
                     AppPurchase.instance
                         .purchase(this@SettingActivity, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
@@ -133,7 +118,9 @@ class SettingActivity : AppCompatActivity() {
 
         }
 
-        (getString(R.string.version_app) + " ${BuildConfig.VERSION_NAME}").also { binding.tvVersion.text = it }
+        (getString(R.string.version_app) + " ${BuildConfig.VERSION_NAME}").also {
+            binding.tvVersion.text = it
+        }
     }
 
     fun feedBackToEmail() {
@@ -167,6 +154,7 @@ class SettingActivity : AppCompatActivity() {
         }
 
     }
+
     private fun composeEmail(addresses: Array<String>, subject: String, text: String) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:") // only email apps should handle this
@@ -232,7 +220,7 @@ class SettingActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAd(): Unit {
+    private fun showAd() {
         Admod.instance?.forceShowInterstitial(
             this,
             mInterstitialAd,
@@ -244,32 +232,28 @@ class SettingActivity : AppCompatActivity() {
             }
         )
     }
+
     override fun onBackPressed() {
         if (!isNetworkAvailable()) {
             finish()
         } else {
-            if (isLoadedAdInterstitial) {
-                showAd()
-            } else {
-                modalLoadingAd.show()
-                Admod.instance?.getInterstitalAds(this,
-                    AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
-                    object : AdCallback() {
-                        override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
-                            super.onInterstitialLoad(interstitialAd)
-                            mInterstitialAd = interstitialAd
-                            isLoadedAdInterstitial = true
-                            modalLoadingAd.dismiss()
-                            showAd()
-                        }
-                        override fun onAdFailedToLoad(i: LoadAdError?) {
-                            super.onAdFailedToLoad(i)
-                            isLoadedAdInterstitial = true
-                            modalLoadingAd.dismiss()
-                            finish()
-                        }
-                    })
-            }
+            modalLoadingAd.show()
+            Admod.instance?.getInterstitalAds(this,
+                AdConfig.AD_ADMOB_CLOSE_BACK_HOME_INTERSTITIAL,
+                object : AdCallback() {
+                    override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
+                        super.onInterstitialLoad(interstitialAd)
+                        mInterstitialAd = interstitialAd
+                        modalLoadingAd.dismiss()
+                        showAd()
+                    }
+
+                    override fun onAdFailedToLoad(i: LoadAdError?) {
+                        super.onAdFailedToLoad(i)
+                        modalLoadingAd.dismiss()
+                        finish()
+                    }
+                })
         }
     }
 
