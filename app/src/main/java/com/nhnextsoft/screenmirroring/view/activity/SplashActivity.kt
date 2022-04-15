@@ -85,7 +85,7 @@ class SplashActivity : AppCompatActivity() {
             } else {
                 Admod.instance?.loadSplashInterstitial(this,
                     AdConfig.AD_ADMOB_SPLASH_INTERSTITIAL,
-                    10000,
+                    30000,
                     5000,
                     object : AdCallback() {
                          override fun onAdClosed() {
