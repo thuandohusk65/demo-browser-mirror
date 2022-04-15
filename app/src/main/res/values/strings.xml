@@ -108,4 +108,10 @@
 
     <string name="dialog_feature_comming_soon">This feature is comming soon</string>
     <string name="dialog_description_feature">We are developing this feature in the next version</string>
+    <string name="stream_http">Stream HTTP</string>
+    <string name="screen_mirror">Screen Mirror</string>
+    <string name="video">Video</string>
+    <string name="image">Image</string>
+    <string name="web">Web</string>
+    <string name="youtube">Youtube</string>
 </resources>
