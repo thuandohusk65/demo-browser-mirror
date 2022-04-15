@@ -68,7 +68,9 @@ class SelectDeviceActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(kotlin.run {
             {
                 if (!this.checkConnectWifi()) {
-                    NoWifiFragment.newInstance().show(supportFragmentManager, "NoWifiFragment")
+                    if (!supportFragmentManager.isDestroyed) {
+                        NoWifiFragment.newInstance().show(supportFragmentManager, "NoWifiFragment")
+                    }
                 } else {
                     binding.imageCheckWifi.visibility = View.VISIBLE
                     binding.progressWifi.visibility = View.GONE
