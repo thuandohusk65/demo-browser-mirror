@@ -334,8 +334,10 @@ class AppOpenManager private constructor() : ActivityLifecycleCallbacks, Lifecyc
                         appResumeAd?.show(currentActivity)
                     }
                 }
-                if (currentActivity != null && currentActivity?.isDestroyed == false && finalDialog != null) {
-                    finalDialog.dismiss()
+                if (currentActivity != null && currentActivity?.isDestroyed == false  && finalDialog != null && finalDialog.isShowing) {
+                    if(!currentActivity!!.isFinishing) {
+                        finalDialog.dismiss()
+                    }
                 }
             }, 800)
         }
