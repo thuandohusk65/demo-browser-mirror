@@ -446,7 +446,9 @@ class AppPurchase private constructor() {
     fun formatCurrency(price: Double, currency: String): String {
         val format = NumberFormat.getCurrencyInstance()
         format.maximumFractionDigits = 0
-        format.currency = Currency.getInstance(currency)
+        if (currency.length == 3) {
+            format.currency = Currency.getInstance(currency)
+        }
         return format.format(price)
     }
 
