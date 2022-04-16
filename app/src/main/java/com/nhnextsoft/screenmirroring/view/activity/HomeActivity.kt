@@ -91,9 +91,9 @@ class HomeActivity : AppCompatActivity() {
         nativeAdExitTypeDialog = DialogExit.getDialogExitType()
     }
 
-    private fun eventCast(intent: Intent) {
+    private fun showAdWithAdId(intent: Intent, adId: String) {
         showCastAdInterstitial(
-            AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL,
+             adId,
             object : AdCallback() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                     super.onInterstitialLoad(interstitialAd)
@@ -178,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
         binding.imageLight.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
             intent.putExtra(Constants.EXTRA_TUTORIAL, false)
-            startActivity(intent)
+            showAdWithAdId(intent, AdConfig.AD_ADMOB_HOME_OPEN_TURTORIAL_INTERSTITIAL)
         }
         binding.imageRemoveAds.setOnClickListener {
             val inAppDialog = InAppDialog(this, PurchaseConstants.PRODUCT_ID_REMOTE_ADS)
@@ -212,19 +212,19 @@ class HomeActivity : AppCompatActivity() {
 
         binding.btnVideo.setOnClickListener {
             val intent = Intent(this, VideoActivity::class.java)
-            eventCast(intent)
+            showAdWithAdId(intent, AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
         }
         binding.btnImage.setOnClickListener {
             val intent = Intent(this, ImageActivity::class.java)
-            eventCast(intent)
+            showAdWithAdId(intent, AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
         }
         binding.btnWeb.setOnClickListener {
             val intent = Intent(this, WebActivity::class.java)
-            eventCast(intent)
+            showAdWithAdId(intent, AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
         }
         binding.btnYoutube.setOnClickListener {
             val intent = Intent(this, YoutubeActivity::class.java)
-            eventCast(intent)
+            showAdWithAdId(intent, AdConfig.AD_ADMOB_OPEN_CAST_TYPE_INTERSTITIAL)
         }
     }
 
