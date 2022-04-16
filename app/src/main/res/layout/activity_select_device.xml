@@ -10,6 +10,8 @@
         android:id="@+id/layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -45,308 +47,325 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_wifi" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/check_signal_transmission"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/progress_wifi"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/circle_progress" />
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_check_wifi"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_checked"
-            android:visibility="gone" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <View
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toLeftOf="@id/layout_1"
-        app:layout_constraintRight_toRightOf="@id/layout_1"
-        app:layout_constraintTop_toBottomOf="@+id/layout_1" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_1">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_speed_control" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/test_connection_speed"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/progress_speed"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/circle_progress" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_check_speed"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_checked"
-            android:visibility="gone" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toLeftOf="@id/layout_2"
-        app:layout_constraintRight_toRightOf="@id/layout_2"
-        app:layout_constraintTop_toBottomOf="@+id/layout_2" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/layout_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_2">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_wireless_duration" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/check_the_connection_distance"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/progress_duration"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/circle_progress" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_check_duration"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_checked"
-            android:visibility="gone" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        app:layout_constraintLeft_toLeftOf="@id/layout_3"
-        app:layout_constraintRight_toRightOf="@id/layout_3"
-        app:layout_constraintTop_toBottomOf="@+id/layout_3" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_select_device"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/btn_select_device"
-        android:enabled="false"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/select_device"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_3" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="#61070417"
+        android:layout_height="0dp"
+        android:fillViewport="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar">
 
-        <com.google.android.gms.ads.nativead.NativeAdView
-            android:id="@+id/nativeAdView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_wifi" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/check_signal_transmission"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/progress_wifi"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/circle_progress" />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_check_wifi"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_checked"
+                    android:visibility="gone" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="@id/layout_1"
+                app:layout_constraintRight_toRightOf="@id/layout_1"
+                app:layout_constraintTop_toBottomOf="@+id/layout_1" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_1">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_speed_control" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/test_connection_speed"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/progress_speed"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/circle_progress" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_check_speed"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_checked"
+                    android:visibility="gone" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="@id/layout_2"
+                app:layout_constraintRight_toRightOf="@id/layout_2"
+                app:layout_constraintTop_toBottomOf="@+id/layout_2" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/layout_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_2">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_wireless_duration" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/check_the_connection_distance"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/progress_duration"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/circle_progress" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_check_duration"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_checked"
+                    android:visibility="gone" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="@id/layout_3"
+                app:layout_constraintRight_toRightOf="@id/layout_3"
+                app:layout_constraintTop_toBottomOf="@+id/layout_3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_select_device"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/btn_select_device"
+                android:enabled="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/select_device"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_3" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#61070417"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_select_device">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
+                <com.google.android.gms.ads.nativead.NativeAdView
+                    android:id="@+id/nativeAdView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.gms.ads.nativead.MediaView
-                        android:id="@+id/ad_media"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:minWidth="150dp"
-                        android:minHeight="150dp" />
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                        android:layout_height="150dp">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/ad_headline"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:lines="2"
-                    android:maxLines="2"
-                    android:text="@string/ad_loading"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="parent" />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/ad_body"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:lineSpacingExtra="1dp"
-                    android:lines="3"
-                    android:maxLines="3"
-                    android:minHeight="30dp"
-                    android:text="@string/ad_loading"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:textStyle="normal"
-                    app:layout_constraintBottom_toTopOf="@+id/ad_call_to_action"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/guideline2"
-                    app:layout_constraintTop_toBottomOf="@+id/ad_headline" />
+                            <com.google.android.gms.ads.nativead.MediaView
+                                android:id="@+id/ad_media"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:minWidth="150dp"
+                                android:minHeight="150dp" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/ad_call_to_action"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="0dp"
-                    android:layout_height="38dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@drawable/admob_cta_corners_shape"
-                    android:gravity="center"
-                    android:text="@string/ad_loading"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/guideline2"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/ad_headline"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="8dp"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:maxLines="2"
+                            android:text="@string/ad_loading"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline2"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/imageView23"
-                    android:layout_width="wrap_content"
-                    android:layout_height="13dp"
-                    android:layout_marginStart="-8dp"
-                    app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_ad_label" />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/ad_body"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:ellipsize="end"
+                            android:lineSpacingExtra="1dp"
+                            android:lines="3"
+                            android:maxLines="3"
+                            android:minHeight="30dp"
+                            android:text="@string/ad_loading"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="normal"
+                            app:layout_constraintBottom_toTopOf="@+id/ad_call_to_action"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/ad_headline" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="13dp"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/sponsored"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView23"
-                    app:layout_constraintStart_toEndOf="@+id/imageView23"
-                    app:layout_constraintTop_toTopOf="@+id/imageView23" />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/ad_call_to_action"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="0dp"
+                            android:layout_height="38dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/admob_cta_corners_shape"
+                            android:gravity="center"
+                            android:text="@string/ad_loading"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/guideline2"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.55" />
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/imageView23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_marginStart="-8dp"
+                            app:layout_constraintStart_toStartOf="@+id/guideline2"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_ad_label" />
 
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="13dp"
+                            android:layout_marginStart="4dp"
+                            android:text="@string/sponsored"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView23"
+                            app:layout_constraintStart_toEndOf="@+id/imageView23"
+                            app:layout_constraintTop_toTopOf="@+id/imageView23"
+                            tools:ignore="SmallSp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.55" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.gms.ads.nativead.NativeAdView>
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        </com.google.android.gms.ads.nativead.NativeAdView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

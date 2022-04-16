@@ -98,7 +98,7 @@ class TutorialActivity : AppCompatActivity() {
                 param("FROM_SCREEN", "Home")
             }
             binding.imageClose.visibility = View.VISIBLE
-            binding.textNextStep.visibility = View.GONE
+            binding.textNextStep.visibility = View.VISIBLE
         }
         handleClick()
     }
