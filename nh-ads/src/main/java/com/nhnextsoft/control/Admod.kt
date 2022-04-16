@@ -19,6 +19,10 @@ import com.applovin.mediation.ApplovinAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.ads.mediation.facebook.FacebookAdapter
 import com.google.ads.mediation.facebook.FacebookExtras
+import com.google.ads.mediation.inmobi.InMobiAdapter
+import com.google.ads.mediation.inmobi.InMobiNetworkKeys
+import com.google.ads.mediation.inmobi.InMobiNetworkValues
+import com.google.ads.mediation.unity.UnityAdapter
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.initialization.InitializationStatus
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -58,6 +62,8 @@ class Admod private constructor() {
     //    private var isAdcolony = false
     private var isAppLovin = false
     private var isPangle = false
+    private var isInMobi = false
+    private var isUnity = false
     var isTimeDelay = false //xử lý delay time show ads, = true mới show ads
     private var openActivityAfterShowInterAds = false
 
@@ -84,6 +90,14 @@ class Admod private constructor() {
 
     fun setPangle(pangle: Boolean) {
         isPangle = pangle
+    }
+
+    fun setInMobi(inMobi: Boolean) {
+        isInMobi = inMobi
+    }
+
+    fun setUnityAds(unity: Boolean) {
+        isUnity = unity
     }
 
     /**
@@ -172,6 +186,19 @@ class Admod private constructor() {
 //                builder.addCustomEventExtrasBundle(AdmobNativeFeedAdAdapter::class.java, extrasPangle)
 //            }
 
+            if (isInMobi) {
+                Timber.d("add builder inMobi")
+                val extrasInMobi = Bundle()
+                builder.addNetworkExtrasBundle(InMobiAdapter::class.java, extrasInMobi)
+                    .build()
+            }
+
+            if (isUnity) {
+                Timber.d("add builder Unity")
+                val extrasUnity = Bundle()
+                builder.addNetworkExtrasBundle(UnityAdapter::class.java, extrasUnity)
+                    .build()
+            }
             //        builder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
             return builder.build()
         }
@@ -740,7 +767,8 @@ class Admod private constructor() {
                                 adValue!!,
                                 adView.adUnitId,
                                 adView.responseInfo
-                                    .mediationAdapterClassName)
+                                    .mediationAdapterClassName
+                            )
                         }
                     }
                 }
@@ -1431,25 +1459,29 @@ class Admod private constructor() {
             return
         }
 
-        RewardedInterstitialAd.load(context, id, adRequest, object : RewardedInterstitialAdLoadCallback() {
-            override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
-                callback.onAdLoaded()
-                this@Admod.rewardedInterstitialAd = rewardedAd
-                this@Admod.rewardedInterstitialAd?.onPaidEventListener =
-                    OnPaidEventListener { adValue: AdValue? ->
-                        logPaidAdImpression(
-                            adValue!!,
-                            "",
-                            "native"
-                        )
-                    }
-            }
+        RewardedInterstitialAd.load(
+            context,
+            id,
+            adRequest,
+            object : RewardedInterstitialAdLoadCallback() {
+                override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
+                    callback.onAdLoaded()
+                    this@Admod.rewardedInterstitialAd = rewardedAd
+                    this@Admod.rewardedInterstitialAd?.onPaidEventListener =
+                        OnPaidEventListener { adValue: AdValue? ->
+                            logPaidAdImpression(
+                                adValue!!,
+                                "",
+                                "native"
+                            )
+                        }
+                }
 
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                callback.onAdFailedToLoad(loadAdError)
-                Timber.e("RewardedAd onAdFailedToLoad: " + loadAdError.message)
-            }
-        })
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    callback.onAdFailedToLoad(loadAdError)
+                    Timber.e("RewardedAd onAdFailedToLoad: " + loadAdError.message)
+                }
+            })
     }
 
     /**
@@ -1504,17 +1536,18 @@ class Admod private constructor() {
             adCallback?.onRewardedAdFailedToShow(0)
             return
         } else {
-            rewardedInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent()
-                    adCallback?.onRewardedAdClosed()
-                }
+            rewardedInterstitialAd?.fullScreenContentCallback =
+                object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        adCallback?.onRewardedAdClosed()
+                    }
 
-                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    super.onAdFailedToShowFullScreenContent(adError)
-                    adCallback?.onRewardedAdFailedToShow(adError.code)
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        super.onAdFailedToShowFullScreenContent(adError)
+                        adCallback?.onRewardedAdFailedToShow(adError.code)
+                    }
                 }
-            }
             rewardedInterstitialAd?.show(context) { rewardItem ->
                 if (adCallback != null) {
                     adCallback.onUserEarnedReward(rewardItem)

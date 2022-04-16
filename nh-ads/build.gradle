@@ -68,7 +68,8 @@ dependencies {
     //adjust
 //    implementation 'com.adjust.sdk:adjust-android:4.28.9'
 //    implementation 'com.android.installreferrer:installreferrer:2.2'
-//    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
 
     //Add IronSource Mediation SDK dependency.
@@ -84,4 +85,16 @@ dependencies {
 //    implementation 'com.facebook.android:facebook-android-sdk:12.0.1'
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // inMobi ads
+    implementation 'com.google.ads.mediation:inmobi:10.0.5.0'
+    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-v4:28.0.0'
+
+    // unity ads
+    implementation 'com.unity3d.ads:unity-ads:4.1.0'
+    implementation 'com.google.ads.mediation:unity:4.1.0.0'
+
 }

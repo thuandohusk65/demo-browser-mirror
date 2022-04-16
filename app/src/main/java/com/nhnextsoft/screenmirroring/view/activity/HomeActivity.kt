@@ -172,6 +172,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+
         binding.pulseLayout.setOnClickListener {
             openScreenMirroring()
         }

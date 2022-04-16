@@ -1,13 +1,17 @@
 package com.nhnextsoft.control.application
 
 import android.app.Application
-import android.util.Log
 import com.bytedance.sdk.openadsdk.TTAdConfig
 import com.bytedance.sdk.openadsdk.TTAdSdk
+import com.inmobi.sdk.InMobiSdk
+import com.inmobi.sdk.SdkInitializationListener
 import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.AppOpenManager
 import com.nhnextsoft.control.BuildConfig
 import com.nhnextsoft.control.FanManagerApp
+import com.unity3d.ads.UnityAds
+import org.json.JSONException
+import org.json.JSONObject
 import timber.log.Timber
 
 abstract class SupportAdsApplication : Application() {
@@ -26,10 +30,34 @@ abstract class SupportAdsApplication : Application() {
         }
 
         if (supportPangle) {
-            Log.d("SupportAds","run supportPangle $supportPangle")
+            Timber.d("run supportPangle " + supportPangle)
             TTAdSdk.init(this, buildAdConfig(), mInitCallback)
             Admod.instance?.setPangle(true)
         }
+
+        if (supportInMobi) {
+            val INMOBI_ACCOUNT_ID = "3fd8aa9f482f42769d90c21158d45d47"
+
+            Timber.d("run supportInMobi " + supportPangle)
+            var consentObject  =  JSONObject()
+            try {
+                // Provide correct consent value to sdk which is obtained by User
+                consentObject.put(InMobiSdk.IM_GDPR_CONSENT_AVAILABLE, true);
+                // Provide 0 if GDPR is not applicable and 1 if applicable
+                consentObject.put("gdpr", "0");
+            } catch (e: JSONException) {
+                e.printStackTrace();
+            }
+            InMobiSdk.init(this, INMOBI_ACCOUNT_ID, consentObject, mInitInMobiCallback);
+            Admod.instance?.setInMobi(true)
+        }
+
+        if (supportUnity) {
+            Timber.d("run supportUnity " + supportUnity)
+            UnityAds.initialize(this, appId)
+            Admod.instance?.setUnityAds(true)
+        }
+
         if (enableAdsResume()) {
             AppOpenManager.instance?.init(this, openAppAdId)
         }
@@ -43,6 +71,12 @@ abstract class SupportAdsApplication : Application() {
 
         override fun fail(p0: Int, p1: String?) {
             Timber.d("init TTAdSdk failed. reason = $p1")
+        }
+    }
+
+    private val mInitInMobiCallback: SdkInitializationListener = object: SdkInitializationListener {
+        override fun onInitializationComplete(p0: java.lang.Error?) {
+            Timber.d("InMobi Init + $p0")
         }
     }
 
@@ -68,4 +102,8 @@ abstract class SupportAdsApplication : Application() {
     abstract val supportFan: Boolean
     abstract val supportApplovin: Boolean
     abstract val supportPangle: Boolean
+    abstract val supportInMobi: Boolean
+    abstract val supportUnity: Boolean
+    abstract val appId: String
+
 }

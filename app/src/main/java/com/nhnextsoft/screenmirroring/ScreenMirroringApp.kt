@@ -127,4 +127,9 @@ class ScreenMirroringApp : SupportAdsApplication() {
     override val supportFan: Boolean = true
     override val supportApplovin: Boolean = true
     override val supportPangle: Boolean = true
+
+    override val supportInMobi: Boolean = true
+
+    override val supportUnity: Boolean = true
+    override val appId: String = "4695456"
 }
