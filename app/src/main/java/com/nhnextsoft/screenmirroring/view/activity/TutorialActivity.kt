@@ -217,8 +217,7 @@ class TutorialActivity : AppCompatActivity() {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         startActivity(intent)
-        finish()
-
+//        finish()
     }
 
     private fun loadAllImageTutorial(): ArrayList<TutorialModel> {
