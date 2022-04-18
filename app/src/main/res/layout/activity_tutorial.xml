@@ -217,6 +217,7 @@
             android:id="@+id/text_next_step"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -225,9 +226,7 @@
             android:textColor="@color/main_color"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_back_step"
