@@ -62,6 +62,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private lateinit var modalLoadingAd: LoadDataDialog
+    private var mNativeAdInterstitial: NativeAd? = null
+
     private var nativeAdExitTypeDialog: Int = 1
 
     private var isConnectMirror: Boolean = false
@@ -85,6 +87,7 @@ class HomeActivity : AppCompatActivity() {
         Timber.d("AppConfigRemote().bannerUpdateType: ${AppConfigRemote().bannerUpdateType}")
         Timber.d("AppPreferences().completedTheFirstTutorial: ${AppPreferences().completedTheFirstTutorial}")
         initView()
+        loadAdExitApp()
         showNativeAdmob()
         checkConnectionScreenMirroring()
         checkingInternet()
@@ -155,7 +158,6 @@ class HomeActivity : AppCompatActivity() {
                     Timber.d("test.Broadcast onDisplayAdded " + displayManager.displays.size)
 
                 }
-
             }
 
             override fun onDisplayRemoved(displayId: Int) {
@@ -399,46 +401,46 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDialogAd(nativeAd: NativeAd?) {
-        if (nativeAd != null) {
-            DialogExit.showDialogExit(this,
-                nativeAd,
-                nativeAdExitTypeDialog,
-                object : DialogExitListener {
-                    override fun onExit(exit: Boolean) {
-                        if (exit) {
-                            startActivity(FinishAppActivity.newIntent(this@HomeActivity))
+    private fun showAdAndExitApp() {
+        try {
+            if (mNativeAdInterstitial != null) {
+                DialogExit.showDialogExit(this,
+                    mNativeAdInterstitial!!,
+                    nativeAdExitTypeDialog,
+                    object : DialogExitListener {
+                        override fun onExit(exit: Boolean) {
+                            if (exit) {
+                                startActivity(FinishAppActivity.newIntent(this@HomeActivity))
+                            }
                         }
-                    }
-                })
-        } else {
+                    })
+            } else {
+                startActivity(FinishAppActivity.newIntent(this))
+            }
+        } catch (err: Exception) {
+            Timber.d("Exception -- $err")
             startActivity(FinishAppActivity.newIntent(this))
         }
 
     }
 
+    private fun loadAdExitApp() {
+        Admod.instance?.loadNativeAd(this,
+            AdConfig.EXIT_APP_DIALOG_NATIVE,
+            object : AdCallback() {
+                override fun onNativeAdLoaded(nativeAd: NativeAd?) {
+                    super.onNativeAdLoaded(nativeAd)
+                    mNativeAdInterstitial = nativeAd
+
+                }
+            })
+    }
     override fun onBackPressed() {
 //        super.onBackPressed()
         if (!isNetworkAvailable()) {
             startActivity(FinishAppActivity.newIntent(this))
         } else {
-            try {
-                modalLoadingAd.show()
-                Admod.instance?.loadNativeAd(this,
-                    AdConfig.EXIT_APP_DIALOG_NATIVE,
-                    object : AdCallback() {
-                        override fun onNativeAdLoaded(nativeAd: NativeAd?) {
-                            super.onNativeAdLoaded(nativeAd)
-                            modalLoadingAd.dismiss()
-                            showDialogAd(nativeAd)
-
-                        }
-                    })
-
-            } catch (err: Exception) {
-                Timber.d("Exception -- $err")
-                startActivity(FinishAppActivity.newIntent(this))
-            }
+            showAdAndExitApp()
         }
     }
 }
