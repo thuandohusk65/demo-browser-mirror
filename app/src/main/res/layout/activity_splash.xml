@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="@string/check_for_version"
+            android:text="@string/experience_mirroring_with_powerful_tools"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
