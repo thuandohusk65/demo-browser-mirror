@@ -1,5 +1,6 @@
 package com.nhnextsoft.screenmirroring.view.activity
 
+import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
@@ -311,8 +313,10 @@ class HomeActivity : AppCompatActivity() {
     private fun showDialogRate() {
         val calendar: Calendar = Calendar.getInstance()
         val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
-        var isShowDialog = today != AppPreferences().isLastTimeOpenReviewDialog
-        if (onShowDialogRating && AppPreferences().isReviewedOnGoogle == false && isShowDialog) {
+        val isShowDialog = today != AppPreferences().isLastTimeOpenReviewDialog
+
+        val dialog: androidx.fragment.app.Fragment? = supportFragmentManager.findFragmentByTag("RateAppDialog")
+        if (onShowDialogRating && AppPreferences().isReviewedOnGoogle == false && isShowDialog && dialog?.isResumed == null) {
             RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }
     }
