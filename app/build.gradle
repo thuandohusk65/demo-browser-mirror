@@ -14,7 +14,7 @@ plugins {
 def versionMajor = 1 // phien ban
 def versionMinor = 0 //
 def versionPatch = 5 //
-def versionBuild = 79 // bump for dogfood builds, public betas, etc.
+def versionBuild = 88 // bump for dogfood builds, public betas, etc.
 
 applovin {
     apiKey = "hLyLL5iWI_VscLCL_O9G3I2_wS-VscCJSmWcPheho48s1IBTv7NCOVFMhncXpE6ViGH3sLfWd3BSmKMqfm3p-X"
