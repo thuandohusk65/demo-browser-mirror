@@ -1,6 +1,5 @@
 package com.nhnextsoft.screenmirroring.view.activity
 
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.hardware.display.DisplayManager
@@ -13,7 +12,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.MediaView
@@ -48,7 +46,10 @@ import com.nhnextsoft.screenmirroring.view.activity.stream.StreamActivity
 import com.nhnextsoft.screenmirroring.view.activity.video.VideoActivity
 import com.nhnextsoft.screenmirroring.view.activity.web.WebActivity
 import com.nhnextsoft.screenmirroring.view.activity.youtube.YoutubeActivity
-import com.nhnextsoft.screenmirroring.view.dialog.*
+import com.nhnextsoft.screenmirroring.view.dialog.LoadDataDialog
+import com.nhnextsoft.screenmirroring.view.dialog.NoWifiFragment
+import com.nhnextsoft.screenmirroring.view.dialog.RateAppDialog
+import com.nhnextsoft.screenmirroring.view.dialog.RequestSeeAdRewardedDialog
 import timber.log.Timber
 import java.util.*
 
@@ -98,7 +99,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun showAdWithAdId(intent: Intent, adId: String) {
         showCastAdInterstitial(
-             adId,
+            adId,
             object : AdCallback() {
                 override fun onInterstitialLoad(interstitialAd: InterstitialAd?) {
                     super.onInterstitialLoad(interstitialAd)
@@ -315,7 +316,8 @@ class HomeActivity : AppCompatActivity() {
         val today: Int = calendar.get(Calendar.DAY_OF_YEAR)
         val isShowDialog = today != AppPreferences().isLastTimeOpenReviewDialog
 
-        val dialog: androidx.fragment.app.Fragment? = supportFragmentManager.findFragmentByTag("RateAppDialog")
+        val dialog: androidx.fragment.app.Fragment? =
+            supportFragmentManager.findFragmentByTag("RateAppDialog")
         if (onShowDialogRating && AppPreferences().isReviewedOnGoogle == false && isShowDialog && dialog?.isResumed == null) {
             RateAppDialog.newInstance().show(supportFragmentManager, "RateAppDialog")
         }
@@ -439,6 +441,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             })
     }
+
     override fun onBackPressed() {
 //        super.onBackPressed()
         if (!isNetworkAvailable()) {

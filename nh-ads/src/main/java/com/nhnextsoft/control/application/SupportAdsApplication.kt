@@ -3,11 +3,11 @@ package com.nhnextsoft.control.application
 import android.app.Application
 import com.bytedance.sdk.openadsdk.TTAdConfig
 import com.bytedance.sdk.openadsdk.TTAdSdk
+import com.google.ads.mediation.sample.customevent.AdmobAdapterUtil
 import com.inmobi.sdk.InMobiSdk
 import com.inmobi.sdk.SdkInitializationListener
 import com.nhnextsoft.control.Admod
 import com.nhnextsoft.control.AppOpenManager
-import com.nhnextsoft.control.BuildConfig
 import com.nhnextsoft.control.FanManagerApp
 import com.unity3d.ads.UnityAds
 import org.json.JSONException
@@ -30,13 +30,14 @@ abstract class SupportAdsApplication : Application() {
         }
 
         if (supportPangle) {
-            Timber.d("run supportPangle " + supportPangle)
-            TTAdSdk.init(this, buildAdConfig(), mInitCallback)
+            Timber.d("run support Pangle $supportPangle")
+            AdmobAdapterUtil.getPangleSdkManager()
+            TTAdSdk.init(this, buildAdConfig(), mInitCallbackPangle)
             Admod.instance?.setPangle(true)
         }
 
         if (supportInMobi) {
-            val INMOBI_ACCOUNT_ID = "3fd8aa9f482f42769d90c21158d45d47"
+//            val INMOBI_ACCOUNT_ID = "3fd8aa9f482f42769d90c21158d45d47"
 
             Timber.d("run supportInMobi " + supportPangle)
             var consentObject  =  JSONObject()
@@ -48,13 +49,13 @@ abstract class SupportAdsApplication : Application() {
             } catch (e: JSONException) {
                 e.printStackTrace();
             }
-            InMobiSdk.init(this, INMOBI_ACCOUNT_ID, consentObject, mInitInMobiCallback);
+            InMobiSdk.init(this, supportInMobiAccountId, consentObject, mInitInMobiCallback);
             Admod.instance?.setInMobi(true)
         }
 
         if (supportUnity) {
-            Timber.d("run supportUnity " + supportUnity)
-            UnityAds.initialize(this, appId)
+            Timber.d("run supportUnity $supportUnity")
+            UnityAds.initialize(this, supportUnityAppId)
             Admod.instance?.setUnityAds(true)
         }
 
@@ -64,7 +65,7 @@ abstract class SupportAdsApplication : Application() {
 
     }
 
-    private val mInitCallback: TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
+    private val mInitCallbackPangle: TTAdSdk.InitCallback = object : TTAdSdk.InitCallback {
         override fun success() {
             Timber.d("init TTAdSdk succeeded")
         }
@@ -83,9 +84,9 @@ abstract class SupportAdsApplication : Application() {
     private fun buildAdConfig(): TTAdConfig {
         return TTAdConfig.Builder()
             // Please use your own appId,
-            .appId("8034646")
+            .appId(supportPangleAppId)
             // Turn it on during the testing phase, you can troubleshoot with the log, remove it after launching the app
-            .debug(BuildConfig.DEBUG)
+            .debug(AppGlobal.BUILD_DEBUG)
             // The default setting is SurfaceView. We strongly recommend to set this to true.
             // If using TextureView to play the video, please set this and add "WAKE_LOCK" permission in manifest
             .useTextureView(true)
@@ -102,8 +103,10 @@ abstract class SupportAdsApplication : Application() {
     abstract val supportFan: Boolean
     abstract val supportApplovin: Boolean
     abstract val supportPangle: Boolean
+    abstract val supportPangleAppId: String
     abstract val supportInMobi: Boolean
+    abstract val supportInMobiAccountId: String
     abstract val supportUnity: Boolean
-    abstract val appId: String
+    abstract val supportUnityAppId: String
 
 }

@@ -7,11 +7,11 @@ plugins {
 //apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 31
+        targetSdkVersion 32
     }
 
 
@@ -44,15 +44,15 @@ dependencies {
 //    implementation 'com.anjlab.android.iab.v3:library:1.1.0'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'androidx.lifecycle:lifecycle-process:2.4.1'
-    implementation 'com.google.ads.mediation:facebook:6.8.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.10.0.0'
 //    implementation 'com.google.ads.mediation:adcolony:4.6.5.0'
     implementation 'com.google.ads.mediation:applovin:11.3.3.0'
 
     // mạng quảng cáo pangle
     implementation 'com.pangle.global:ads-sdk:4.3.0.6'
-    implementation 'com.pangle.global:adapter-for-admob:1.4.0'
+    implementation 'com.pangle.global:adapter-for-admob:1.4.3'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
-    implementation 'com.google.ads.mediation:pangle:4.3.0.6.0'
+//    implementation 'com.google.ads.mediation:pangle:4.3.0.6.0'
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
